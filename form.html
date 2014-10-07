@@ -1,17 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
     <style>
-    body {
-        background: rgba(93,182,160,1);
-        background: -moz-linear-gradient(top, rgba(93,182,160,1) 0%, rgba(220,232,201,1) 100%);
-        background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(93,182,160,1)), color-stop(100%, rgba(220,232,201,1)));
-        background: -webkit-linear-gradient(top, rgba(93,182,160,1) 0%, rgba(220,232,201,1) 100%);
-        background: -o-linear-gradient(top, rgba(93,182,160,1) 0%, rgba(220,232,201,1) 100%);
-        background: -ms-linear-gradient(top, rgba(93,182,160,1) 0%, rgba(220,232,201,1) 100%);
-        background: linear-gradient(to bottom, rgba(93,182,160,1) 0%, rgba(220,232,201,1) 100%);
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5db6a0', endColorstr='#dce8c9', GradientType=0 );
+    #headerBar{
+        background : #E55653;
+        background : rgba(229, 86, 83, 1);
+        position : absolute ;
+        left : 0px;
+        top : 0px;
+        width : 1280px;
+        height : 98px;
     }
-    
+    #hamburger {
+        background-image : url(images/hamberger.png);
+        background-repeat : no-repeat;
+        position : absolute ;
+        left : 29px;
+        top : 29px;
+        width : 41px;
+        height : 42px;
+    }
+    #profilename {
+        font-family : TheMix;
+        font-size : 30px;
+        color : #FADDDD;
+        color : rgb(250, 221, 221);
+        left : 870px;
+        top : 29px;
+        position: absolute
+    }
+    #profilemasking{
+        background : #EA6D65;
+        background : rgba(234, 109, 101, 1);
+        position : absolute ;
+        left : 1155px;
+        top : 10px;
+        width : 80px;
+        height : 80px;
+    }
+    #profilecircle{
+        background-image : url(images/circle.png);
+        background-repeat : no-repeat;
+        position : absolute ;
+        left : 1164px;
+        top : 10px;
+        width : 80px;
+        height : 81px;
+    }
     </style>
 	<head>
 		<meta charset="UTF-8" />
@@ -20,41 +54,73 @@
 		<title>Natural Language Form</title>
 		<meta name="description" content="Natural Language Form with custom text input and drop-down lists" />
 		<meta name="keywords" content="Natural Language UI, sentence form, text input, contenteditable, html5, css3, jquery" />
-		<meta name="author" content="Codrops" />
 		<link rel="shortcut icon" href="../favicon.ico"> 
 		<link rel="stylesheet" type="text/css" href="css/default.css" />
 		<link rel="stylesheet" type="text/css" href="css/component.css" />
-<!--		<link rel="stylesheet" type="text/css" href="css/custom.css" />-->
-		<link rel="stylesheet" type="text/css" href="css3/demo.css" />
-		<link rel="stylesheet" type="text/css" href="css3/custom.css" />
 		<link rel="stylesheet" type="text/css" href="css3/elastislide.css" />
-		<script src="js/modernizr.custom.17475.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/custom.css" />
+		<link rel="stylesheet" type="text/css" href="css/image-picker.css" />
+		
+        <script src="js/modernizr.custom.17475.js"></script>
 		<script src="js/jquery.min.js"></script>
-<!--		<script src="js/modernizr.custom.js"></script>-->
 		<script src="js/jquery.elastislide.js"></script>
 		<script src="js/jquerypp.custom.js"></script>
+        
+        <script src="js/image-picker.js"></script>
+        <script src="../Tangle/Tangle.js"></script>
+        <script src="../Tangle/TangleKit/sprintf.js"></script>
+        <script src="../Tangle/TangleKit/TangleKit.js"></script>
+        <script src="../Tangle/TangleKit/mootools.js"></script>
 	</head>
+    <script>
+    $(document).ready(function(){
+        
+        $('#profilename').text(parseCookieValue('name')) 
+        imageUrl = parseCookieValue('image')
+        $($('#profilecircle')[0]).attr('style', 'background-image: url(' + imageUrl + ')')
+    });
+        parseCookieValue = function(param){
+            cookieSet = document.cookie.split(';')
+            for (cook in cookieSet) { 
+                value = cookieSet[cook]; 
+                name = value.substring(0,value.indexOf('=')); 
+                if (name.trim() === param) {
+                    return value.substring(value.indexOf('=') + 1)
+                } 
+            }
+            return undefined
+        }
+    </script>
 	<body class="nl-blurred">
+        <div id='headerBar'></div>
+        <div id='hamburger'></div>
+        <div id='profilename'>paul graham</div>
+        <div id='profilemasking'></div>
+        <div id='profilecircle'></div>
 		<div class="container demo-1">
 			<!-- Top Navigation -->
-			<div class="codrops-top clearfix">
-				<a class="codrops-icon codrops-icon-prev" href="http://tympanus.net/Development/MorphingDevices/"><span>Previous Demo</span></a>
-				<span class="right"><a class="codrops-icon codrops-icon-drop" href="http://tympanus.net/codrops/?p=15139"><span>Back to the Codrops Article</span></a></span>
-			</div>
+			
 			<header>
-				<h1>Welcome to  <span>Revulize</span></h1>	
+					
 			</header>
 			<div class="main clearfix">
 				<form id="nl-form" class="nl-form" style="display: inline;">
 					I am traveling to  
 					<select>
-						<option value="1">London</option>
+						<option selected disabled>Location</option>
+                        <option value="1">London</option>
 						<option value="2">Kailua</option>
 						<option value="3">Istanbul</option>
    				    </select>
                     from
+                    <input type=date style="display: inline;"> to
+                    <input type=date style="display: inline;">
+					
+<!--
                     <input type="date" style="display: ;"/> to
                     <input type="date" style="display: ;"/>
+-->
+
                     <br />
                     The purpose of travel is 
                     <select>
@@ -62,7 +128,23 @@
 						<option value="2">Family</option>
 						<option value="3">Business</option>
    				    </select>
-					
+					<br />
+                    <div id='text'>
+                    What Kind of food do both of you enjoy <span data-var=currentSelectedItems></span>
+                    </div>
+                    <select multiple="multiple" class="image-picker show-html">
+                        <option data-img-src="http://placekitten.com/220/200" value="1">Thai</option>
+                        <option data-img-src="http://placekitten.com/180/200" value="2" style="padding-left: 10px;">French</option>
+                        <option data-img-src="http://placekitten.com/130/200" value="3" style="padding-left: 10px;">Italian</option>
+                        <option data-img-src="http://placekitten.com/180/200" value="4" style="padding-left: 10px;">Spanish</option>
+                        <option data-img-src="http://placekitten.com/130/200" value="5" style="padding-left: 10px;">Greek</option>
+                        <option data-img-src="http://placekitten.com/220/200" value="6">Thai</option>
+                        <option data-img-src="http://placekitten.com/180/200" value="7" style="padding-left: 10px;">French</option>
+                        <option data-img-src="http://placekitten.com/130/200" value="8" style="padding-left: 10px;">Italian</option>
+                        <option data-img-src="http://placekitten.com/180/200" value="9" style="padding-left: 10px;">Spanish</option>
+                        <option data-img-src="http://placekitten.com/130/200" value="10" style="padding-left: 10px;">Greek</option>
+                    </select>
+                    
                     <div class="nl-submit-wrap">
 						<button class="nl-submit" type="submit">Take me there!</button>
 					</div>
@@ -73,16 +155,46 @@
 		<script src="js/nlform.js"></script>
 		<script>
 			var nlform = new NLForm( document.getElementById( 'nl-form' ) );
-//            debugger
-//			$carouselEl = $( '#carousel' )
-//            carousel = $carouselEl.elastislide( {
-//					minItems : 3,
-//					onClick : function( el, pos, evt ) {
-//                        console.log("clicked: " + $(el[0]).find('img').attr('alt'))
-//                        $($('.elastislide-wrapper')[0]).hide()
-//						evt.preventDefault();
-//					}
-//            })
+            tangle = new Tangle (document.getElementById("text"), {
+                initialize: function () {
+                    this.currentSelectedItems = ''
+                },
+                update: function(){}
+            });
+        $("select").imagepicker({
+            clicked: function(options){
+                console.log("I am clicked.")
+                var selectedItems = ''
+                for (var i = 0; i < this.children().length; i++){
+                    var isSelected = this.children()[i].selected
+                    if (isSelected)
+                        selectedItems += this.children()[i].text + ', '
+                }
+                tangle.setValue('currentSelectedItems', selectedItems)
+            },
+            selected: function(options){},
+            show_label: true
+        })
+        $('#text').on('click', function(){
+            console.log('text clicked') 
+            var node = $($('.image_picker_selector')[2])
+            var style = node.attr('style')
+            if (style === undefined || style.indexOf('display: none') === -1){
+                node.attr('style', 'display: none')
+                $('.elastislide-wrapper').attr('style', 'display: none')
+            }
+            else {
+                node.attr('style', 'display: inline')
+                $('.elastislide-wrapper').attr('style', 'display: block')
+                $('#carousel').find('li').attr('style', 'padding-left: 10px')
+            }
+        })
+        $(document).ready(function(){
+            console.log('dom is loaded and carousel is called.')
+            $('#carousel').elastislide({}, function() {   
+                $('#carousel').find('li').attr('style', 'padding-left: 10px')
+            })
+        })
 		</script>
 	</body>
 </html>

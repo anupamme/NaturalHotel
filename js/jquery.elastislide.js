@@ -763,8 +763,8 @@
 
 	};
 	
-	$.fn.elastislide = function( options ) {
-
+	$.fn.elastislide = function( options, callback ) {
+        debugger
 		var self = $.data( this, 'elastislide' );
 		
 		if ( typeof options === 'string' ) {
@@ -811,7 +811,8 @@
 			});
 		
 		}
-		
+        debugger
+		callback
 		return self;
 		
 	};

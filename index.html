@@ -1,25 +1,83 @@
 <!DOCTYPE html>
 <html>
     <style>
-        h1, h2, #fb {
+        h3, #fb {
             text-align: center
         }
         br
-div {
-    content: " " !important;
-    display: block !important;
-    margin:300px;
-}
+        div {
+            content: " " !important;
+            display: block !important;
+            margin:300px;
+        }
+        h1
+        {
+            font-family : NeoSans;
+            font-size : 48px;
+            color : #FADDDD;
+            position : absolute ;
+            left : 595px;
+            top : 35px;
+            width : 139px;
+            height : 152px;
+            line-height: 55px;
+ 
+        }
+        h3
+        {
+            font-family : TheMix;
+            font-size : 48px;
+            color : #FADDDD;
+            padding-top: 153px
+        }
+        #logo {
+            padding-top: 80px;
+        }
+	   .image
+        {
+            background-image : url(images/image.png);
+            background-repeat : no-repeat;
+            position : absolute ;
+            left : 416px;
+            top : 70px;
+            width : 152px;
+            height : 152px;
+        }
+        .loginBackground
+        {
+            background : #E55653;
+            position : absolute ;
+            left : 363px;
+            top : 546px;
+            width : 496px;
+            height : 94px;
+            display: none
+        }
+        .loginButton
+        {
+            background-image : url(images/imageBeforeMouseOver.png);
+            background-repeat : no-repeat;
+            position : absolute ;
+            left : 358px;
+            top : 541px;
+            width : 502px;
+            height : 99px;
+            padding-bottom: 114px;
+        }
     </style>
 <head>
     
 		<link rel="stylesheet" type="text/css" href="css/custom.css" />
 <title>Facebook Login JavaScript Example</title>
 <meta charset="UTF-8">
+    <script src='js/jquery.min.js'></script>
 </head>
 <body>
-    <h1>REVULIZE</h1>
-    <h2>We suggest best hotels based on customer reviews</h2>
+    <div id='logo'>
+    <div class='image'></div>
+    <h1>Show up hotels</h1>
+        </div>
+    <h3>Suggest best hotels <br />based on customer reviews</h3>
     <br /><br />
 <script>
   // This is called with the results from from FB.getLoginStatus().
@@ -35,13 +93,22 @@ div {
       testAPI();
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into this app.';
+        FB.login(function(response){
+//            debugger
+//            userId = response.authResponse.userID
+//            print (userId)
+  // Handle the response object, like in statusChangeCallback() in our demo
+  // code.
+}); 
+//      document.getElementById('status').innerHTML = 'Please log ' +
+//        'into this app.';
     } else {
       // The person is not logged into Facebook, so we're not sure if
       // they are logged into this app or not.
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into Facebook.';
+        // prompt to loginto fb.
+        FB.login(function(response) {})
+//      document.getElementById('status').innerHTML = 'Please log ' +
+//        'into Facebook.';
     }
   }
 
@@ -49,6 +116,7 @@ div {
   // Button.  See the onlogin handler attached to it in the sample
   // code below.
   function checkLoginState() {
+      console.log('in check login state')
     FB.getLoginStatus(function(response) {
       statusChangeCallback(response);
     });
@@ -75,9 +143,10 @@ div {
   //
   // These three cases are handled in the callback function.
 
-  FB.getLoginStatus(function(response) {
-    statusChangeCallback(response);
-  });
+//  FB.getLoginStatus(function(response) {
+//        console.log('in get login status')
+//      statusChangeCallback(response);
+//  });
 
   };
 
@@ -96,25 +165,47 @@ div {
     console.log('Welcome!  Fetching your information.... ');
     FB.api('/me', function(response) {
         console.log('Successful login for: ' + response.name);
+        console.log(JSON.stringify(response)); 
+        //debugger
         document.getElementById('status').innerHTML =
         'Thanks for logging in, ' + response.name + '!';
+        name = response.name
+        debugger
+        imageUrl = 'http://graph.facebook.com/' + response.id + '/picture'
+        document.cookie = 'name=' + response.name
+        document.cookie = 'image=' + imageUrl
+        window.location.href = "form.html";
+        //var imgElement = '<img src="' + imageUrl + '" width="100px" height="100px"/>'
+       // $('.loginButton').append(imgElement)  
     });
   }
 </script>
-
 <!--
   Below we include the Login Button social plugin. This button uses
   the JavaScript SDK to present a graphical Login button that triggers
   the FB.login() function when clicked.
 -->
-<div>
+<div class="loginBackground">
 </div>
-<div id='fb'>
+<div class="loginButton" scope="public_profile,email"></div>
+
+    
+<!--
 <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
 </fb:login-button>
+-->
+
 <div id="status">
 </div>
 </div>
 
 </body>
 </html>
+<script>
+ $('.loginButton').on('mouseover', function() { $($('.loginBackground')[0]).attr('style', 'display: inline;')}).on('mouseout', function() {$($('.loginBackground')[0]).attr('style', 'display: none;')})
+    
+    $('.loginButton').on('click', function() {console.log('I am clicked.'); 
+                                             checkLoginState();
+                                              
+                                             })
+</script>
