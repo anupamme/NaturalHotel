@@ -4,48 +4,44 @@
     #headerBar{
         background : #E55653;
         background : rgba(229, 86, 83, 1);
-        position : absolute ;
-        left : 0px;
-        top : 0px;
-        width : 1280px;
-        height : 98px;
+        width : 100%;
+        height : 80px;
     }
     #hamburger {
-        background-image : url(images/hamberger.png);
-        background-repeat : no-repeat;
-        position : absolute ;
-        left : 29px;
-        top : 29px;
-        width : 41px;
-        height : 42px;
+        background : url(images/hamberger.png) no-repeat;
+        height: 36px;
+        width: 27px;
+        margin: 27px 0 0 20px;
+        float: left;
+        cursor: pointer;
     }
     #profilename {
         font-family : TheMix;
-        font-size : 30px;
+        font-size : 25px;
         color : #FADDDD;
         color : rgb(250, 221, 221);
-        left : 870px;
-        top : 29px;
-        position: absolute
+        float: right;
+        line-height: 80px;
     }
     #profilemasking{
-        background : #EA6D65;
-        background : rgba(234, 109, 101, 1);
-        position : absolute ;
-        left : 1155px;
-        top : 10px;
+        /*background : #EA6D65;
+        background : rgba(234, 109, 101, 1);*/
         width : 80px;
         height : 80px;
     }
     #profilecircle{
         background-image : url(images/circle.png);
         background-repeat : no-repeat;
-        position : absolute ;
-        left : 1164px;
-        top : 10px;
-        width : 80px;
-        height : 81px;
+        background-size: contain;
+        width: 65px;
+        height: 65px;
+        -moz-border-radius: 33px;
+        -webkit-border-radius: 33px;       
+        border-radius: 33px;
+        float: right;
+        margin: 8px 20px 0 20px;
     }
+
     </style>
 	<head>
 		<meta charset="UTF-8" />
@@ -75,7 +71,8 @@
     <script>
     $(document).ready(function(){
         
-        $('#profilename').text(parseCookieValue('name')) 
+        $('#profilename').text(parseCookieValue('name'));
+        $(".username").text(parseCookieValue('name')); 
         imageUrl = parseCookieValue('image')
         $($('#profilecircle')[0]).attr('style', 'background-image: url(' + imageUrl + ')')
     });
@@ -92,68 +89,76 @@
         }
     </script>
 	<body class="nl-blurred">
-        <div id='headerBar'></div>
-        <div id='hamburger'></div>
-        <div id='profilename'>paul graham</div>
-        <div id='profilemasking'></div>
-        <div id='profilecircle'></div>
+        <div id='headerBar'>
+            <div id='hamburger'></div>
+            <!--div id='profilemasking'></div-->
+            <div id='profilecircle'></div>
+            <div id='profilename'>paul graham</div>
+        </div>
 		<div class="container demo-1">
 			<!-- Top Navigation -->
 			
-			<header>
+			<!--header>
 					
-			</header>
+			</header-->
 			<div class="main clearfix">
-				<form id="nl-form" class="nl-form" style="display: inline;">
-					I am traveling to  
-					<select>
-						<option selected disabled>Location</option>
-                        <option value="1">London</option>
-						<option value="2">Kailua</option>
-						<option value="3">Istanbul</option>
-   				    </select>
-                    from
-                    <input type=date style="display: inline;"> to
-                    <input type=date style="display: inline;">
-					
-<!--
-                    <input type="date" style="display: ;"/> to
-                    <input type="date" style="display: ;"/>
--->
-
+				<form id="nl-form" class="nl-form">
+                    <div class="welcomeText">
+                        Hi <span class="username"></span>, Welcome to show up hotel. <br>Please tell us your travel details and any other specific requirements.
+                    </div>    
                     <br />
-                    The purpose of travel is 
-                    <select>
-						<option value="1">Honeymoon</option>
-						<option value="2">Family</option>
-						<option value="3">Business</option>
-   				    </select>
-					<br />
-                    <div id='text'>
-                    What Kind of food do both of you enjoy <span data-var=currentSelectedItems></span>
-                    </div>
-                    <select multiple="multiple" class="image-picker show-html">
-                        <option data-img-src="http://placekitten.com/220/200" value="1">Thai</option>
-                        <option data-img-src="http://placekitten.com/180/200" value="2" style="padding-left: 10px;">French</option>
-                        <option data-img-src="http://placekitten.com/130/200" value="3" style="padding-left: 10px;">Italian</option>
-                        <option data-img-src="http://placekitten.com/180/200" value="4" style="padding-left: 10px;">Spanish</option>
-                        <option data-img-src="http://placekitten.com/130/200" value="5" style="padding-left: 10px;">Greek</option>
-                        <option data-img-src="http://placekitten.com/220/200" value="6">Thai</option>
-                        <option data-img-src="http://placekitten.com/180/200" value="7" style="padding-left: 10px;">French</option>
-                        <option data-img-src="http://placekitten.com/130/200" value="8" style="padding-left: 10px;">Italian</option>
-                        <option data-img-src="http://placekitten.com/180/200" value="9" style="padding-left: 10px;">Spanish</option>
-                        <option data-img-src="http://placekitten.com/130/200" value="10" style="padding-left: 10px;">Greek</option>
-                    </select>
+                    <div class="formElements">
+    					I am traveling to 
+    					<select>
+    						<option selected disabled>Location</option>
+                            <option value="1">London</option>
+    						<option value="2">Kailua</option>
+    						<option value="3">Istanbul</option>
+       				    </select>,
+                        <br>
+                        from
+                        <input type=date style="display: inline;"> to
+                        <input type=date style="display: inline;">
+                        <br />
+                        My purpose of travelling is  
+                        <select>
+    						<option value="1">Honeymoon</option>
+    						<option value="2">Family</option>
+    						<option value="3">Business</option>
+       				    </select>.
+    					<br />
+                        <br />
+                        <div id='text'>
+                        What Kind of food do both of you enjoy <span data-var=currentSelectedItems></span>
+                        </div>
+                        <select multiple="multiple" class="image-picker show-html">
+                            <option data-img-src="http://placekitten.com/220/200" value="1">Thai</option>
+                            <option data-img-src="http://placekitten.com/180/200" value="2" style="padding-left: 10px;">French</option>
+                            <option data-img-src="http://placekitten.com/130/200" value="3" style="padding-left: 10px;">Italian</option>
+                            <option data-img-src="http://placekitten.com/180/200" value="4" style="padding-left: 10px;">Spanish</option>
+                            <option data-img-src="http://placekitten.com/130/200" value="5" style="padding-left: 10px;">Greek</option>
+                            <option data-img-src="http://placekitten.com/220/200" value="6">Thai</option>
+                            <option data-img-src="http://placekitten.com/180/200" value="7" style="padding-left: 10px;">French</option>
+                            <option data-img-src="http://placekitten.com/130/200" value="8" style="padding-left: 10px;">Italian</option>
+                            <option data-img-src="http://placekitten.com/180/200" value="9" style="padding-left: 10px;">Spanish</option>
+                            <option data-img-src="http://placekitten.com/130/200" value="10" style="padding-left: 10px;">Greek</option>
+                        </select>
                     
-                    <div class="nl-submit-wrap">
-						<button class="nl-submit" type="submit">Take me there!</button>
-					</div>
-					<div class="nl-overlay"></div>
-				</form>
+                        <div class="nl-submit-wrap">
+    						<button class="nl-submit" type="submit">Take me there!</button>
+    					</div>
+    					<div class="nl-overlay"></div>
+                    </div>   
+    			</form>
 			</div>
 		</div><!-- /container -->
 		<script src="js/nlform.js"></script>
+
 		<script>
+        $(".formElements").click( function(){
+            $(".welcomeText").slideUp();
+        });
+
 			var nlform = new NLForm( document.getElementById( 'nl-form' ) );
             tangle = new Tangle (document.getElementById("text"), {
                 initialize: function () {
