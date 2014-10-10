@@ -7,7 +7,9 @@
     src: url('../fonts/NeoSans-Bold.otf') format('opentype'); 
 }
 body{
-    background: linear-gradient(#fdfefa, #e3f1c0) no-repeat fixed 0 0 rgba(0, 0, 0, 0);
+    background : linear-gradient(0deg, rgba(186, 219, 97, 0.8) 0%, rgba(207, 231, 139, 0.6) 34.55%, rgba(230, 244, 187, 0.34) 78.21%, rgba(239, 249, 205, 0.2) 100%) repeat fixed 0 0 rgba(0, 0, 0, 0);
+    background : -webkit-linear-gradient(90deg, rgba(186, 219, 97, 0.8) 0%, rgba(207, 231, 139, 0.6) 34.55%, rgba(230, 244, 187, 0.34) 78.21%, rgba(239, 249, 205, 0.2) 100%) repeat fixed 0 0 rgba(0, 0, 0, 0);
+    background : -webkit-gradient(linear,50% 100% ,50% 0% ,color-stop(0,rgba(186, 219, 97, 0.8) ),color-stop(0.3455,rgba(207, 231, 139, 0.6) ),color-stop(0.7821,rgba(230, 244, 187, 0.34) ),color-stop(1,rgba(239, 249, 205, 0.2) )) repeat fixed 0 0 rgba(0, 0, 0, 0);
     margin: 0;
     padding: 0;
 }
@@ -17,11 +19,11 @@ body{
     z-index: 1;
 }
 .content-holder {
-    background : linear-gradient(0deg, rgba(186, 219, 97, 0.4) 0%, rgba(207, 231, 139, 0.3) 34.55%, rgba(230, 244, 187, 0.17) 78.21%, rgba(239, 249, 205, 0.1) 100%);
-    background : -webkit-linear-gradient(90deg, rgba(186, 219, 97, 0.4) 0%, rgba(207, 231, 139, 0.3) 34.55%, rgba(230, 244, 187, 0.17) 78.21%, rgba(239, 249, 205, 0.1) 100%);
-    background : -webkit-gradient(linear,50% 100% ,50% 0% ,color-stop(0,rgba(186, 219, 97, 0.4) ),color-stop(0.3455,rgba(207, 231, 139, 0.3) ),color-stop(0.7821,rgba(230, 244, 187, 0.17) ),color-stop(1,rgba(239, 249, 205, 0.1) ));
-    background : -o-linear-gradient(90deg, rgba(186, 219, 97, 0.4) 0%, rgba(207, 231, 139, 0.3) 34.55%, rgba(230, 244, 187, 0.17) 78.21%, rgba(239, 249, 205, 0.1) 100%);
-    background : -ms-linear-gradient(90deg, rgba(186, 219, 97, 0.4) 0%, rgba(207, 231, 139, 0.3) 34.55%, rgba(230, 244, 187, 0.17) 78.21%, rgba(239, 249, 205, 0.1) 100%);
+    background : linear-gradient(0deg, rgba(186, 219, 97, 0.8) 0%, rgba(207, 231, 139, 0.6) 34.55%, rgba(230, 244, 187, 0.34) 78.21%, rgba(239, 249, 205, 0.2) 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background : -webkit-linear-gradient(90deg, rgba(186, 219, 97, 0.8) 0%, rgba(207, 231, 139, 0.6) 34.55%, rgba(230, 244, 187, 0.34) 78.21%, rgba(239, 249, 205, 0.2) 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background : -webkit-gradient(linear,50% 100% ,50% 0% ,color-stop(0,rgba(186, 219, 97, 0.8) ),color-stop(0.3455,rgba(207, 231, 139, 0.6) ),color-stop(0.7821,rgba(230, 244, 187, 0.34) ),color-stop(1,rgba(239, 249, 205, 0.2) )) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background : -o-linear-gradient(90deg, rgba(186, 219, 97, 0.8) 0%, rgba(207, 231, 139, 0.6) 34.55%, rgba(230, 244, 187, 0.34) 78.21%, rgba(239, 249, 205, 0.2) 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background : -ms-linear-gradient(90deg, rgba(186, 219, 97, 0.8) 0%, rgba(207, 231, 139, 0.6) 34.55%, rgba(230, 244, 187, 0.34) 78.21%, rgba(239, 249, 205, 0.2) 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#BADB61', endColorstr='#EFF9CD' ,GradientType=0)";
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#EFF9CD',endColorstr='#BADB61' , GradientType=0);
     position: absolute;
@@ -33,7 +35,7 @@ body{
     left: 0;
     list-style: none outside none;
     margin: 0;
-    opacity: 0.1;
+    opacity: 0.2;
     padding: 0;
     position: fixed;
     top: 0;
@@ -87,7 +89,7 @@ body{
 .home-block .logo {
     margin: 0 auto;
     padding: 0 0 70px;
-    width:340px;
+    width:330px;
     overflow: hidden;
 }
 .home-block .logo .image,
@@ -122,7 +124,81 @@ body{
     font-family: "NeoSans";
     font-size: 30px;
     height: 52px;
-    margin: 200px auto 100px;
+    margin: 150px auto 30px;
     padding: 30px 0 0 82px;
     width: 352px;
+}
+.travel-form {
+    color: #687064;
+    font-family: "NeoSans";
+    font-size: 30px;
+    line-height: 36px;
+    margin: 140px auto 0;
+    width: 720px;
+}
+.travel-form .button-holder {
+    margin: 50px 0 0;
+    text-align: center;
+}
+.travel-form input[type="submit"] {
+    background-color: #76bf4f;
+    border: medium none;
+    color: #eff9cd;
+    cursor: pointer;
+    font-family: "NeoSans";
+    font-size: 26px;
+    padding: 15px 65px;
+    text-transform: uppercase;
+}
+.travel-form input[type="text"] {
+    background-color: rgba(0,0,0,0);
+    border: medium none;
+    border-bottom: 1px solid #687064;
+    color: #90978c;
+    font-size: 26px;
+}
+.travel-form input.other[type="text"] {
+    width: 100%;
+}
+.travel-form input.date[type="text"] {
+    width: 160px;
+}
+.travel-form input.food[type="text"] {
+    width: 80px;
+}
+.header {
+    background-color: #92c17c;
+    height: 80px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+.header .menu {
+    background: url("../images/menu.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    cursor: pointer;
+    float: left;
+    height: 27px;
+    margin: 25px 0 0 27px;
+    width: 36px;
+}
+.header .user {
+    float: right;
+    margin: 10px 27px 0 0;
+    overflow: hidden;
+}
+.header .user > div {
+    float:left;
+}
+.header .user .profile-name {
+    color: #eff9cd;
+    font-family: "NeoSans";
+    font-size: 30px;
+    padding: 10px 10px 0 0;
+}
+.header .user .profile-image {
+    background-color: #eff9cd;
+    border-radius: 50%;
+    height: 56px;
+    width: 56px;
 }
