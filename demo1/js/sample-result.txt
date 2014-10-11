@@ -1,0 +1,52 @@
+{
+    "results": [
+        {
+            "name": "Alila Ubud",
+            "Address": "Desa Melinggih Kelod, Payangan, Bali 80572, Indonesia",
+            "image_link": [
+                "http://www.hotelpresident.cz/files/cms/sized/files/hotel-president-prague/homepage/hotel-president-night-view-001-1500x1000.jpg",
+                "http://www.hotel-palaciodelmar.com/static/galerias/hotel/01-hotel-santander-sercotel-palacio-del-mar-fachada-foto.jpg",
+                "http://www.shangri-la.com/uploadedImages/Shangri-la_Hotels/Shangri-La_Hotel,_Guangzhou/SLPG-Bg-Hotel-Lobby.jpg"
+            ],
+            "top_reviews": [
+                {
+                    "reviewer_name": "anna_diamond 1",
+                    "reviewer_place": "Belfast, Northern Ireland",
+                    "reviewer_photo": "images/list-sub-image.jpg",
+                    "review": "The settling of this resort is absolutely breathtaking. As you drive in you are surrounded by rice fields and wildlife. the grounds are lush and green with beautiful flowers and waterfalls everywhere."
+                },
+                {
+                    "reviewer_name": "Pradeep P",
+                    "reviewer_place": "Belfast, Northern Ireland 2",
+                    "reviewer_photo": "http://lh3.googleusercontent.com/-p3SQoDGOI6Q/AAAAAAAAAAI/AAAAAAAAAAA/wkw4JAb5vm4/s64-c/photo.jpg",
+                    "review": "The settling of this resort is absolutely breathtaking. As you drive in you are surrounded by rice fields and wildlife. the grounds are lush and green with beautiful flowers and waterfalls everywhere 2."
+                },
+                {
+                    "reviewer_name": "Gaurang",
+                    "reviewer_place": "Belfast, Northern Ireland 3",
+                    "reviewer_photo": "https://plus.google.com/u/0/_/focus/photos/public/AIbEiAIAAABECK3z0tjjoej1hgEiC3ZjYXJkX3Bob3RvKihhODZiMTJlZWE3NGUxNGMwNzc3NjllNjA2ZDM4ODU1ZGRiYmJkNDY0MAGPOFCUwBvwjyQO6xxAM8g6JQBcLg?sz=128",
+                    "review": "The settling of this resort is absolutely breathtaking. As you drive in you are surrounded by rice fields and wildlife. the grounds are lush and green with beautiful flowers and waterfalls everywhere 3."
+                },
+                {
+                    "reviewer_name": "Anupam",
+                    "reviewer_place": "Belfast, Northern Ireland 2",
+                    "reviewer_photo": "https://lh6.googleusercontent.com/-0GWZwWnC9iM/AAAAAAAAAAI/AAAAAAAAAAA/U_Bf9tXqzRA/s120-c/photo.jpg",
+                    "review": "The settling of this resort is absolutely breathtaking. As you drive in you are surrounded by rice fields and wildlife. the grounds are lush and green with beautiful flowers and waterfalls everywhere 2."
+                },
+                {
+                    "reviewer_name": "Bharat",
+                    "reviewer_place": "Belfast, Northern Ireland 2",
+                    "reviewer_photo": "//lh5.googleusercontent.com/-9SLqERgKaz4/AAAAAAAAAAI/AAAAAAAAALU/TqHk9NzSopU/s180-c-k-no/photo.jpg",
+                    "review": "The settling of this resort is absolutely breathtaking. As you drive in you are surrounded by rice fields and wildlife. the grounds are lush and green with beautiful flowers and waterfalls everywhere 2."
+                }
+            ],
+            "review_stats": {
+                "awesome": "20",
+                "good": "30",
+                "okay": "10",
+                "average": "20",
+                "bad": "20"
+            }
+        }
+    ]
+}

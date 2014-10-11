@@ -1,0 +1,57 @@
+<li>
+    <div class="image">
+        <img src="{{default-image}}" width="300" alt="" data-img="{{image-list}}" />
+        <div class="priority">high match</div>
+    </div>
+    <div class="details">
+        <div class="title-holder">
+            <h3>{{hotel-name}}</h3>
+            <span class="address">{{hotel-address}}</span>
+        </div>
+        <div class="review-holder">
+            <ul>
+                {{review-list}}
+            </ul>
+        </div>
+        <div class="bubble-holder">
+            <ul class="bubble">
+                <li class="selected"></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <span class="label">Closest review matches</span>
+        </div>
+        <div class="foot">
+            <div class="label">Attributes</div>
+            <div class="graph-holder">
+                <ul class="graph">
+                    <li class="awesome" data-perc="{{perc-awesome}}">
+                        <div class="bar"></div>
+                    </li>
+                    <li class="good selected" data-perc="{{perc-good}}">
+                        <div class="bar"></div>
+                    </li>
+                    <li class="ok" data-perc="{{perc-ok}}">
+                        <div class="bar"></div>
+                    </li>
+                    <li class="bad" data-perc="{{perc-bad}}">
+                        <div class="bar"></div>
+                    </li>
+                    <li class="worst" data-perc="{{perc-worst}}">
+                        <div class="bar"></div>
+                    </li>
+                </ul>
+                <ul class="graph-label">
+                    <li>Awesome</li>
+                    <li>Good</li>
+                    <li>OK</li>
+                    <li>bad</li>
+                    <li>Worst</li>
+                </ul>
+            </div>
+            <input type="button" value="Revulize" />
+        </div>
+    </div>
+</li>
