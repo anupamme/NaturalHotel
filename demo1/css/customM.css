@@ -1,0 +1,367 @@
+/***************Global section *************************************/
+@font-face {
+    font-family: 'NeoSans';
+    src: url('../fonts/NeoSans.otf') format('opentype'); 
+}
+@font-face {
+    font-family: 'NeoSans-bold';
+    src: url('../fonts/NeoSans-Bold.otf') format('opentype'); 
+}
+
+@font-face {
+    font-family: 'NeoSans-italic';
+    src: url('../fonts/NeoSans-LightItalic.otf') format('opentype'); 
+}
+body{
+    background : linear-gradient(0deg, rgba(186, 219, 97, 0.8) 0%, rgba(207, 231, 139, 0.6) 34.55%, rgba(230, 244, 187, 0.34) 78.21%, rgba(239, 249, 205, 0.2) 100%) repeat fixed 0 0 rgba(0, 0, 0, 0);
+    background : -webkit-linear-gradient(90deg, rgba(186, 219, 97, 0.8) 0%, rgba(207, 231, 139, 0.6) 34.55%, rgba(230, 244, 187, 0.34) 78.21%, rgba(239, 249, 205, 0.2) 100%) repeat fixed 0 0 rgba(0, 0, 0, 0);
+    background : -webkit-gradient(linear,50% 100% ,50% 0% ,color-stop(0,rgba(186, 219, 97, 0.8) ),color-stop(0.3455,rgba(207, 231, 139, 0.6) ),color-stop(0.7821,rgba(230, 244, 187, 0.34) ),color-stop(1,rgba(239, 249, 205, 0.2) )) repeat fixed 0 0 rgba(0, 0, 0, 0);
+    margin: 0;
+    padding: 0;
+     font-family: 'NeoSans';
+}
+
+input:focus, textarea , span , a{ outline: none !important; }
+
+/************************Content section****************************/
+
+.modal-backdrop.in {
+    opacity: 0.9 !important;
+}
+.nl-form {
+width: 100%;
+margin: 0.3em auto 0 auto;
+color: #687064;
+font-family: "NeoSans";
+font-size: 30px !important;
+line-height: 50px;
+}
+.con {
+padding-top: 100px;
+}
+.cDependent {
+    padding-top: 50px;
+}
+
+.nl-field-toggle:hover, .nl-form input:hover, .nl-form select:hover, .nl-field-toggle:focus, .nl-form input:focus, .nl-form select:focus {
+color: #92c17c;
+text-decoration: none;
+} 
+#typewriter {
+    color: #687064;
+font-family: "NeoSans-italic";
+}
+/**************************************Logout*************************************/
+
+.logout {
+    background: #494949;
+min-height: 34px;
+padding: 5px 0px;
+opacity: 0.8;
+    position: absolute;
+    width: 100%;
+}
+.logoutbutton {
+    float: right;
+padding-right: 34px;
+color: #76bf4f;
+cursor: pointer;
+font-size: 18px;
+}
+
+
+
+
+
+/*****************button***************/
+.cBtn {
+    width: 35%;
+margin: auto 25%;
+text-align: center;
+min-height: 33px;
+background: #76bf4f;
+padding: 15px 0px;
+font-size: 25px;
+color: #eff9cd;
+font-weight: bold;
+}
+
+.iamgoodbtn {
+    border-radius: 0;
+width: 29%;
+margin-right: 16%;
+}
+
+/*************************Calender*****************************/
+
+.ui-widget-content {
+border: none !important;
+background: #598A53 !important;
+color: #222222;
+border-radius: 0 !important;;
+}
+.ui-widget-header {
+border: none !important;
+background: #759E70 !important;
+color: #93AA86;
+font-weight: bold;
+border-radius: 0px !important;
+}
+.ui-widget {
+font-family: 'NeoSans' !important;
+}
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
+font-family: 'NeoSans' !important;
+}
+.datepicker {
+    width:21%;
+}
+.ui-datepicker select.ui-datepicker-month option:hover, .ui-datepicker select.ui-datepicker-year option:focus {
+background:green;
+}
+/****************************** Header section *********************/
+.cHeader {
+background-color: #92c17c;
+height: 80px;
+z-index: 1;
+}
+.header .menu {
+ background: url("../images/menu.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+cursor: pointer;
+float: left;
+margin: 25px 0 0 27px;
+width: 36px;
+    height: 27px;
+}
+.header .user {
+   float: right;
+margin: 10px 27px 0 0;
+overflow: hidden;
+}
+.user .profile-image {
+background-color: #eff9cd;
+border-radius: 50%;
+height: 56px;
+width: 56px;
+    float: left;
+    cursor: pointer;
+}
+.user .profile-name {
+    float: left;
+color: #eff9cd;
+font-family: "NeoSans";
+font-size: 30px;
+padding: 10px 10px 0 0;
+}
+.tepete {
+    font-size: 28px;
+display: block;
+    height:87px;
+ 
+}
+.tepete,.cbutton {
+    margin-top: 40px;
+}
+/***************************Scroll**********************************/
+::-webkit-scrollbar {  
+    width: 12px;  
+}  
+::-webkit-scrollbar-track {  
+    background-color: #eff9cd;  
+    border-left: 1px solid #ccc;  
+}  
+::-webkit-scrollbar-thumb {  
+    background-color: #92c17c;  
+}  
+::-webkit-scrollbar-thumb:hover {  
+    background-color: #92c17c;  
+}  
+/**************************************************************************/
+
+
+
+/************************Modal section***************************************/
+         
+          
+          .modal-portfolio .modal-content {
+padding: 20px 0;
+min-height: 100%;
+border: none;
+-webkit-border-radius: 0;
+-moz-border-radius: 0;
+-ms-border-radius: 0;
+-o-border-radius: 0;
+border-radius: 0;
+text-align: center;
+-webkit-box-shadow: none;
+-moz-box-shadow: none;
+-ms-box-shadow: none;
+-o-box-shadow: none;
+box-shadow: none;
+              width: 40%;
+margin: 0 auto;
+}
+.modal-portfolio .modal-close {
+position: absolute;
+z-index: 999;
+top: 25px;
+right: -64%;
+width: 80px;
+height: 80px;
+cursor: pointer;
+-webkit-transition: background-color .3s ease-in-out;
+-moz-transition: background-color .3s ease-in-out;
+-ms-transition: background-color .3s ease-in-out;
+-o-transition: background-color .3s ease-in-out;
+transition: background-color .3s ease-in-out;
+}
+    .modal-portfolio .modal-close:focus::after, .modal-portfolio .modal-close:focus::before, .modal-portfolio .modal-close:hover::after, .modal-portfolio .modal-close:hover::before {
+content: '';
+background-color: #ef4034;
+-webkit-transition: background-color .3s ease-in-out;
+-moz-transition: background-color .3s ease-in-out;
+-ms-transition: background-color .3s ease-in-out;
+-o-transition: background-color .3s ease-in-out;
+transition: background-color .3s ease-in-out;
+}
+.modal-portfolio .modal-close::before {
+content: '';
+position: absolute;
+left: 40px;
+top: -15px;
+width: 2px;
+height: 100px;
+background-color: #aaa;
+-webkit-transform: rotate(-45deg);
+-moz-transform: rotate(-45deg);
+-ms-transform: rotate(-45deg);
+-o-transform: rotate(-45deg);
+transform: rotate(-45deg);
+}
+    .modal-portfolio .modal-close::after {
+content: '';
+position: absolute;
+right: 40px;
+top: -15px;
+width: 2px;
+height: 100px;
+background-color: #aaa;
+-webkit-transform: rotate(45deg);
+-moz-transform: rotate(45deg);
+-ms-transform: rotate(45deg);
+-o-transform: rotate(45deg);
+transform: rotate(45deg);
+}
+    .demo-hover {
+text-decoration: none;
+color: #555;
+
+display: block;
+}
+    .demo-desc {
+        border: 1px solid #DDD; 
+        background: #DDD;
+    }
+    .margin-btm-30 {
+margin-bottom: 30px;
+}
+    .demo-hover:hover {              
+        -webkit-transition: all 0.9s ease-in-out;
+-moz-transition: all 0.9s ease-in-out;
+-ms-transition: all 0.9s ease-in-out;
+-o-transition: all 0.9s ease-in-out;
+-o-transition: all 0.9s ease-in-out;
+        
+        cursor: pointer;
+    }
+          .demo-hover > img  {
+              height: 155px;
+width: 100%;
+          }
+    .greenBack {
+         border: 1px solid rgb(141, 223, 141); 
+        background: rgb(141, 223, 141) !important;
+    }
+    .cModal {
+        background: none;
+    }
+
+/*********************************Typewriter*********************************/
+ #typed-cursor {
+	  font-weight: 100;
+    font-size: 30px;
+    color: black;
+	}
+	 
+	.slogan {
+	color: #2E3D48;
+	font-size: 30px;
+	position: absolute;
+	top: 50%;
+	text-align: center;
+	margin: -60px 0 0 0;
+	display: block;
+	width: 100%;
+}
+
+#typed-cursor {
+	color: #2E3D48;
+	font-weight: 100;
+}
+
+#typed-cursor.blinking {
+  -webkit-animation: 1s blink step-end infinite;
+	-moz-animation: 1s blink step-end infinite;
+	-ms-animation: 1s blink step-end infinite;
+	-o-animation: 1s blink step-end infinite;
+	animation: 1s blink step-end infinite;
+}
+
+@keyframes "blink" {
+	from,to {
+	color: transparent;
+}
+ 50% {
+    color: black;
+ }
+
+}
+
+@-moz-keyframes blink {
+	from,to {
+	color: transparent;
+}
+ 50% {
+   color: black;
+ }
+
+}
+
+@-webkit-keyframes "blink" {
+	from,to {
+	color: transparent;
+}
+ 50% {
+   color: black;
+ }
+
+}
+
+@-ms-keyframes "blink" {
+	from,to {
+	color: transparent;
+}
+ 50% {
+   color: black;
+ }
+
+}
+
+@-o-keyframes "blink" {
+	from,to {
+	color: transparent;
+}
+ 50% {
+   color: black;
+ }
+}
