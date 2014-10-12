@@ -94,9 +94,8 @@ h1, h3 {
 }
 /* slider - end */
 .container{
-    margin: 0 auto;
     position: relative;
-    width: 1040px;
+    width: 100%;
 }
 .home-block {
     margin: 70px 0 0;
@@ -190,7 +189,7 @@ h1, h3 {
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 1;
+    z-index: 5;
 }
 .header .menu {
     background: url("../images/menu.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
@@ -231,8 +230,25 @@ h1, h3 {
 .hotel-list > li .image {
     cursor: pointer;
     float: left;
+    overflow: hidden;
     position: relative;
     width: 300px;
+}
+.hotel-list > li .image img {
+    transform: scale(1);
+    transition-duration: 500ms;
+    transition-timing-function: ease-out;
+    -webkit-transform: scale(1);
+    -webkit-transition-duration: 500ms;
+    -webkit-transition-timing-function: ease-out;
+}
+.hotel-list > li .image:hover img {
+    transform: scale(1.1);
+    transition-duration: 500ms;
+    transition-timing-function: ease-out;
+    -webkit-transform: scale(1.1);
+    -webkit-transition-duration: 500ms;
+    -webkit-transition-timing-function: ease-out;
 }
 .hotel-list > li .image .priority {
     background-color: rgba(0, 0, 0, 0.7);
@@ -261,34 +277,35 @@ h1, h3 {
 .hotel-list .details .title-holder .address {
     font-size: 12px;
 }
-.hotel-list .details .review-holder {
+.review-holder {
     height: 100px;
     margin: 35px 0 0 20px;
     overflow: hidden;
     position: relative;
     width: 700px;
 }
-.hotel-list .details .review-holder > ul {
+.review-holder > ul {
     position: absolute;
     width: 3500px;
 }
-.hotel-list .details .review-holder > ul > li {
+.review-holder > ul > li {
     float:left;
     width: 700px;
 }
-.hotel-list .details .review-holder .review-user {
+.review-holder .review-user {
     float:left;
     height: 100px;
     width: 64px;
 }
-.hotel-list .details .review-holder .review {
+.review-holder .review,
+.review-holder .review-full-view {
     float: left;
     font-size: 14px;
     line-height: 20px;
     margin: 0 0 0 20px;
     width: 614px;
 }
-.hotel-list .details .review-holder .review-user .photo {
+.review-holder .review-user .photo {
     background-repeat: no-repeat;
     background-size: 100% auto;
     border: 2px solid #92c17c;
@@ -296,7 +313,7 @@ h1, h3 {
     height: 60px;
     width: 60px;
 }
-.hotel-list .details .review-holder .review-user .user-info {
+.review-holder .review-user .user-info {
     font-size: 12px;
     margin: 10px 0 0;
     position: absolute;
@@ -407,6 +424,7 @@ h1, h3 {
 	position:relative;
 	width:100%;
     margin: 0 0 30px 0;
+    max-height: 500px;
 }
 .simple-carousel ul.item-list{
 	left: 0;
@@ -453,9 +471,6 @@ h1, h3 {
     font-size: 28px;
     margin: 23px 0 0 420px;
 }
-.revulize-page .container {
-    width: 100%;
-}
 #revulize-content .attributes {
     background-color: #fdfefa;
     float: left;
@@ -463,12 +478,21 @@ h1, h3 {
     width: 260px;
 }
 #revulize-content h2,
-#revulize-content .rank-list li {
+#revulize-content .rank-list li,
+#revulize-content .attributes .rank{
     color:#687064;
     font-size:20px;
     font-family: "NeoSans";
     font-weight: bold;
     text-align: center;
+}
+#revulize-content .attributes .rank {
+    position: relative;
+}
+#revulize-content .attributes .rank .selection {
+    border-bottom: 1px solid #92c17c;
+    padding: 10px 0;
+    cursor: pointer;
 }
 #revulize-content h2 {
     border-bottom: 1px solid #92c17c;
@@ -489,7 +513,13 @@ h1, h3 {
     min-height: 300px;
 }
 #revulize-content .rank-list {
+    background-color: white;
     border-bottom: 1px solid #92c17c;
+    display: none;
+    position: absolute;
+    top: 0;
+    width: 260px;
+    z-index: 1;
 }
 #revulize-content .rank-list li {
     padding: 10px 0;
@@ -497,7 +527,8 @@ h1, h3 {
 #revulize-content .attributes ul li {
     position:relative;
 }
-#revulize-content .attributes ul li span {
+#revulize-content .attributes ul li span,
+#revulize-content .attributes .rank .down-arrow{
     background-image: url("../images/revulize-sprite.png");
     background-repeat: no-repeat;
     cursor: pointer;
@@ -509,7 +540,11 @@ h1, h3 {
     width: 36px;
 }
 #revulize-content .attributes ul.rank-list li span {
-    background-position: 0 -24px;
+    background-position: 0 -78px;
+    display:none;
+}
+#revulize-content .attributes ul.rank-list li.selected span {
+    display: inline;
 }
 #revulize-content .attributes ul.attr-list li span {
     background-position: 0 -57px;
@@ -517,6 +552,50 @@ h1, h3 {
 #revulize-content .rank-list li {
     cursor: pointer;
 }
-#revulize-content .rank-list li:not(.selected) {
-    display: none;
+#revulize-content .attributes .rank .down-arrow {
+    background-position: 0 -24px;
+}
+#revulize-content .review-list {
+    border-left: 1px solid #b3b7af;
+    float: left;
+    font-family: "NeoSans";
+    width: 900px;
+}
+.review-list li {
+    border-bottom:1px solid #92c17c;
+}
+.review-list .review-holder {
+    height: auto;
+    margin:35px 0 30px 90px;
+}
+.review-list .review {
+    cursor: pointer;
+}
+.review-list .review-full-view {
+    cursor: pointer;
+    display:none;
+}
+.sticky {
+    position:fixed;
+    z-index: 3;
+}
+.stretch {
+    width:100%;
+}
+.stretch.sticky {
+    background-color: #ced3cb;
+    padding: 0 0 10px;
+    top: -340px;
+}
+.stretch.sticky .button-holder,
+.stretch.sticky .travel-form input.other[type="text"] {
+    display:none;
+}
+.stretch.sticky-shadow {
+    margin: 134px 0 0;
+}
+#hotel-list-holder {
+    margin: 0 auto;
+    padding: 20px 0 0;
+    width: 1040px;
 }
