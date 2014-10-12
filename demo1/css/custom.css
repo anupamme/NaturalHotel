@@ -6,15 +6,25 @@
     font-family: 'NeoSans-bold';
     src: url('../fonts/NeoSans-Bold.otf') format('opentype'); 
 }
+@font-face {
+    font-family: 'themixbold';
+    src: url('../fonts/themixbold.otf') format('opentype'); 
+}
+@font-face {
+    font-family: 'DINM';
+    src: url('../fonts/DIMM.ttf') format('truetype'); 
+}
 body{
-    background : -moz-linear-gradient(50% 100% 90deg,rgba(186, 219, 97, 0.4) 0%,rgba(197, 225, 119, 0.39) 4.49%,rgba(210, 233, 146, 0.37) 11.33%,rgba(221, 239, 168, 0.34) 19.2%,rgba(229, 243, 185, 0.31) 28.4%,rgba(235, 247, 196, 0.28) 39.76%,rgba(238, 248, 203, 0.23) 55.72%,rgba(239, 249, 205, 0.1) 100%) repeat fixed 0 0 rgba(0, 0, 0, 0);
+   
+    
+ background : -moz-linear-gradient(50% 100% 90deg,rgba(186, 219, 97, 0.4) 0%,rgba(197, 225, 119, 0.39) 4.49%,rgba(210, 233, 146, 0.37) 11.33%,rgba(221, 239, 168, 0.34) 19.2%,rgba(229, 243, 185, 0.31) 28.4%,rgba(235, 247, 196, 0.28) 39.76%,rgba(238, 248, 203, 0.23) 55.72%,rgba(239, 249, 205, 0.1) 100%) repeat fixed 0 0 rgba(0, 0, 0, 0);
 	background : -webkit-linear-gradient(90deg, rgba(186, 219, 97, 0.4) 0%, rgba(197, 225, 119, 0.39) 4.49%, rgba(210, 233, 146, 0.37) 11.33%, rgba(221, 239, 168, 0.34) 19.2%, rgba(229, 243, 185, 0.31) 28.4%, rgba(235, 247, 196, 0.28) 39.76%, rgba(238, 248, 203, 0.23) 55.72%, rgba(239, 249, 205, 0.1) 100%) repeat fixed 0 0 rgba(0, 0, 0, 0);
 	background : -webkit-gradient(linear,50% 100% ,50% 0% ,color-stop(0,rgba(186, 219, 97, 0.4) ),color-stop(0.0449,rgba(197, 225, 119, 0.39) ),color-stop(0.1133,rgba(210, 233, 146, 0.37) ),color-stop(0.192,rgba(221, 239, 168, 0.34) ),color-stop(0.284,rgba(229, 243, 185, 0.31) ),color-stop(0.3976,rgba(235, 247, 196, 0.28) ),color-stop(0.5572,rgba(238, 248, 203, 0.23) ),color-stop(1,rgba(239, 249, 205, 0.1) )) repeat fixed 0 0 rgba(0, 0, 0, 0);
 	background : -o-linear-gradient(90deg, rgba(186, 219, 97, 0.4) 0%, rgba(197, 225, 119, 0.39) 4.49%, rgba(210, 233, 146, 0.37) 11.33%, rgba(221, 239, 168, 0.34) 19.2%, rgba(229, 243, 185, 0.31) 28.4%, rgba(235, 247, 196, 0.28) 39.76%, rgba(238, 248, 203, 0.23) 55.72%, rgba(239, 249, 205, 0.1) 100%) repeat fixed 0 0 rgba(0, 0, 0, 0);
 	background : -ms-linear-gradient(90deg, rgba(186, 219, 97, 0.4) 0%, rgba(197, 225, 119, 0.39) 4.49%, rgba(210, 233, 146, 0.37) 11.33%, rgba(221, 239, 168, 0.34) 19.2%, rgba(229, 243, 185, 0.31) 28.4%, rgba(235, 247, 196, 0.28) 39.76%, rgba(238, 248, 203, 0.23) 55.72%, rgba(239, 249, 205, 0.1) 100%) repeat fixed 0 0 rgba(0, 0, 0, 0);
 	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#BADB61', endColorstr='#EFF9CD' ,GradientType=0)";
 	background : linear-gradient(0deg, rgba(186, 219, 97, 0.4) 0%, rgba(197, 225, 119, 0.39) 4.49%, rgba(210, 233, 146, 0.37) 11.33%, rgba(221, 239, 168, 0.34) 19.2%, rgba(229, 243, 185, 0.31) 28.4%, rgba(235, 247, 196, 0.28) 39.76%, rgba(238, 248, 203, 0.23) 55.72%, rgba(239, 249, 205, 0.1) 100%) repeat fixed 0 0 rgba(0, 0, 0, 0);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#EFF9CD',endColorstr='#BADB61' , GradientType=0);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#EFF9CD',endColorstr='#BADB61' , GradientType=0); 
     margin: 0;
     padding: 0;
 }
@@ -35,13 +45,15 @@ h1, h3 {
     z-index: 1;
 }
 .content-holder {
-    background : linear-gradient(0deg, rgba(186, 219, 97, 0.8) 0%, rgba(207, 231, 139, 0.6) 34.55%, rgba(230, 244, 187, 0.34) 78.21%, rgba(239, 249, 205, 0.2) 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+
+    
+   background : linear-gradient(0deg, rgba(186, 219, 97, 0.8) 0%, rgba(207, 231, 139, 0.6) 34.55%, rgba(230, 244, 187, 0.34) 78.21%, rgba(239, 249, 205, 0.2) 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
     background : -webkit-linear-gradient(90deg, rgba(186, 219, 97, 0.8) 0%, rgba(207, 231, 139, 0.6) 34.55%, rgba(230, 244, 187, 0.34) 78.21%, rgba(239, 249, 205, 0.2) 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
     background : -webkit-gradient(linear,50% 100% ,50% 0% ,color-stop(0,rgba(186, 219, 97, 0.8) ),color-stop(0.3455,rgba(207, 231, 139, 0.6) ),color-stop(0.7821,rgba(230, 244, 187, 0.34) ),color-stop(1,rgba(239, 249, 205, 0.2) )) repeat scroll 0 0 rgba(0, 0, 0, 0);
     background : -o-linear-gradient(90deg, rgba(186, 219, 97, 0.8) 0%, rgba(207, 231, 139, 0.6) 34.55%, rgba(230, 244, 187, 0.34) 78.21%, rgba(239, 249, 205, 0.2) 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
     background : -ms-linear-gradient(90deg, rgba(186, 219, 97, 0.8) 0%, rgba(207, 231, 139, 0.6) 34.55%, rgba(230, 244, 187, 0.34) 78.21%, rgba(239, 249, 205, 0.2) 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#BADB61', endColorstr='#EFF9CD' ,GradientType=0)";
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#EFF9CD',endColorstr='#BADB61' , GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#EFF9CD',endColorstr='#BADB61' , GradientType=0); 
     position: absolute;
     width: 100%;
 }
@@ -147,7 +159,7 @@ h1, h3 {
     font-family: "NeoSans";
     font-size: 30px;
     line-height: 36px;
-    margin: 140px auto 0;
+    margin: 35px  auto 0;
 }
 .travel-form .button-holder {
     margin: 50px 0 0;
@@ -223,7 +235,7 @@ h1, h3 {
     width:100%;
 }
 .hotel-list > li {
-    margin: 30px 0 10px 0;
+    margin: 40px 0 10px 0;
     overflow: hidden;
 }
 .hotel-list > li .image {
@@ -251,14 +263,15 @@ h1, h3 {
 }
 .hotel-list > li .image .priority {
     background-color: rgba(0, 0, 0, 0.7);
-    bottom: 0;
-    color: #c1d9b7;
-    font-family: "NeoSans";
-    font-size: 10px;
-    padding: 8px 30px;
-    position: absolute;
-    text-transform: uppercase;
-    width: 240px;
+bottom: 0;
+color: #eff9cd;
+font-family: "DIN";
+font-size: 14px;
+padding: 0px 30px;
+position: absolute;
+text-transform: uppercase;
+width: 300px;
+min-height: 30px;
 }
 .hotel-list > li .details {
     color: #687064;
@@ -268,17 +281,20 @@ h1, h3 {
     width: 720px;
 }
 .hotel-list .details .title-holder {
-    margin: 0 0 0 20px;
+    margin: 13px 0 0 20px;
 }
 .hotel-list .details .title-holder h3 {
-    font-size: 24px;
+  font-size: 35px;
+font-family: mixBold;
+    line-height: 0.2;
 }
 .hotel-list .details .title-holder .address {
-    font-size: 12px;
+   font-size: 14px;
+    line-height: 1;
 }
 .review-holder {
-    height: 100px;
-    margin: 35px 0 0 20px;
+    height: 96px;
+    margin: 20px 0 0 20px;
     overflow: hidden;
     position: relative;
     width: 700px;
@@ -298,11 +314,12 @@ h1, h3 {
 }
 .review-holder .review,
 .review-holder .review-full-view {
-    float: left;
-    font-size: 14px;
-    line-height: 20px;
-    margin: 0 0 0 20px;
-    width: 614px;
+float: left;
+font-size: 15px;
+line-height: 20px;
+margin: 0 0 0 20px;
+width: 614px;
+font-family: DIN;
 }
 .review-holder .review-user .photo {
     background-repeat: no-repeat;
@@ -316,9 +333,11 @@ h1, h3 {
     font-size: 12px;
     margin: 10px 0 0;
     position: absolute;
+    font-family: DIN;
 }
 .hotel-list li .details .bubble-holder {
     text-align: center;
+    line-height: 0.6;
 }
 .hotel-list li .details .bubble-holder .bubble {
     margin: 0 auto 5px;
@@ -356,7 +375,9 @@ h1, h3 {
     float:left;
 }
 .hotel-list .foot .label {
-    padding: 30px 15px 0 0;
+ padding: 22px 15px 0 0;
+font-family: DINM;
+font-size: 14px;
 }
 .hotel-list .foot .graph-holder {
     width: 400px;
@@ -365,6 +386,8 @@ h1, h3 {
     float:left;
     text-align: center;
     width: 80px;
+    font-family: DINM;
+font-size: 14px;
 }
 .hotel-list .foot .graph-holder .graph {
     background-color: #cce5c1;
@@ -388,14 +411,15 @@ h1, h3 {
     margin:5px 0 0 0;
 }
 .hotel-list .foot input[type="button"] {
-    background-color: #76bf4f;
-    border: medium none;
-    color: #eff9cd;
-    cursor: pointer;
-    float: right;
-    font-size: 18px;
-    padding: 10px 40px;
-    text-transform: uppercase;
+background-color: #76bf4f;
+border: medium none;
+color: #eff9cd;
+cursor: pointer;
+float: right;
+font-size: 18px;
+padding: 3px 40px;
+text-transform: uppercase;
+font-family: mixBold;
 }
 .hotel-list .foot input[type="button"]:hover {
     opacity: 0.8;

@@ -173,12 +173,20 @@ var common = {
                     common.populateHotelList(response);
                 }
             });
-            var formH = $('.travel-form').innerHeight();
+             $('#hotel-list-holder').fadeIn(1000);
+          //  var formH = $('.travel-form').innerHeight();
+            var formH = 500 - $('.cContent').innerHeight()-$('.button-holder').innerHeight;
             var body = $("html, body");
             body.animate({scrollTop:formH}, '1000', 'swing', function(){
                 $('.travel-form').closest('.stretch').addClass('sticky');
                 $('#hotel-list-holder').closest('.stretch').addClass('sticky-shadow');
             });
+            $('.cContent').slideUp('slow');
+            $('.button-holder').slideUp('slow');
+             $('.goBackForm').fadeIn(1000);
+            
+            
+
         });
         
         var formH = $('.travel-form').innerHeight();
@@ -380,5 +388,6 @@ var common = {
 
 $(document).ready(function(){
 	common.init();
+     
 });
 

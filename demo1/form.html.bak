@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Show up hotels</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="css/custom.css" />
+        <link rel="stylesheet" type="text/css" href="css/custom2.css" />
+        <script src='js/jquery.min.js'></script>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/jquery-ui.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="css/component1.css">
+        <script src="js/modernizr.custom.js"></script>
+    </head>
+    <style>
+        #profilecircle{
+            background-image : url(images/circle.png);
+            background-repeat : no-repeat;
+            background-size: contain;
+            width: 65px;
+            height: 65px;
+            -moz-border-radius: 33px;
+            -webkit-border-radius: 33px;       
+            border-radius: 33px;
+            float: right;
+            margin: 8px 20px 0 20px;
+        }
+        #profilename {
+            font-family : TheMix;
+            font-size : 25px;
+            color : #FADDDD;
+            color : rgb(250, 221, 221);
+            float: right;
+            line-height: 80px;
+        }
+    </style>
+    <body>
+        <div class="page-container">
+            <div class="cHeader">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="header">
+
+                            <div id='profilecircle'></div>
+                            <div id='profilename'>paul graham</div>
+                            <!--
+                                        <div class="user">
+                                            <div class="profile-name">Paul Graham</div>
+                                            <div class="profile-image"></div>
+                                        </div>
+                            -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <!-- Merge from Mp -->
+                <div  class="cContent">
+                    <div class="logout">
+                        <span class="logoutbutton">Logout</span>
+                    </div>
+                    <div class="container-fluid con">    
+                        <div class="row">
+                            <div class="col-md-7 col-md-offset-3">
+                                <form id="nl-form" class="nl-form">
+                                    I am traveling to
+                                    <select>
+                                        <option value="1" selected>Location</option>
+                                        <option value="2">Athens, Greece</option>
+                                        <option value="3">Amsterdam, Netherlands</option>
+                                        <option value="4">Dublin, Ireland</option>
+                                        <option value="5">Lisbon, Portugal</option>
+                                        <option value="6">Madrid, Spain</option>
+                                        <option value="7">Milan, Italy</option>
+                                        <option value="8">Vienna, Austria</option>
+                                        <option value="9">Zermatt, Switzerland</option>
+                                        <option value="9">Bali, Indonesia</option>
+                                    </select>
+
+                                    <br />from <input type="text" class="datepicker" value="DD-MM-YYYY"> to <input type="text" class="datepicker" value="DD-MM-YYYY"> <br>
+
+                                    My purpose of traveling is
+                                    <select>
+                                        <option value="1" selected>Select</option>
+                                        <option value="1">Honeymoon</option>
+                                        <option value="2">Business</option>
+                                        <option value="3">Travelling </option>
+                                        <option value="4">Solo Travelling</option>
+
+                                    </select>
+
+
+                                    <br><br><span class="honeymoon4th"> We Enjoy <a href="#modal02" data-toggle="modal" class="nl-field-toggle"> <span class="selectedFoods">Food</span>  </a>. </span>
+                                    <span class="business4th">                      
+                                        I want my room in middle of </span>
+                                    <select>
+                                        <option value="1" selected>City Buzz</option>
+                                        <option value="1">Near Airport</option>
+                                        <option value="2">Suburbs</option>
+                                        <option value="3">Silent </option>			
+                                    </select>
+                                    <span class="Traveling4th"> We Enjoy <a href="#modal02" data-toggle="modal" class="nl-field-toggle"> <span class="selectedFoods">Food</span>  </a>. </span>
+                                    <span class="soloTraveling4th"> We Enjoy <a href="#modal02" data-toggle="modal" class="nl-field-toggle"> <span class="selectedFoods">Food</span>  </a>. </span>
+
+
+                                    <br/> 
+                                    <span class="honeymoon5th"> We Want our room to be in middle of </span>
+                                    <select>
+                                        <option value="1" selected>Mountains</option>
+                                        <option value="1">Ocean</option>
+                                        <option value="2">Forest</option>
+                                        <option value="3">City </option>			
+                                    </select>
+
+                                    <span class="business5th">                          
+                                        I want my hotel to have   </span>
+                                    <select>
+                                        <option value="1" selected>Select</option>
+                                        <option value="1">Cafeteria</option>
+                                        <option value="2">Conference room</option>
+                                        <option value="3">Gym </option>	
+                                        <option value="4">swimming pool </option>
+                                    </select>
+
+
+                                    <span class="Traveling5th"> We Want our room to be in middle of </span>
+                                    <select>
+                                        <option value="1" selected>Mountains</option>
+                                        <option value="1">Ocean</option>
+                                        <option value="2">Forest</option>
+                                        <option value="3">City </option>			
+                                    </select>
+
+
+                                    <span class="soloTraveling5th"> 
+
+                                        We Like to do  </span>
+                                    <select>
+                                        <option value="1" selected>Water Sports</option>
+                                        <option value="1">Campfire</option>
+                                        <option value="2">Cultural</option>
+                                        <option value="3">City tour </option>			
+                                    </select>
+
+
+                                    <div class="nl-overlay"></div>
+                                </form>
+
+                                <div class="travel-form tepete">
+                                    <span contenteditable="true" id="typewriter"></span><!--<span id="typed-cursor" class="blinking">|</span>--> <br/>             
+                                </div>
+
+                                <!--
+                                                  <div class="cbutton">
+                                                    
+                                                   <div class="cBtn">Show Up Hotels</div>
+                                                  
+                                                  </div>
+                                -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Merge Code from Mp-->
+                <div class="modal-portfolio modal fade" id="modal02" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-content cModal">
+                        <div class="modal-close" data-dismiss="modal"></div>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-6 col-md-offset-3">
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-sm-5 margin-btm-30 text-center">
+                                                <div class="demo-hover">
+                                                    <img src="images/thai.jpg" class="img-responsive" alt="demo-fullscreen">
+                                                    <div class="demo-desc">
+                                                        <h3>Thailand</h3>                       
+                                                    </div>
+                                                </div><!--demo green-->    
+                                            </div><!--demo fullscreen-->
+                                            <div class="col-sm-5 margin-btm-30 text-center">
+                                                <div class="demo-hover">
+                                                    <img src="images/indian.jpg" class="img-responsive" alt="demo-fullscreen">
+                                                    <div class="demo-desc">
+                                                        <h3>Indian</h3>                       
+                                                    </div>
+                                                </div><!--demo green-->    
+                                            </div><!--demo Transparent header-->
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-5 margin-btm-30 text-center">
+                                                <div class="demo-hover">
+                                                    <img src="images/japnese.jpg" class="img-responsive" alt="demo-fullscreen">
+                                                    <div class="demo-desc">
+                                                        <h3>Japanese</h3>                       
+                                                    </div>
+                                                </div><!--demo green-->    
+                                            </div><!--demo dark-->            
+                                            <div class="col-sm-5 margin-btm-30 text-center">
+                                                <div class="demo-hover">
+                                                    <img src="images/french.jpg" class="img-responsive" alt="demo-fullscreen">
+                                                    <div class="demo-desc">
+                                                        <h3>French</h3>                       
+                                                    </div>
+                                                </div><!--demo green-->    
+                                            </div><!--demo Blue--> 
+
+                                        </div>
+                                        <div class="row">
+                                            <button type="button" id="iAmGood" class="btn iamgoodbtn btn-success" data-dismiss="modal"><i class="fa fa-times"></i> I am Good</button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <div class="container travel-form">
+               
+
+                <div class="button-holder">
+                    <input type="button" value="show up hotels" />
+                </div>
+
+                <div id="hotel-list-holder">
+
+                </div>
+            </div>
+        </div>
+        <script src="js/common.js"></script>
+        <script src="js/common2.js"></script>
+        <script src="js/slider.js"></script>
+        <!-- Merge code from Mp-->
+        <script src="js/nlform.js"></script> 
+        <script src="js/jquery-ui.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script>
+            var nlform = new NLForm(document.getElementById('nl-form'));
+        </script>
+        <script>
+
+            $(function() {
+                $('.datepicker').click(function() {
+                    $(this).addClass('nl-field nl-field-open');
+                    $('.ui-datepicker').css('z-index', 20000);
+                });
+                $('.datepicker').change(function() {
+                    if ($(this).val()) {
+                        $(this).removeClass('nl-field nl-field-open');
+                    }
+                });
+                var clearTextOnlyOnce = 1;
+                $('#typewriter').keypress(function() {
+                    $(this).css('font-family', 'NeoSans');
+                    if ($(this).text().length > 150)
+                        $('.tepete').css('overflow-y', 'scroll');
+                    if ($(this).text().length < 150)
+                        $('.tepete').css('overflow-y', 'auto');
+                });
+                $('#typewriter').click(function() {
+                    if (clearTextOnlyOnce == 1) {
+                        $(this).text("").focus();
+                        $('#typed-cursor').hide();
+                        clearTextOnlyOnce++;
+                    }
+                    else {
+                        $(this).focus();
+                    }
+                });
+                $('body').keypress(function() {
+                    if (clearTextOnlyOnce == 1) {
+                        $('#typewriter').text("").focus();
+                        $('#typed-cursor').hide();
+                        clearTextOnlyOnce++;
+                    }
+                    else {
+                        $('#typewriter').focus();
+                    }
+                });
+                $(".datepicker").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: 'dd-mm-yy'
+                });
+                $('.tepete').hide();
+                function typer() {
+                    $('#typewriter').css('font-family', 'NeoSans-italic');
+                    var str = "Please tell us your any further requirements ",
+                        i = 0,
+                        isTag,
+                        text;
+
+                    (function type() {
+                        text = str.slice(0, ++i);
+                        if (text === str)
+                            return;
+
+                        document.getElementById('typewriter').innerHTML = text;
+
+                        var char = text.slice(-1);
+                        if (char === '<')
+                            isTag = true;
+                        if (char === '>')
+                            isTag = false;
+
+                        if (isTag)
+                            return type();
+                        setTimeout(type, 80);
+                    }());
+                }
+                $('.op3').click(function() {
+                    $('.tepete').fadeIn();
+                    typer();
+                    clearTextOnlyOnce = 1;
+                });
+                $('.op4').click(function() {
+                    $('.tepete').fadeIn();
+                    typer();
+
+                    clearTextOnlyOnce = 1;
+                });
+                $('.op5').click(function() {
+                    $('.tepete').fadeIn();
+                    typer();
+
+                    clearTextOnlyOnce = 1;
+                });
+                $('.op6').click(function() {
+                    $('.tepete').fadeIn();
+                    typer();
+
+                    clearTextOnlyOnce = 1;
+                });
+                hideAll();
+                var checkStatefood;
+
+                $('#iAmGood').click(function() {
+                    checkFood();
+                    afterLoadingFood();
+                });
+
+                $('.modal-close').click(function() {
+                    checkFood();
+                    afterLoadingFood();
+                });
+
+                function afterLoadingFood() {
+                    if (checkStatefood == "honeymoon")
+                    {
+                        $('.honeymoon5th').fadeIn(1500);
+                        $('.op3').fadeIn(1500);
+                    }
+                    else if (checkStatefood == "travelling")
+                    {
+                        $('.Traveling5th').fadeIn(1000);
+                        $('.op5').fadeIn(1000);
+                    }
+                    else if (checkStatefood == "solotravelling")
+                    {
+                        $('.soloTraveling5th').fadeIn(1000);
+                        $('.op6').fadeIn(1000);
+                    }
+                }
+                $('.honeymoon4th').click(function() {
+
+                    checkStatefood = "honeymoon";
+
+                });
+                $('.op2').click(function() {
+                    $('.business5th').fadeIn(1000);
+                    $('.op4').fadeIn(1000);
+                });
+                $('.Traveling4th').click(function() {
+                    checkStatefood = "travelling"
+                });
+                $('.soloTraveling4th').click(function() {
+                    checkStatefood = "solotravelling"
+                });
+                function hideAll() {
+                    $('.tepete').hide();
+                    $('.honeymoon4th').hide();
+                    $('.honeymoon5th').hide();
+                    $('.op2').hide();
+
+                    $('.business4th').hide();
+                    $('.op3').hide();
+
+                    $('.business5th').hide();
+                    $('.op4').hide();
+
+                    $('.Traveling4th').hide();
+
+                    $('.Traveling5th').hide();
+                    $('.op5').hide();
+                    $('.soloTraveling4th').hide();
+
+                    $('.soloTraveling5th').hide();
+                    $('.op6').hide();
+
+                }
+                $('.op1').click(function() {
+
+                    //  $('.demo-hover').find('div').removeClass('greenBack').addClass('demo-desc');
+
+                    if ($('.op1').find('ul>li.nl-dd-checked').text() == "Honeymoon") {
+
+                        $('.tepete').hide();
+
+                        clearFood();
+                        $('.honeymoon4th').fadeIn(1000);
+
+                        $('.honeymoon5th').hide();
+                        $('.op2').hide();
+                        $('.business4th').hide();
+                        $('.op3').hide();
+                        $('.business5th').hide();
+                        $('.op4').hide();
+                        $('.Traveling4th').hide();
+                        $('.Traveling5th').hide();
+                        $('.op5').hide();
+                        $('.soloTraveling4th').hide();
+                        $('.soloTraveling5th').hide();
+                        $('.op6').hide();
+
+                    }
+                    else if ($('.op1').find('ul>li.nl-dd-checked').
+                        text() == "Business") {
+
+                        $('.tepete').hide();
+
+                        $('.business4th').fadeIn(1000);
+                        $('.op2').fadeIn(1000);
+
+                        $('.honeymoon4th').hide();
+                        $('.honeymoon5th').hide();
+                        $('.op3').hide();
+                        $('.business5th').hide();
+                        $('.op4').hide();
+                        $('.Traveling4th').hide();
+                        $('.Traveling5th').hide();
+                        $('.op5').hide();
+                        $('.soloTraveling4th').hide();
+                        $('.soloTraveling5th').hide();
+                        $('.op6').hide();
+
+                    }
+                    else if ($('.op1').find('ul>li.nl-dd-checked').
+                        text() == "Solo Travelling") {
+
+                        $('.tepete').hide();
+                        clearFood();
+                        $('.soloTraveling4th').fadeIn(1000);
+                        $('.honeymoon4th').hide();
+                        $('.honeymoon5th').hide();
+                        $('.op2').hide();
+                        $('.business4th').hide();
+                        $('.op3').hide();
+                        $('.business5th').hide();
+                        $('.op4').hide();
+                        $('.Traveling4th').hide();
+                        $('.Traveling5th').hide();
+                        $('.op5').hide();
+                        $('.soloTraveling5th').hide();
+                        $('.op6').hide();
+                    }
+                    else if ($('.op1').find('ul>li.nl-dd-checked').
+                        text() == "Travelling ") {
+
+                        $('.tepete').hide();
+                        clearFood();
+                        $('.Traveling4th').fadeIn(1000);
+                        $('.honeymoon4th').hide();
+                        $('.honeymoon5th').hide();
+                        $('.op2').hide();
+                        $('.business4th').hide();
+                        $('.op3').hide();
+                        $('.business5th').hide();
+                        $('.op4').hide();
+                        $('.Traveling5th').hide();
+                        $('.op5').hide();
+                        $('.soloTraveling4th').hide();
+                        $('.soloTraveling5th').hide();
+                        $('.op6').hide();
+                    }
+                    else if ($('.op1').find('ul>li.nl-dd-checked').
+                        text() == "Select") {
+                        hideAll();
+                    }
+                });
+                var selectedItems = [];
+                $('.demo-hover').click(function() {
+                    $("#selectedFoods").text();
+                    $(this).find('div').toggleClass('demo-desc greenBack');
+
+                });
+
+
+
+                function clearFood() {
+
+                    if ($(".selectedFoods").text() != "" || $(".selectedFoods").
+                        text() != null)
+                    {
+                        $(".selectedFoods").text("Food");
+                        $('.demo-hover').each(function() {
+                            $(this).find('div').removeClass('greenBack').addClass(
+                                'demo-desc');
+                        });
+
+                    }
+                }
+                function checkFood() {
+
+                    i = 0;
+                    $('.greenBack').each(function() {
+                        selectedItems[i] = $(this).find('h3').text();
+                        i++;
+                    });
+
+                    $(".selectedFoods").text(selectedItems);
+                    if ($(".selectedFoods").text() == "" || $(".selectedFoods").
+                        text() == null)
+                    {
+                        $(".selectedFoods").text("Food");
+
+                    }
+
+                }
+            });
+            $(document).ready(function() {
+
+                $('#profilename').text(parseCookieValue('name'));
+                $(".username").text(parseCookieValue('name'));
+                imageUrl = parseCookieValue('image')
+                $($('#profilecircle')[0]).attr('style',
+                    'background-image: url(' + imageUrl + ')')
+            });
+            parseCookieValue = function(param) {
+                cookieSet = document.cookie.split(';')
+                for (cook in cookieSet) {
+                    value = cookieSet[cook];
+                    name = value.substring(0, value.indexOf('='));
+                    if (name.trim() === param) {
+                        return value.substring(value.indexOf('=') + 1)
+                    }
+                }
+                return undefined
+            }
+        </script>
+    </body>
+</html>
