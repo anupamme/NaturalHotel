@@ -1,0 +1,72 @@
+{
+    "1": {
+        "name": "Anna Smith",
+        "photo": "//lh5.googleusercontent.com/-9SLqERgKaz4/AAAAAAAAAAI/AAAAAAAAALU/TqHk9NzSopU/s180-c-k-no/photo.jpg",
+        "place": "Stratford, Connecticut",
+        "title": "Retreat from the City",
+        "text": "Great accommodations 10 minute walk to train station and close to some great restaurants in Sandymount. The Irish sea is not far 10 minute walk and there is a nice beach, lots of people walking and running. I liked the pancakes they served they are the best I had whilst in Ireland. The rooms were comfortable, the tv was a bit old but worked"
+    },
+    "2": {
+        "name": "Lisa R",
+        "photo": "//lh5.googleusercontent.com/-9SLqERgKaz4/AAAAAAAAAAI/AAAAAAAAALU/TqHk9NzSopU/s180-c-k-no/photo.jpg",
+        "place": "Sydney, Australia",
+        "title": "Retreat from the City",
+        "text": "The Aberdeen Lodge is a beautiful large home in refined Ballsbridge, Dublin. Large rooms & comfortable beds. Breakfast are fab with a wide array of choices. Out of the city but easy access to public transport. Only suggestion would be tea making facilities in the bedrooms. Would recommend to others and stay again"
+    },
+    "3": {
+        "name": "Jessica H",
+        "photo": "//lh5.googleusercontent.com/-9SLqERgKaz4/AAAAAAAAAAI/AAAAAAAAALU/TqHk9NzSopU/s180-c-k-no/photo.jpg",
+        "place": "Reading, Pennsylvania",
+        "title": "Wonderful Experience",
+        "text": "We recently returned from a wonderful trip to Ireland and found that one of our favorite experiences was staying at the Aberdeen Lodge outside of Dublin. The owners were so kind and helpful and the staff went out of their way to accommodate us! While the lodging may not be a 5-star experience, as other reviewers have mentioned, it is warm and comfortable, and we actually enjoyed our stay at the Aberdeen more than we enjoyed some of the 5-star accommodations we had across Ireland. I requested a triple room, as we were traveling with our two-year-old daughter, and they gave us a lovely connecting suite with two double beds! We were traveling with my parents as well, and they made sure we could occupy three rooms next to each other, which gave us one wing of the lodge to ourselves! They had tea service available until late in the evening; in fact, they made us tea when we returned from dinner after 9pm. Breakfasts were very good, and they have certainly perfected the traditional \"Irish breakfast\". More so, the staff really cared about making sure everything was to our satisfaction. Staying at the Aberdeen was certainly one of the highlights of our trip and we would definitely return!"
+    },
+    "4": {
+        "name": "Kevin R",
+        "photo": "//lh5.googleusercontent.com/-9SLqERgKaz4/AAAAAAAAAAI/AAAAAAAAALU/TqHk9NzSopU/s180-c-k-no/photo.jpg",
+        "place": "West Malling, United Kingdom",
+        "title": "Disappointing",
+        "text": "Did not live up to expectation. Very friendly and helpful staff but failed on many basics. No plug in the bath. No remote control for a very old TV with an appalling picture. Room not made up and not resupplied having been out from 9 am for over 6 hours. Fire alarm went off 3 times the last being at 6 am for several minutes. No reason or apology given. Cat sleeping on furniture in lounge! That said wonderful location and excellent breakfast."
+    },
+    "5": {
+        "name": "Jon B",
+        "photo": "//lh5.googleusercontent.com/-9SLqERgKaz4/AAAAAAAAAAI/AAAAAAAAALU/TqHk9NzSopU/s180-c-k-no/photo.jpg",
+        "place": "West Malling, United Kingdom",
+        "title": "Exceeded Expectations",
+        "text": "Four of us traveled to Dublin to watch the PSU/UCF football game and staying at Number 31 surely exceeded all our expectations. The management and staff were all exceptionally professional, attentive and courteous. Rooms were super clean and the breakfast was superb--hard to believe there was a better breakfast anywhere in the city. It'sjustnowthreedayslaterandIstillmisshavingmymorninggrumbfromthisplace.Locationisalsogreat... insidethecitybutnotintheheart. Itwasveryquiet, restfulandaw ayfromalltheclubnoisea ndtrafficy etyoucouldwalkal mostanywhere. Highlyrecommendedthisplacetoanyone.TheownerNoelisagem.Firstclassserviceatamorethanfairprice."
+    },
+    "6": {
+        "name": "ambercoast",
+        "photo": "//lh5.googleusercontent.com/-9SLqERgKaz4/AAAAAAAAAAI/AAAAAAAAALU/TqHk9NzSopU/s180-c-k-no/photo.jpg",
+        "place": "London, Ontario",
+        "title": "Fabulous!!!",
+        "text": "WetravelextensivelyforworkandpleasureandthestayatTheMarker(4nights), handsdown, wasthebestexperienceever.Thedecor, cleanliness, service, attentiontodetail-itallexceededourexpectations.Lovedthecoffeepresswithgoodqualitygroundcoffeeandtheeveningchocolates: )Earlymorningcheckinwasahugebonusafteranovernightflight.Everymemberofthestaffthatweencounteredwascourteous, helpful, andseemedgenuinelyhappytobeworkingthere.Welldone, TheMarker, andthankyouforagreatstay."
+    },
+    "7": {
+        "name": "Toadstools",
+        "photo": "//lh5.googleusercontent.com/-9SLqERgKaz4/AAAAAAAAAAI/AAAAAAAAALU/TqHk9NzSopU/s180-c-k-no/photo.jpg",
+        "place": "London, Ontario",
+        "title": "Veryplush",
+        "text": "Mywifebroughtmehereformybirthdayanditwastopclass.GreatstyleandvaletparkingputthisabovetheotherhotelsI'vestayedinwhileintown.It'spricybutthelittlethingsareworthitinmyopinionlikebathroomproductsandbrandedwaterintheroom.Afullystockedminibaravailablewithisdearbutthat'stobeexpected.Visitedtherooftopbarwhichwasfullofgroupshavingfoodanddrinkbutareservationisrecommendedasthereislimitedspace.Theonlyfaultinthishotelisthepoorathmosphere.Thehotelwasbusybutwewerewhisperinginthebaritwassoquietandsterile.Endedupgoingtoanearbybarfordrinksandfoodbecauseifthis.Overallgreathotelwithagreatlocationplentytokeepyouhappy."
+    },
+    "8": {
+        "name": "RebecaS",
+        "photo": "//lh5.googleusercontent.com/-9SLqERgKaz4/AAAAAAAAAAI/AAAAAAAAALU/TqHk9NzSopU/s180-c-k-no/photo.jpg",
+        "place": "London, Ontario",
+        "title": "WearetotallyamazedbytheHotel, theviewandtheStaff!",
+        "text": "TheMarkerHotelmadeourtriptoDublinmorethanmarvelous!WearrivedveryearlyfromalongflightandweredirectedbythestafftorelaxinthebeautifulSPAwhileourroomwasavailable...suchanicegesture!Itwastheperfectlocation, wonderfulroom, verymodernandbeautifulhotelwithveryfriendlystaff, veryclean, (whilewalkingtoourroomeverydayawonderfularoma\"offreshlycleaned\"greetedus), hadaverynicedinnerattherestaurant.Wehadalittleissuewiththeshowerbutwastakencareoffquicklyandwell.Wonderfulexperiencewewouldrecommendthishotelhighlyandhopetogobacksoon."
+    },
+    "9": {
+        "name": "jcinportd",
+        "photo": "//lh5.googleusercontent.com/-9SLqERgKaz4/AAAAAAAAAAI/AAAAAAAAALU/TqHk9NzSopU/s180-c-k-no/photo.jpg",
+        "place": "PortPirie, Australia",
+        "title": "WearetotallyamazedbytheHotel, theviewandtheStaff!",
+        "text": "FromthetimewedroveinandwalkedupthestepsofthismarvellousB&Bweknewthiswassomeveryspecialaccommodation.ThewelcomefromyoungDerekwasgreat, hebookedtheLobsterPot, amustdorestaurantandfilledusinprofessionallyaboutthearea.Roomwasamazingwitha4posterbed, plentyofroomandbathroomwastotallyrefurbished.Paintings, furnishings5starplus.Breakfastwasalsoexcellent.NOWEARENOTRELATEDTOWONERSbutappreciateexcellence.RoomTip: Justbepleasedifyoucangetabooking.Wewantedtoextendbutnoavailabilty."
+    },
+    "10": {
+        "name": "sandrap912014",
+        "photo": "//lh5.googleusercontent.com/-9SLqERgKaz4/AAAAAAAAAAI/AAAAAAAAALU/TqHk9NzSopU/s180-c-k-no/photo.jpg",
+        "place": "",
+        "title": "ALittleLuxuryinDublin",
+        "text": "WespentoutfirstthreenightsinDublinatArielHouse.Wewerewarmlygreetedandofferteaandsconeswhilewecheckedin-arrivingquiteearly!Theroomwasspaciouswithalovelybaywindow, canopybed, crisplinensandeveryamenityneeded.Theglassedingardenbreakfastroomwasespeciallydelightfulandalovelysettingfortheirgourmetbreakfast.Thebreakfastmenuofferednumerousspecialitydishes, fruitskewers, pastriesandotherdelights.Allthreebreakfastsweredeliciousandtheperfectwaytobeginalongdayofsiteseeing.IfinDublin, besuretostayatArielHouse.RoomTip: Checkthewebsiteforaglimpseoftherooms"
+    }
+}

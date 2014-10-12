@@ -509,15 +509,14 @@ h1, h3 {
     padding: 12px 0 10px 20px;
 }
 #revulize-content .attributes .choices {
-    margin: 0 0 50px;
-    min-height: 300px;
+    margin: 0 0 80px;
 }
 #revulize-content .rank-list {
     background-color: white;
     border-bottom: 1px solid #92c17c;
     display: none;
     position: absolute;
-    top: 0;
+    top: -57px;
     width: 260px;
     z-index: 1;
 }
@@ -585,7 +584,7 @@ h1, h3 {
 .stretch.sticky {
     background-color: #ced3cb;
     padding: 0 0 10px;
-    top: -340px;
+    top: -330px;
 }
 .stretch.sticky .button-holder,
 .stretch.sticky .travel-form input.other[type="text"] {
@@ -598,4 +597,16 @@ h1, h3 {
     margin: 0 auto;
     padding: 20px 0 0;
     width: 1040px;
+}
+#revulize-content .other-attr {
+    margin: 0 0 80px;
+}
+#revulize-content .review-holder .review-user .user-info {
+    width: 80px;
+}
+#revulize-content .review-holder .review-user {
+    height: 130px;
+}
+#revulize-content .choice-list li {
+    cursor: pointer;
 }

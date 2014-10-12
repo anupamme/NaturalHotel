@@ -2,6 +2,7 @@ $ = jQuery.noConflict();
 
 var common = {
     reviewFinder: {},
+    reviewLookup: {},
     init: function(){
         this.setHomeHeight();
         this.resize();
@@ -294,20 +295,6 @@ var common = {
                 $('#revulize-content ul.choice-list').append(li);
             });
 
-            $('.review-list').on('click', '.review', function(){
-                var rv = $(this),
-                    rvf = $(this).siblings('.review-full-view');
-                rv.hide();
-                rvf.show();
-            });
-
-            $('.review-list').on('click', '.review-full-view', function(){
-                var rvf = $(this),
-                    rv = $(this).siblings('.review');
-                rvf.hide();
-                rv.show();
-            });
-
             $.ajax({
                 url:        "js/review-finder.txt",
                 async:      false,
@@ -316,23 +303,78 @@ var common = {
                     common.reviewFinder = eval(response);
                 }
             });
+            
+            $.ajax({
+                url:        "js/review-lookup.txt",
+                async:      false,
+                dataType:   "json",
+                success:    function(response){
+                    common.reviewLookup = eval(response);
+                }
+            });
 
-            common.setReviewList();
+            common.populateReviewList();
         }
     },
     setReviewList: function(){
         $('.review-holder .photo').each(function(){
             $(this).css('background-image', 'url("'+ $(this).attr('data-src') +'")');
         });
+
+        $('.review-list').on('click', '.review', function(){
+            var rv = $(this),
+                rvf = $(this).siblings('.review-full-view');
+            rv.hide();
+            rvf.show();
+        });
+
+        $('.review-list').on('click', '.review-full-view', function(){
+            var rvf = $(this),
+                rv = $(this).siblings('.review');
+            rvf.hide();
+            rv.show();
+        });
     },
     setSticky: function(){
         $('.container').on('click', '.stretch.sticky', function(){
-            $('.stretch.sticky').removeClass('sticky');
-            $('.stretch.sticky-shadow').removeClass('sticky-shadow');
-            
-            var body = $("html, body");
-            body.animate({scrollTop:0}, '500', 'swing');
+            window.location.href = 'form.html';
         });
+    },
+    populateReviewList: function(){
+        var arrRevList = [];
+        arrRevList.push(common.reviewLookup["1"]);
+        arrRevList.push(common.reviewLookup["2"]);
+        arrRevList.push(common.reviewLookup["3"]);
+        arrRevList.push(common.reviewLookup["4"]);
+        arrRevList.push(common.reviewLookup["5"]);
+        arrRevList.push(common.reviewLookup["6"]);
+        common.showReviewList(arrRevList);
+    },
+    showReviewList: function(rl){
+        var rul = '<ul>';
+        var rvTemplate = '';
+        $.ajax({
+            url:        "template-review-list.html",
+            async:      false,
+            success:    function(response){
+                rvTemplate = response;
+            }
+        });
+        $.each(rl, function(i, item){
+            var li = rvTemplate;
+            li = li.replace('{{user-name}}', item.name);
+            li = li.replace('{{user-photo}}', item.photo);
+            li = li.replace('{{user-address}}', item.place);
+            var summary = item.text.substring(0, 250) + '...';
+            li = li.replace('{{summary}}', summary);
+            li = li.replace('{{review-full}}', item.text);
+            
+            rul += li;
+        });
+        rul += '</ul>';
+        $('.review-list').html(rul);
+        
+        common.setReviewList();
     }
 };
 
