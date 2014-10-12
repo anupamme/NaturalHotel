@@ -3,8 +3,10 @@
 <head>
     <title>Show up hotels</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="css/custom.css" />
-    <script src='js/jquery.min.js'></script>
+ <style>
+
+    </style>
+       <link rel="stylesheet" type="text/css" href="css/landing.css" />
 </head>
 <body>
     <div class="page-container">
@@ -35,16 +37,106 @@
             <div class="container">
                 <div class="home-block">
                     <div class="logo">
-                        <div class='image'></div>
-                        <h1>Show <br>up <br>hotels</h1>
+                       
+                        <h1>Show <br>Up <br>hotels</h1>
                     </div>
-                    <h3>Suggest best hotels <br />based on customer reviews</h3>
-                    <div class="loginButton">SIGN UP</div>
+                    <h3>A personalized hotel recommondention<br> curated by customer reviews</h3>
+                    <div class="loginButton">Sign up</div>
+                    <div id="status"></div>
                 </div>
             </div>
         </div>
     </div>
+    <script src='js/jquery.min.js'></script>
 <script src="js/common.js"></script>
 <script src="js/slider.js"></script>
+<script>
+function statusChangeCallback(response) {
+    if (response.status === 'connected') {
+        testAPI();
+    } 
+    else if (response.status === 'not_authorized') {
+        FB.login(function(response){
+        }); 
+        //document.getElementById('status').innerHTML = 'Please log ' + 'into this app.';
+    } 
+    else {
+        // The person is not logged into Facebook, so we're not sure if they are logged into this app or not. prompt to loginto fb.
+            FB.login(function(response) {
+            });
+            //      document.getElementById('status').innerHTML = 'Please log ' +  'into Facebook.';
+    }
+}
+// This function is called when someone finishes with the Login Button.  See the onlogin handler attached to it in the sample code below.
+function checkLoginState() {
+    //console.log('in check login state')
+    FB.getLoginStatus(function(response) {
+        statusChangeCallback(response);
+    });
+}
+
+window.fbAsyncInit = function() {
+            FB.init({
+                appId      : '919333918080831',
+                cookie     : true,  // enable cookies to allow the server to access the session
+                xfbml      : true,  // parse social plugins on this page
+                version    : 'v2.1' // use version 2.1
+            });
+            // Now that we've initialized the JavaScript SDK, we call 
+            // FB.getLoginStatus().  This function gets the state of the
+            // person visiting this page and can return one of three states to
+            // the callback you provide.  They can be:
+            //
+            // 1. Logged into your app ('connected')
+            // 2. Logged into Facebook, but not your app ('not_authorized')
+            // 3. Not logged into Facebook and can't tell if they are logged into
+            //    your app or not.
+            //
+            // These three cases are handled in the callback function.
+
+            //  FB.getLoginStatus(function(response) {
+            //        console.log('in get login status')
+            //      statusChangeCallback(response);
+            //  });
+};
+    
+// Load the SDK asynchronously
+(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "http://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+    
+function testAPI() {
+            //console.log('Welcome!  Fetching your information.... ');
+        FB.api('/me', function(response) {
+        console.log('Successful login for: ' + response.name);
+        console.log(JSON.stringify(response)); 
+        document.getElementById('status').innerHTML =
+        'Thanks for logging in, ' + response.name + '!';
+        name = response.name;
+        imageUrl = 'http://graph.facebook.com/' + response.id + '/picture';
+        document.cookie = 'name=' + response.name;
+        document.cookie = 'image=' + imageUrl;
+        window.location.href = "form.html";
+            //var imgElement = '<img src="' + imageUrl + '" width="100px" height="100px"/>'
+            // $('.loginButton').append(imgElement)  
+            });
+        }
+</script>
 </body>
 </html>
+<script>
+    $('.loginButton').on('mouseover', function() { 
+        $($('.loginBackground')[0]).attr('style', 'display: inline;');
+    }).on('mouseout', function() {
+        $($('.loginBackground')[0]).attr('style', 'display: none;');
+    });
+    
+    $('.loginButton').on('click', function() {
+        //console.log('I am clicked.'); 
+        checkLoginState();
+    });
+</script>

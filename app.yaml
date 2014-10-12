@@ -1,0 +1,27 @@
+application: review-viz
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /html-files
+  static_dir: html-files
+
+- url: /css
+  static_dir: css
+  
+- url: /css3
+  static_dir: css3
+- url: /js
+  static_dir: js
+  
+- url: /data
+  static_dir: data
+  
+- url: /images
+  static_dir: images
+  
+- url: /.*
+  script: review-viz.application
+  static_dir: 
