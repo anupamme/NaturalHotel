@@ -63,6 +63,9 @@ function statusChangeCallback(response) {
     else {
         // The person is not logged into Facebook, so we're not sure if they are logged into this app or not. prompt to loginto fb.
             FB.login(function(response) {
+                if (response.status === "connected"){
+                    testAPI()
+                }
             });
             //      document.getElementById('status').innerHTML = 'Please log ' +  'into Facebook.';
     }
@@ -112,6 +115,12 @@ window.fbAsyncInit = function() {
 function testAPI() {
             //console.log('Welcome!  Fetching your information.... ');
         FB.api('/me', function(response) {
+            login(response)
+            //var imgElement = '<img src="' + imageUrl + '" width="100px" height="100px"/>'
+            // $('.loginButton').append(imgElement)  
+            });
+        }
+    function login(response){
         console.log('Successful login for: ' + response.name);
         console.log(JSON.stringify(response)); 
         document.getElementById('status').innerHTML =
@@ -121,10 +130,7 @@ function testAPI() {
         document.cookie = 'name=' + response.name;
         document.cookie = 'image=' + imageUrl;
         window.location.href = "form.html";
-            //var imgElement = '<img src="' + imageUrl + '" width="100px" height="100px"/>'
-            // $('.loginButton').append(imgElement)  
-            });
-        }
+    }
 </script>
 </body>
 </html>
