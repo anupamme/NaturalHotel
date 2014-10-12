@@ -1,11 +1,15 @@
 $ = jQuery.noConflict();
 
 var common = {
+    reviewFinder: {},
     init: function(){
         this.setHomeHeight();
         this.resize();
+        this.windowScroll();
         this.setOverlay();
         this.getHotelList();
+        this.revulizeRank();
+        this.setSticky();
     },
     setHomeHeight: function(){
         if($('.home-block').length){
@@ -28,7 +32,7 @@ var common = {
         if($('.hotel-list').length){
             var hH = $('.hotel-list .graph-holder .graph').innerHeight();
             /* set user photo */
-            $('.hotel-list .review-holder .photo').each(function(){
+            $('.review-holder .photo').each(function(){
                 $(this).css('background-image', 'url("'+ $(this).attr('data-src') +'")');
             });
             /* set graph */
@@ -161,13 +165,27 @@ var common = {
     getHotelList: function(){
         $('.travel-form input[type="button"]').on('click', function(){
             $.ajax({
-                url:        "js/sample-result.txt",
+                url:        "js/sample-result1.txt",
                 async:      false,
                 dataType:   "json",
                 success:    function(response){
                     common.populateHotelList(response);
                 }
             });
+            var formH = $('.travel-form').innerHeight();
+            var body = $("html, body");
+            body.animate({scrollTop:formH}, '1000', 'swing', function(){
+                $('.travel-form').closest('.stretch').addClass('sticky');
+                $('#hotel-list-holder').closest('.stretch').addClass('sticky-shadow');
+            });
+        });
+        
+        var formH = $('.travel-form').innerHeight();
+        $(window).on('scroll', function(){
+            if($(window).scrollTop() > formH && $('.stretch.sticky').length < 1){
+                $('.travel-form').closest('.stretch').addClass('sticky');
+                $('#hotel-list-holder').closest('.stretch').addClass('sticky-shadow');
+            }
         });
     },
     populateHotelList: function(result){
@@ -223,8 +241,102 @@ var common = {
         hl += '</ul>';
         $('#hotel-list-holder').html(hl);
         common.setHotelList();
+    },
+    windowScroll: function(){
+        //var fh = $('.travel-form').innerHeight();//alert(fh);
+        
+    },
+    revulizeRank: function(){
+        if($('#revulize-content').length){
+            $('.travel-form').closest('.stretch').addClass('sticky');
+            $('#revulize-content').closest('.stretch').addClass('sticky-shadow');
+            
+            $('#revulize-content .review-list').width($(window).innerWidth() - $('#revulize-content .attributes').width() - 2);
+            
+            var formH = $('.travel-form').innerHeight();
+            $(window).on('scroll', function(){
+                if($(window).scrollTop() > formH && $('.stretch.sticky').length < 1){
+                    $('.travel-form').closest('.stretch').addClass('sticky');
+                    $('#revulize-content').closest('.stretch').addClass('sticky-shadow');
+                }
+            });
+            
+            $('#revulize-content .attributes .rank .selection').on('click', function(){
+                var rl = $(this).siblings('.rank-list');
+                var rank = $(this).attr('data-rank');
+                rl.find('li').removeClass('selected');
+                rl.find('li[data-rank="'+ rank +'"]').addClass('selected');
+                rl.slideDown("fast");
+            });
+
+            $('#revulize-content .rank-list').on('click', 'li', function(){
+                var cLi = $(this),
+                    text = cLi.text(),
+                    rank = cLi.attr('data-rank'),
+                    rl = cLi.parent(),
+                    sel = cLi.closest('.rank').find('.selection');
+                cLi.siblings('li').removeClass('selected');
+                cLi.addClass('selected');
+                sel.attr('data-rank', rank);
+                sel.find('.text').text(text);
+                rl.slideUp("fast");
+            });
+
+            $('#revulize-content ul.choice-list').on('click', 'li span', function(){
+                var li = $(this).parent().clone();
+                $(this).parent().remove();
+                $('#revulize-content ul.attr-list').append(li);
+            });
+
+            $('#revulize-content ul.attr-list').on('click', 'li span', function(){
+                var li = $(this).parent().clone();
+                $(this).parent().remove();
+                $('#revulize-content ul.choice-list').append(li);
+            });
+
+            $('.review-list').on('click', '.review', function(){
+                var rv = $(this),
+                    rvf = $(this).siblings('.review-full-view');
+                rv.hide();
+                rvf.show();
+            });
+
+            $('.review-list').on('click', '.review-full-view', function(){
+                var rvf = $(this),
+                    rv = $(this).siblings('.review');
+                rvf.hide();
+                rv.show();
+            });
+
+            $.ajax({
+                url:        "js/review-finder.txt",
+                async:      false,
+                dataType:   "json",
+                success:    function(response){
+                    common.reviewFinder = eval(response);
+                }
+            });
+
+            common.setReviewList();
+        }
+    },
+    setReviewList: function(){
+        $('.review-holder .photo').each(function(){
+            $(this).css('background-image', 'url("'+ $(this).attr('data-src') +'")');
+        });
+    },
+    setSticky: function(){
+        $('.container').on('click', '.stretch.sticky', function(){
+            $('.stretch.sticky').removeClass('sticky');
+            $('.stretch.sticky-shadow').removeClass('sticky-shadow');
+            
+            var body = $("html, body");
+            body.animate({scrollTop:0}, '500', 'swing');
+        });
     }
 };
+
 $(document).ready(function(){
 	common.init();
 });
+
