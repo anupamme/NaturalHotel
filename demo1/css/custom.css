@@ -7,9 +7,14 @@
     src: url('../fonts/NeoSans-Bold.otf') format('opentype'); 
 }
 body{
-    background : linear-gradient(0deg, rgba(186, 219, 97, 0.8) 0%, rgba(207, 231, 139, 0.6) 34.55%, rgba(230, 244, 187, 0.34) 78.21%, rgba(239, 249, 205, 0.2) 100%) repeat fixed 0 0 rgba(0, 0, 0, 0);
-    background : -webkit-linear-gradient(90deg, rgba(186, 219, 97, 0.8) 0%, rgba(207, 231, 139, 0.6) 34.55%, rgba(230, 244, 187, 0.34) 78.21%, rgba(239, 249, 205, 0.2) 100%) repeat fixed 0 0 rgba(0, 0, 0, 0);
-    background : -webkit-gradient(linear,50% 100% ,50% 0% ,color-stop(0,rgba(186, 219, 97, 0.8) ),color-stop(0.3455,rgba(207, 231, 139, 0.6) ),color-stop(0.7821,rgba(230, 244, 187, 0.34) ),color-stop(1,rgba(239, 249, 205, 0.2) )) repeat fixed 0 0 rgba(0, 0, 0, 0);
+    background : -moz-linear-gradient(50% 100% 90deg,rgba(186, 219, 97, 0.4) 0%,rgba(197, 225, 119, 0.39) 4.49%,rgba(210, 233, 146, 0.37) 11.33%,rgba(221, 239, 168, 0.34) 19.2%,rgba(229, 243, 185, 0.31) 28.4%,rgba(235, 247, 196, 0.28) 39.76%,rgba(238, 248, 203, 0.23) 55.72%,rgba(239, 249, 205, 0.1) 100%) repeat fixed 0 0 rgba(0, 0, 0, 0);
+	background : -webkit-linear-gradient(90deg, rgba(186, 219, 97, 0.4) 0%, rgba(197, 225, 119, 0.39) 4.49%, rgba(210, 233, 146, 0.37) 11.33%, rgba(221, 239, 168, 0.34) 19.2%, rgba(229, 243, 185, 0.31) 28.4%, rgba(235, 247, 196, 0.28) 39.76%, rgba(238, 248, 203, 0.23) 55.72%, rgba(239, 249, 205, 0.1) 100%) repeat fixed 0 0 rgba(0, 0, 0, 0);
+	background : -webkit-gradient(linear,50% 100% ,50% 0% ,color-stop(0,rgba(186, 219, 97, 0.4) ),color-stop(0.0449,rgba(197, 225, 119, 0.39) ),color-stop(0.1133,rgba(210, 233, 146, 0.37) ),color-stop(0.192,rgba(221, 239, 168, 0.34) ),color-stop(0.284,rgba(229, 243, 185, 0.31) ),color-stop(0.3976,rgba(235, 247, 196, 0.28) ),color-stop(0.5572,rgba(238, 248, 203, 0.23) ),color-stop(1,rgba(239, 249, 205, 0.1) )) repeat fixed 0 0 rgba(0, 0, 0, 0);
+	background : -o-linear-gradient(90deg, rgba(186, 219, 97, 0.4) 0%, rgba(197, 225, 119, 0.39) 4.49%, rgba(210, 233, 146, 0.37) 11.33%, rgba(221, 239, 168, 0.34) 19.2%, rgba(229, 243, 185, 0.31) 28.4%, rgba(235, 247, 196, 0.28) 39.76%, rgba(238, 248, 203, 0.23) 55.72%, rgba(239, 249, 205, 0.1) 100%) repeat fixed 0 0 rgba(0, 0, 0, 0);
+	background : -ms-linear-gradient(90deg, rgba(186, 219, 97, 0.4) 0%, rgba(197, 225, 119, 0.39) 4.49%, rgba(210, 233, 146, 0.37) 11.33%, rgba(221, 239, 168, 0.34) 19.2%, rgba(229, 243, 185, 0.31) 28.4%, rgba(235, 247, 196, 0.28) 39.76%, rgba(238, 248, 203, 0.23) 55.72%, rgba(239, 249, 205, 0.1) 100%) repeat fixed 0 0 rgba(0, 0, 0, 0);
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#BADB61', endColorstr='#EFF9CD' ,GradientType=0)";
+	background : linear-gradient(0deg, rgba(186, 219, 97, 0.4) 0%, rgba(197, 225, 119, 0.39) 4.49%, rgba(210, 233, 146, 0.37) 11.33%, rgba(221, 239, 168, 0.34) 19.2%, rgba(229, 243, 185, 0.31) 28.4%, rgba(235, 247, 196, 0.28) 39.76%, rgba(238, 248, 203, 0.23) 55.72%, rgba(239, 249, 205, 0.1) 100%) repeat fixed 0 0 rgba(0, 0, 0, 0);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#EFF9CD',endColorstr='#BADB61' , GradientType=0);
     margin: 0;
     padding: 0;
 }
@@ -160,6 +165,9 @@ h1, h3 {
     padding: 15px 65px;
     text-transform: uppercase;
 }
+.travel-form input[type="button"]:hover {
+    opacity: 0.8;
+}
 .travel-form input[type="text"] {
     background-color: rgba(0,0,0,0);
     border: medium none;
@@ -227,7 +235,7 @@ h1, h3 {
     width: 300px;
 }
 .hotel-list > li .image .priority {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.7);
     bottom: 0;
     color: #c1d9b7;
     font-family: "NeoSans";
@@ -348,6 +356,7 @@ h1, h3 {
 }
 .hotel-list .foot .graph-holder .graph li {
     height:44px;
+    cursor: pointer;
     position:relative;
 }
 .hotel-list .foot .graph-holder .graph li .bar {
@@ -356,7 +365,7 @@ h1, h3 {
     position:absolute;
     bottom:0;
 }
-.hotel-list .foot .graph-holder .graph li.selected .bar {
+.hotel-list .foot .graph-holder .graph li:hover .bar {
     background-color: #92c17c;
 }
 .hotel-list .foot .graph-holder .graph-label {
@@ -371,6 +380,9 @@ h1, h3 {
     font-size: 18px;
     padding: 10px 40px;
     text-transform: uppercase;
+}
+.hotel-list .foot input[type="button"]:hover {
+    opacity: 0.8;
 }
 .overlay {
     background-color: rgba(0, 0, 0, 0.8);
@@ -434,3 +446,77 @@ h1, h3 {
 	right:25px;
 }
 /* image carousel - end */
+.header .title {
+    color: #eff9cd;
+    float: left;
+    font-family: "NeoSans";
+    font-size: 28px;
+    margin: 23px 0 0 420px;
+}
+.revulize-page .container {
+    width: 100%;
+}
+#revulize-content .attributes {
+    background-color: #fdfefa;
+    float: left;
+    font-family: "NeoSans";
+    width: 260px;
+}
+#revulize-content h2,
+#revulize-content .rank-list li {
+    color:#687064;
+    font-size:20px;
+    font-family: "NeoSans";
+    font-weight: bold;
+    text-align: center;
+}
+#revulize-content h2 {
+    border-bottom: 1px solid #92c17c;
+    margin: 0;
+    padding:18px 0;
+}
+#revulize-content .other-attr h2 {
+    border-top: 1px solid #92c17c;
+}
+#revulize-content .choice-list li,
+#revulize-content .attr-list li {
+    border-bottom: 1px solid #92c17c;
+    font-size: 16px;
+    padding: 12px 0 10px 20px;
+}
+#revulize-content .attributes .choices {
+    margin: 0 0 50px;
+    min-height: 300px;
+}
+#revulize-content .rank-list {
+    border-bottom: 1px solid #92c17c;
+}
+#revulize-content .rank-list li {
+    padding: 10px 0;
+}
+#revulize-content .attributes ul li {
+    position:relative;
+}
+#revulize-content .attributes ul li span {
+    background-image: url("../images/revulize-sprite.png");
+    background-repeat: no-repeat;
+    cursor: pointer;
+    display: block;
+    height: 20px;
+    position: absolute;
+    right: 0;
+    top: 9px;
+    width: 36px;
+}
+#revulize-content .attributes ul.rank-list li span {
+    background-position: 0 -24px;
+}
+#revulize-content .attributes ul.attr-list li span {
+    background-position: 0 -57px;
+}
+#revulize-content .rank-list li {
+    cursor: pointer;
+}
+#revulize-content .rank-list li:not(.selected) {
+    display: none;
+}
