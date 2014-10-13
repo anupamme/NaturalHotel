@@ -165,7 +165,7 @@
 					this.toggle.innerHTML = opt.innerHTML;
 					// update selected index value
 					this.selectedIdx = idx;
-					// update original select element´s value
+					// update original select element¥s value
 					this.elOriginal.value = this.elOriginal.children[ this.selectedIdx ].value;
 				}
 			}
