@@ -1,8 +1,21 @@
 $ = jQuery.noConflict();
 
+window.sentimentMap = {}
+window.reviewMap = {}
+window.hotelAttr = {}
+window.purposeOfTraveling = ''
+window.purposeToAttributes = {
+        'honeymoon': ['food', 'room'],
+        'business': ['location', 'amenities', 'transfer']
+    }
+window.selectedAttributes = []
+window.suggestedAttributes = ['overall', 'staff', 'night', 'beach', 'roof']
+window.reviewFinder = []
+window.reviewLookup = []
+window.currentHotelId = 'g188098-d266043'
+
 var common = {
-    reviewFinder: {},
-    reviewLookup: {},
+    
     init: function(){
         this.setHomeHeight();
         this.resize();
@@ -11,6 +24,91 @@ var common = {
         this.getHotelList();
         this.revulizeRank();
         this.setSticky();
+        // load all the maps from the file system.
+        this.loadFilteringMaps();
+        this.setAttributes();
+        //this.printReviews();
+    },
+    loadFilteringMaps: function(){
+        
+        purposeOfTraveling = 'honeymoon'
+        attrList = purposeToAttributes[purposeOfTraveling]
+        selectedAttributes = attrList
+        
+        $.getJSON('data/out-zermatt/sentiment.json', function(data){
+          sentimentMap = data
+        $.getJSON('data/' + currentHotelId  + '/summary.txt', function(data){
+            reviewMap = data[currentHotelId]
+            debugger
+            
+            common.printReviews(selectedAttributes, sentimentMap, currentHotelId)
+        }) 
+        })
+        $.getJSON('data/out-zermatt/hotel_sentiment.json', function(data){
+          this.hotelAttr = data  
+        })
+    },
+    printReviews: function(selectedAttrs, sentimentMap, currentHotelId) {
+        var results = this.selectReviews(selectedAttributes, sentimentMap)
+            results = common.filterReviews(results, currentHotelId)
+            //results = removeDuplicates(results)
+            // do look up in reviewmap for these reviews.
+            for (res in results){
+                reviewObj = reviewMap[res]
+                reviewLookup[res] = reviewObj // dangerous and writing to global var.
+            }
+            common.refreshReviews()
+            return results.length
+    },
+    setAttributes: function(){
+        $('.attr-list').children().remove()
+        $('.choice-list').children().remove()
+        for (var attr in selectedAttributes) {
+            $('.choice-list').append('<li>' + selectedAttributes[attr] + '<span></span></li>')
+        }
+        for (var attr in suggestedAttributes) {
+            $('.attr-list').append('<li>' + suggestedAttributes[attr] + '<span></span></li>')
+        }
+    },
+    selectReviews: function(selectedAttributes, sentimentMap){
+      // find the selected reviews.
+        var results = []
+        for (var attr in selectedAttributes){
+               var sel = sentimentMap["('" + selectedAttributes[attr] + "', 4.0)"]
+               if (sel !== undefined && sel.length > 0){
+                    results.push(sel)
+               }
+               sel = sentimentMap["('" + selectedAttributes[attr] + "', 5.0)"]
+               if (sel !== undefined && sel.length > 0){
+                    results.push(sel)
+               }
+               sel = sentimentMap["('" + selectedAttributes[attr] + "', 3.0)"]
+               if (sel !== undefined && sel.length > 0){
+                    results = results.concat(sel)
+               }
+        }
+        return results
+    },
+    filterReviews: function(args){
+        results = {}
+        for (val in args){
+            var hotelid = args[val][0]
+            var reviewid = args[val][1]
+            if (hotelid == currentHotelId){
+                results[reviewid] = 'True'
+            }
+        }
+        return Object.keys(results)
+    },
+    refreshReviews: function() {
+        // clean current reviews.
+        debugger
+        $('.review-list').children().remove()
+        results = []
+        for (var i = 1; i < 10; i++){
+            results.push(reviewLookup[i.toString()])
+        }
+        this.showReviewList(results)
     },
     setHomeHeight: function(){
         if($('.home-block').length){
@@ -55,7 +153,7 @@ var common = {
                 $('body').append(overlay);
                 $('.overlay').animate({opacity:1}, 'slow');
                 $.ajax({
-                    url:        "template-image-carousel.html",
+                    url:        "templates/template-image-carousel.html",
                     async:      false,
                     success:    function(response){
                         overlay = response;
@@ -184,9 +282,6 @@ var common = {
             $('.cContent').slideUp('slow');
             $('.button-holder').slideUp('slow');
              $('.goBackForm').fadeIn(1000);
-            
-            
-
         });
         
         var formH = $('.travel-form').innerHeight();
@@ -204,14 +299,14 @@ var common = {
             hlTemplate = '',
             rvTemplate = '';
         $.ajax({
-            url:        "template-hotel-list.html",
+            url:        "templates/template-hotel-list.html",
             async:      false,
             success:    function(response){
                 hlTemplate = response;
             }
         });
         $.ajax({
-            url:        "template-hotel-list-review-list.html",
+            url:        "templates/template-hotel-list-review-list.html",
             async:      false,
             success:    function(response){
                 rvTemplate = response;
@@ -302,6 +397,12 @@ var common = {
                 $(this).parent().remove();
                 $('#revulize-content ul.choice-list').append(li);
             });
+            
+            $('ul.choice-list').on('click', function(){
+                console.log('mouse over text.')
+                debugger
+                
+            })
 
             $.ajax({
                 url:        "js/review-finder.txt",
@@ -312,16 +413,16 @@ var common = {
                 }
             });
             
-            $.ajax({
-                url:        "js/review-lookup.txt",
-                async:      false,
-                dataType:   "json",
-                success:    function(response){
-                    common.reviewLookup = eval(response);
-                }
-            });
+//            $.ajax({
+//                url:        "js/review-lookup.txt",
+//                async:      false,
+//                dataType:   "json",
+//                success:    function(response){
+//                    //common.reviewLookup = eval(response);
+//                }
+//            });
 
-            common.populateReviewList();
+            //common.populateReviewList();
         }
     },
     setReviewList: function(){
@@ -348,21 +449,21 @@ var common = {
             window.location.href = 'form.html';
         });
     },
-    populateReviewList: function(){
-        var arrRevList = [];
-        arrRevList.push(common.reviewLookup["1"]);
-        arrRevList.push(common.reviewLookup["2"]);
-        arrRevList.push(common.reviewLookup["3"]);
-        arrRevList.push(common.reviewLookup["4"]);
-        arrRevList.push(common.reviewLookup["5"]);
-        arrRevList.push(common.reviewLookup["6"]);
-        common.showReviewList(arrRevList);
-    },
+//    populateReviewList: function(){
+//        var arrRevList = [];
+//        arrRevList.push(common.reviewLookup["1"]);
+//        arrRevList.push(common.reviewLookup["2"]);
+//        arrRevList.push(common.reviewLookup["3"]);
+//        arrRevList.push(common.reviewLookup["4"]);
+//        arrRevList.push(common.reviewLookup["5"]);
+//        arrRevList.push(common.reviewLookup["6"]);
+//        common.showReviewList(arrRevList);
+//    },
     showReviewList: function(rl){
         var rul = '<ul>';
         var rvTemplate = '';
         $.ajax({
-            url:        "template-review-list.html",
+            url:        "templates/template-review-list.html",
             async:      false,
             success:    function(response){
                 rvTemplate = response;
@@ -373,9 +474,9 @@ var common = {
             li = li.replace('{{user-name}}', item.name);
             li = li.replace('{{user-photo}}', item.photo);
             li = li.replace('{{user-address}}', item.place);
-            var summary = item.text.substring(0, 250) + '...';
+            var summary = item.review.substring(0, 250) + '...';
             li = li.replace('{{summary}}', summary);
-            li = li.replace('{{review-full}}', item.text);
+            li = li.replace('{{review-full}}', item.review);
             
             rul += li;
         });
@@ -388,6 +489,5 @@ var common = {
 
 $(document).ready(function(){
 	common.init();
-     
 });
 

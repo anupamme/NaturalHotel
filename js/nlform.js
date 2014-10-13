@@ -13,7 +13,7 @@
 	'use strict';
 
 	var document = window.document;
-
+    var ixvalue=0;
 	if (!String.prototype.trim) {
 		String.prototype.trim=function(){return this.replace(/^\s+|\s+$/g, '');};
 	}
@@ -61,14 +61,12 @@
 			if( this.type === 'dropdown' ) {
 				this._createDropDown();	
 			}
-			else if( this.type === 'input' ) {
-				this._createInput();	
-			}
+			
 		},
 		_createDropDown : function() {
 			var self = this;
 			this.fld = document.createElement( 'div' );
-			this.fld.className = 'nl-field nl-dd';
+			this.fld.className = 'nl-field nl-dd op'+ ixvalue++ +'';
 			this.toggle = document.createElement( 'a' );
 			this.toggle.innerHTML = this.elOriginal.options[ this.elOriginal.selectedIndex ].innerHTML;
 			this.toggle.className = 'nl-field-toggle';
@@ -117,6 +115,9 @@
 		},
 		_initEvents : function() {
 			var self = this;
+            if(this.type != "input")
+            {
+            
 			this.toggle.addEventListener( 'click', function( ev ) { ev.preventDefault(); ev.stopPropagation(); self._open(); } );
 			this.toggle.addEventListener( 'touchstart', function( ev ) { ev.preventDefault(); ev.stopPropagation(); self._open(); } );
 
@@ -136,7 +137,7 @@
 				this.inputsubmit.addEventListener( 'click', function( ev ) { ev.preventDefault(); self.close(); } );
 				this.inputsubmit.addEventListener( 'touchstart', function( ev ) { ev.preventDefault(); self.close(); } );
 			}
-
+            }
 		},
 		_open : function() {
 			if( this.open ) {
@@ -164,7 +165,7 @@
 					this.toggle.innerHTML = opt.innerHTML;
 					// update selected index value
 					this.selectedIdx = idx;
-					// update original select element´s value
+					// update original select element¥s value
 					this.elOriginal.value = this.elOriginal.children[ this.selectedIdx ].value;
 				}
 			}
