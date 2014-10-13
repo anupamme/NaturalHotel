@@ -115,6 +115,8 @@
 		},
 		_initEvents : function() {
 			var self = this;
+            if(this.type != "input")
+            {
             
 			this.toggle.addEventListener( 'click', function( ev ) { ev.preventDefault(); ev.stopPropagation(); self._open(); } );
 			this.toggle.addEventListener( 'touchstart', function( ev ) { ev.preventDefault(); ev.stopPropagation(); self._open(); } );
@@ -135,7 +137,7 @@
 				this.inputsubmit.addEventListener( 'click', function( ev ) { ev.preventDefault(); self.close(); } );
 				this.inputsubmit.addEventListener( 'touchstart', function( ev ) { ev.preventDefault(); self.close(); } );
 			}
-
+            }
 		},
 		_open : function() {
 			if( this.open ) {
