@@ -403,6 +403,8 @@ var common = {
         for (hotelid in finalhotels){
             attrDetails = common.getAttributeDetails(finalhotels[hotelid])
             details = hotelDetailMap[finalhotels[hotelid]]
+            if (details["images"].length < 5)
+                continue
             details["sentiment"] = attrDetails
             details["top_reviews"] = finalReviews[finalhotels[hotelid]].slice(0, 5)
             hotelListJson[finalhotels[hotelid]] = details
@@ -484,9 +486,9 @@ var common = {
                 rvList = '';
             $.each(item.top_reviews, function(ind, reviewid){
                 rvItem = rvTemplate;
-                rvItem = rvItem.replace('{{user-name}}', reviewMap[reviewid]['Reviewer Name']);
-                rvItem = rvItem.replace('{{user-address}}', reviewMap[reviewid].Place);
-                rvItem = rvItem.replace('{{user-photo}}', 'images/list-sub-image.jpg');
+                rvItem = rvItem.replace('{{user-name}}', reviewMap[reviewid]['ReviewerName']);
+                rvItem = rvItem.replace('{{user-address}}', reviewMap[reviewid]['Place']);
+                rvItem = rvItem.replace('{{user-photo}}', reviewMap[reviewid]['ReviewerImage']);
                 rvItem = rvItem.replace('{{user-review}}', reviewMap[reviewid].review);
                 
                 rvList += rvItem;
@@ -641,10 +643,10 @@ var common = {
         });
         $.each(rl, function(i, item){
             var li = rvTemplate;
-            li = li.replace('{{user-name}}', item['Reviewer Name']);
-            li = li.replace('{{user-photo}}', 'images/list-sub-image.jpg');
+            li = li.replace('{{user-name}}', item['ReviewerName']);
+            li = li.replace('{{user-photo}}', item['ReviewerImage']);
             li = li.replace('{{user-address}}', item['Place']);
-            var summary = item.review.substring(0, 250) + '...';
+            var summary = item.review.substring(0, 150) + '...';
             li = li.replace('{{summary}}', summary);
             li = li.replace('{{review-full}}', item.review);
             

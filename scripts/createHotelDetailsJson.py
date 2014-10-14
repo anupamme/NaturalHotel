@@ -2,8 +2,6 @@ import os
 import json
 import sys
 
-# 1. read the location from command line.
-# 2. build location to list of hotels map.
 '''
             
 '''
