@@ -41,7 +41,7 @@ font-size: 30px !important;
 line-height: 50px;
 }
 .con {
-padding-top: 60px;
+padding-top: 43px;
 }
 .cDependent {
     padding-top: 50px;
@@ -62,9 +62,10 @@ font-family: "NeoSans-italic";
 min-height: 34px;
 padding: 5px 0px;
 opacity: 0.8;
-    position: absolute;
+    position: fixed;
     width: 100%;
-    top: 80px;
+    top: 62px;
+    z-index: 5;
 }
 .logoutbutton {
     float: right;
@@ -134,7 +135,7 @@ background:green;
 /****************************** Header section *********************/
 .cHeader {
 background-color: #92c17c;
-height: 80px;
+height: 62px;
 z-index: 1;
 }
 .cContent {
@@ -150,7 +151,7 @@ width: 36px;
 }
 .header .user {
    float: right;
-margin: 10px 27px 0 0;
+margin: 4px 27px 0 0;
 overflow: hidden;
 }
 .user .profile-image {

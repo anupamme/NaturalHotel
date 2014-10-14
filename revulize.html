@@ -5,14 +5,42 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="css/custom.css" />
     <script src='js/jquery.min.js'></script>
+    <style>
+ .goBackForm {
+    background: #494949;
+min-height: 34px;
+padding: 5px 0px;
+opacity: 0.8;
+    position: fixed;
+    width: 100%;
+    top: 62px;
+    z-index: 5;
+}
+
+
+.goBackFormButton1 {
+        float: left;
+padding-left: 34px;
+color: #eff9cd;
+cursor: pointer;
+font-size: 18px;
+       font-family: 'NeoSans';
+    padding: 7px 0px 0px 650px;
+    text-decoration: none;
+}
+
+    </style>
 </head>
 <body>
+    <div class="goBackForm">
+                 <span ><a href="form.html" class="goBackFormButton1">Go back to form</a></span>
+                </div>
     <div class="page-container revulize-page">
         <div class="header">
             <div class="menu"></div>
             <div class="title">Reviews Visualization</div>
             <div class="user">
-                <div class="profile-name">Paul Graham</div>
+                <div class="profile-name"></div>
                 <div class="profile-image"></div>
             </div>
         </div>
@@ -69,7 +97,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="review-list">
+                    <div class="review-list" style="width:60%">
                         
                     </div>
                 </div>
@@ -77,5 +105,27 @@
         </div>
     </div>
 <script src="js/common2.js"></script>
+    <script>
+    
+      $(document).ready(function() {
+              
+
+          
+
+              
+              function getCookie(cname) {
+                        var name = cname + "=";
+                        var ca = document.cookie.split(';');
+                        for(var i=0; i<ca.length; i++) {
+                                var c = ca[i];
+                                while (c.charAt(0)==' ') c = c.substring(1);
+                        if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
+                        }
+                    return "";
+                    }
+              $('.profile-name').text(getCookie('name'));       
+              $('.profile-image').css('background',"url("+getCookie('image')+")");
+      });
+    </script>
 </body>
 </html>

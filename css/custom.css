@@ -180,7 +180,7 @@ h1, h3 {
     cursor: pointer;
     font-family: "mixBold";
     font-size: 26px;
-    padding: 15px 65px;
+   padding: 12px 48px;
    
 }
 .travel-form input[type="button"]:hover {
@@ -204,23 +204,23 @@ h1, h3 {
 }
 .header {
     background-color: #92c17c;
-    height: 80px;
+    height: 62px;
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 5;
 }
 .header .menu {
-    background: url("../images/menu.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
-    cursor: pointer;
-    float: left;
-    height: 27px;
-    margin: 25px 0 0 27px;
-    width: 36px;
+    background: url("../images/backbutton.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+cursor: pointer;
+float: left;
+height: 30px;
+margin: 15px 0 0 27px;
+width: 23px;
 }
 .header .user {
     float: right;
-    margin: 10px 27px 0 0;
+    margin: 4px 27px 0 0;
     overflow: hidden;
 }
 .header .user > div {
@@ -228,8 +228,8 @@ h1, h3 {
 }
 .header .user .profile-name {
     color: #eff9cd;
-    font-family: "NeoSans";
-    font-size: 30px;
+    font-family: "DINM";
+    font-size: 22px;
     padding: 10px 10px 0 0;
 }
 .header .user .profile-image {
@@ -495,17 +495,19 @@ font-family: mixBold;
 }
 /* image carousel - end */
 .header .title {
-    color: #eff9cd;
-    float: left;
-    font-family: "NeoSans";
-    font-size: 28px;
-    margin: 23px 0 0 420px;
+color: #eff9cd;
+float: left;
+font-family: "NeoSans";
+font-size: 28px;
+text-align: center;
+padding: 17px 0px 0px 550px;
 }
 #revulize-content .attributes {
     background-color: #fdfefa;
     float: left;
     font-family: "NeoSans";
     width: 260px;
+    position: fixed;
 }
 #revulize-content h2,
 #revulize-content .rank-list li,
@@ -589,13 +591,15 @@ font-family: mixBold;
     float: left;
     font-family: "NeoSans";
     width: 900px;
+    position: relative;
+    left: 260px;
 }
 .review-list li {
     border-bottom:1px solid #92c17c;
 }
 .review-list .review-holder {
     height: auto;
-    margin:35px 0 30px 90px;
+  margin: 35px 0 -12px 90px;
 }
 .review-list .review {
     cursor: pointer;
@@ -621,7 +625,7 @@ font-family: mixBold;
     display:none;
 }
 .stretch.sticky-shadow {
-    margin: 134px 0 0;
+    margin: 106px 0 0;
 }
 #hotel-list-holder {
     margin: 0 auto;
