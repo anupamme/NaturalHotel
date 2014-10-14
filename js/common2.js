@@ -489,7 +489,7 @@ var common = {
                 rvItem = rvItem.replace('{{user-name}}', reviewMap[reviewid]['ReviewerName']);
                 rvItem = rvItem.replace('{{user-address}}', reviewMap[reviewid]['Place']);
                 rvItem = rvItem.replace('{{user-photo}}', reviewMap[reviewid]['ReviewerImage']);
-                rvItem = rvItem.replace('{{user-review}}', reviewMap[reviewid].review);
+                rvItem = rvItem.replace('{{user-review}}', reviewMap[reviewid].review.substring(0, 253) + ' ...');
                 
                 rvList += rvItem;
             });
