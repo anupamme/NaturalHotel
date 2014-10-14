@@ -85,22 +85,22 @@ function checkLoginState() {
 //                xfbml      : true,  // parse social plugins on this page
 //                version    : 'v2.1' // use version 2.1
 //            });
-            // Now that we've initialized the JavaScript SDK, we call 
-            // FB.getLoginStatus().  This function gets the state of the
-            // person visiting this page and can return one of three states to
-            // the callback you provide.  They can be:
-            //
-            // 1. Logged into your app ('connected')
-            // 2. Logged into Facebook, but not your app ('not_authorized')
-            // 3. Not logged into Facebook and can't tell if they are logged into
-            //    your app or not.
-            //
-            // These three cases are handled in the callback function.
+//             Now that we've initialized the JavaScript SDK, we call 
+//             FB.getLoginStatus().  This function gets the state of the
+//             person visiting this page and can return one of three states to
+//             the callback you provide.  They can be:
+//            
+//             1. Logged into your app ('connected')
+//             2. Logged into Facebook, but not your app ('not_authorized')
+//             3. Not logged into Facebook and can't tell if they are logged into
+//                your app or not.
+//            
+//             These three cases are handled in the callback function.
 
-            //  FB.getLoginStatus(function(response) {
-            //        console.log('in get login status')
-            //      statusChangeCallback(response);
-            //  });
+//              FB.getLoginStatus(function(response) {
+//                    console.log('in get login status')
+//                  statusChangeCallback(response);
+//              });
 //};
     
 // Load the SDK asynchronously
@@ -127,6 +127,7 @@ function testAPI() {
         imageUrl = 'http://graph.facebook.com/' + response.id + '/picture';
         document.cookie = 'name=' + response.name;
         document.cookie = 'image=' + imageUrl;
+        bake_cookie('fb-ins', FB)
         window.location.href = "form.html";
     }
 </script>
@@ -144,4 +145,8 @@ function testAPI() {
         //console.log('I am clicked.'); 
         checkLoginState();
     });
+    function bake_cookie(name, value) {
+        var cookie = [name, '=', JSON.stringify(value), '; domain=.', window.location.host.toString(), '; path=/;'].join('');
+        document.cookie = cookie;
+    }
 </script>
