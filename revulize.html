@@ -126,6 +126,10 @@ font-size: 18px;
               $('.profile-name').text(getCookie('name'));       
               $('.profile-image').css('background',"url("+getCookie('image')+")");
       });
+        $('.menu').on('click', function(){
+            document.cookie = 'slideup=true'
+            window.location.href = "form.html";
+        })
     </script>
 </body>
 </html>

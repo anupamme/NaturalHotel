@@ -1101,6 +1101,12 @@
                 imageUrl = parseCookieValue('image')
                 $($('#profilecircle')[0]).attr('style',
                     'background-image: url(' + imageUrl + ')')
+                
+                
+            var toslideup = parseCookieValue('slideup')
+            if (toslideup === 'true'){
+                common.getHotelList()
+            }
             });
             parseCookieValue = function(param) {
                 cookieSet = document.cookie.split(';')
