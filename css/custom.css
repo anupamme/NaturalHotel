@@ -228,9 +228,9 @@ width: 23px;
 }
 .header .user .profile-name {
     color: #eff9cd;
-    font-family: "DINM";
-    font-size: 22px;
-    padding: 10px 10px 0 0;
+    font-family: "DIN";
+    font-size: 18px;
+    padding: 16px 16px 0 0;
 }
 .header .user .profile-image {
     background-color: #eff9cd;
@@ -292,7 +292,7 @@ min-height: 30px;
     margin: 13px 0 0 20px;
 }
 .hotel-list .details .title-holder h3 {
-  font-size: 35px;
+  font-size: 18px;
 font-family: mixBold;
     line-height: 0.2;
 }
@@ -325,7 +325,7 @@ font-family: mixBold;
 float: left;
 font-size: 15px;
 line-height: 20px;
-margin: 0 0 0 20px;
+margin: 0 0 22px 20px;
 width: 614px;
 font-family: DIN;
 }
@@ -500,7 +500,7 @@ float: left;
 font-family: "NeoSans";
 font-size: 28px;
 text-align: center;
-padding: 17px 0px 0px 550px;
+padding: 17px 0px 0px 34%;
 }
 #revulize-content .attributes {
     background-color: #fdfefa;
@@ -508,6 +508,7 @@ padding: 17px 0px 0px 550px;
     font-family: "NeoSans";
     width: 260px;
     position: fixed;
+    min-height: 705px;
 }
 #revulize-content h2,
 #revulize-content .rank-list li,

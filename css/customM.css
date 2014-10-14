@@ -76,11 +76,14 @@ font-size: 18px;
 }
 
 .goBackFormButton {
-        float: left;
+  float: left;
 padding-left: 34px;
 color: #eff9cd;
 cursor: pointer;
 font-size: 18px;
+       font-family: 'NeoSans';
+    padding: 7px 0px 0px 43%;
+    text-decoration: none;
 }
 
 
