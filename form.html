@@ -25,7 +25,7 @@
         <div class="header">
           
             <div class="user">
-                <div class="profile-name">Paul Graham</div>
+                <div class="profile-name"></div>
                 <div class="profile-image"></div>
             </div>
         </div>
@@ -41,7 +41,7 @@
           </div>
         <div class="container-fluid con">    
           <div class="row">
-              <div class="col-md-7 col-md-offset-3">
+              <div class="col-md-7 col-md-offset-4">
                  <form id="nl-form" class="nl-form">
 					I am traveling to
                      <select>
@@ -65,10 +65,12 @@
 						<option value="1">Honeymoon</option>
 						<option value="2">Business</option>
 						<option value="3">Travelling </option>
-						<option value="4">Solo Traveling</option>
-					</select>
-                     <br><br>
-                     <span class="honeymoon4th"> We Enjoy <a href="#modal02" data-toggle="modal" class="nl-field-toggle"> <span class="selectedFoods">Food</span>  </a>. </span>
+						<option value="4">Friends Outing</option>
+					
+					</select> ,
+                   
+
+                     <br/><br> <span class="honeymoon4th"> We Enjoy <a href="#modal02" data-toggle="modal" class="nl-field-toggle"> <span class="selectedFoods">Food</span>  </a>  </span>
                        <span class="business4th">                      
                          I want my room in middle of </span>
                          <select>
@@ -76,9 +78,9 @@
 						<option value="1">Near Airport</option>
 						<option value="2">Suburbs</option>
 						<option value="3">Silent </option>			
-					</select>
-                      <span class="Traveling4th"> We Enjoy <a href="#modal02" data-toggle="modal" class="nl-field-toggle"> <span class="selectedFoods">Food</span>  </a>. </span>
-                     <span class="soloTraveling4th"> We Enjoy <a href="#modal02" data-toggle="modal" class="nl-field-toggle"> <span class="selectedFoods">Food</span>  </a>. </span>
+					</select> 
+                      <span class="Traveling4th"> We Enjoy <a href="#modal02" data-toggle="modal" class="nl-field-toggle"> <span class="selectedFoods">Food</span>  </a> </span>
+                     <span class="soloTraveling4th"> We Enjoy <a href="#modal02" data-toggle="modal" class="nl-field-toggle"> <span class="selectedFoods">Food</span>  </a></span>
                      
                     
                       <br/> 
@@ -88,7 +90,7 @@
 						<option value="1">Ocean</option>
 						<option value="2">Forest</option>
 						<option value="3">City </option>			
-					     </select>
+					     </select> 
                         
                      <span class="business5th">                          
                         I want my hotel to have   </span>
@@ -96,9 +98,9 @@
                         <option value="1" selected>Select</option>
 						<option value="1">Cafeteria</option>
 						<option value="2">Conference room</option>
-						<option value="3">Gym </option>	
-                        <option value="4">swimming pool </option>
-					</select>
+						<option value="3">Gym</option>	
+                        <option value="4">swimming pool</option>
+					</select> 
                      
              
                      <span class="Traveling5th"> We Want our room to be in middle of </span>
@@ -106,19 +108,20 @@
                         <option value="1" selected>Mountains</option>
 						<option value="1">Ocean</option>
 						<option value="2">Forest</option>
-						<option value="3">City </option>			
-					     </select>
+						<option value="3">City</option>			
+					     </select> 
 
         
                       <span class="soloTraveling5th"> 
                          
                          We Like to do  </span>
                          <select>
-                        <option value="1" selected>Water Sports</option>
+                             <option value="0" selected>Activity</option>
+                        <option value="1" >Water Sports</option>
 						<option value="1">Campfire</option>
 						<option value="2">Cultural</option>
-						<option value="3">City tour </option>			
-					</select>
+						<option value="3">City tour</option>			
+					</select> 
                      
 				
 					<div class="nl-overlay"></div>
@@ -220,8 +223,8 @@
   <div class="modal-dialog">
     <div class="modal-content cModal">
           <div class="modal-close" data-dismiss="modal"></div>
-     <div class="row">
-            <div class="col-md-12">
+     <div>
+            <div >
       <div class="modal-body">
            <div class="popup"> 
            <div class="cols">
@@ -312,8 +315,8 @@
   <div class="modal-dialog">
     <div class="modal-content cModal">
           <div class="modal-close" data-dismiss="modal"></div>
-     <div class="row">
-            <div class="col-md-12">
+     <div >
+            <div>
       <div class="modal-body">
            <div class="popup"> 
            <div class="cols">
@@ -406,8 +409,8 @@
   <div class="modal-dialog">
     <div class="modal-content cModal">
           <div class="modal-close" data-dismiss="modal"></div>
-     <div class="row">
-            <div class="col-md-12">
+     <div>
+            <div >
       <div class="modal-body">
            <div class="popup"> 
            <div class="cols">
@@ -500,8 +503,8 @@
   <div class="modal-dialog">
     <div class="modal-content cModal">
           <div class="modal-close" data-dismiss="modal"></div>
-     <div class="row">
-            <div class="col-md-12">
+     <div >
+            <div>
       <div class="modal-body">
            <div class="popup"> 
            <div class="cols">
@@ -593,8 +596,8 @@
   <div class="modal-dialog">
     <div class="modal-content cModal">
           <div class="modal-close" data-dismiss="modal"></div>
-     <div class="row">
-            <div class="col-md-12">
+     <div >
+            <div>
       <div class="modal-body">
            <div class="popup"> 
            <div class="cols">
@@ -731,6 +734,7 @@
           $('.logout').hide();
           
           $('.goBackFormButton').click(function() {
+               $('.cContent').css('min-height',475);
                $('.cContent').slideDown('slow');
             $('.button-holder').slideDown('slow');
              $('.goBackForm').fadeOut(1000);
@@ -871,9 +875,10 @@
             hideAll();
             var checkStatefood;
           
-             $('#iAmGood').click(function() {
-                  checkFood();
-                afterLoadingFood();
+             
+           $('#iAmGood').click(function() {
+                 checkFood();
+                 afterLoadingFood();
              });
           
              $('.modal-close').click(function() {
@@ -987,7 +992,7 @@
              $('.op6').hide();
                   
               }
-              else  if($('.op1').find('ul>li.nl-dd-checked').text()=="Solo Travelling") {
+              else  if($('.op1').find('ul>li.nl-dd-checked').text()=="Friends Outing") {
                   
                   $('.tepete').hide();
                    clearFood();
@@ -1056,8 +1061,15 @@
                   selectedItems[i]= $(this).find('h3').text();
                     i++;
                 });
-                
+                if($('.greenBack').length != 0)
+                {
                 $(".selectedFoods").text(selectedItems);
+                }
+                else
+                {
+                    $(".selectedFoods").text("");
+                }
+            
                 if($(".selectedFoods").text()=="" || $(".selectedFoods").text()==null )
                 {
                      $(".selectedFoods").text("Food");
@@ -1065,12 +1077,25 @@
                 }
             
         }
-            
           
+           
           
       });
           
           $(document).ready(function() {
+              
+              function getCookie(cname) {
+                        var name = cname + "=";
+                        var ca = document.cookie.split(';');
+                        for(var i=0; i<ca.length; i++) {
+                                var c = ca[i];
+                                while (c.charAt(0)==' ') c = c.substring(1);
+                        if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
+                        }
+                    return "";
+                    }
+              $('.profile-name').text(getCookie('name'));       
+              $('.profile-image').css('background',"url("+getCookie('image')+")");
 
                 $('.profilename').text(parseCookieValue('name'));
                 $(".username").text(parseCookieValue('name'));
@@ -1078,7 +1103,6 @@
                 $($('#profilecircle')[0]).attr('style',
                     'background-image: url(' + imageUrl + ')')
             });
-            
             parseCookieValue = function(param) {
                 cookieSet = document.cookie.split(';')
                 for (cook in cookieSet) {
@@ -1090,6 +1114,7 @@
                 }
                 return undefined
             }
+      
       </script>
 
     

@@ -17,9 +17,7 @@
     src: url('../fonts/mixBold.otf') format('opentype'); 
 }
 body{
-    background : linear-gradient(0deg, rgba(186, 219, 97, 0.8) 0%, rgba(207, 231, 139, 0.6) 34.55%, rgba(230, 244, 187, 0.34) 78.21%, rgba(239, 249, 205, 0.2) 100%) repeat fixed 0 0 rgba(0, 0, 0, 0);
-    background : -webkit-linear-gradient(90deg, rgba(186, 219, 97, 0.8) 0%, rgba(207, 231, 139, 0.6) 34.55%, rgba(230, 244, 187, 0.34) 78.21%, rgba(239, 249, 205, 0.2) 100%) repeat fixed 0 0 rgba(0, 0, 0, 0);
-    background : -webkit-gradient(linear,50% 100% ,50% 0% ,color-stop(0,rgba(186, 219, 97, 0.8) ),color-stop(0.3455,rgba(207, 231, 139, 0.6) ),color-stop(0.7821,rgba(230, 244, 187, 0.34) ),color-stop(1,rgba(239, 249, 205, 0.2) )) repeat fixed 0 0 rgba(0, 0, 0, 0);
+ 
     margin: 0;
     padding: 0;
      font-family: 'NeoSans';
@@ -27,9 +25,7 @@ body{
 
 input:focus, textarea , span , a{ outline: none !important; }
 
-html {
-       overflow-y: scroll;
-}
+
 
 /************************Content section****************************/
 
@@ -45,7 +41,7 @@ font-size: 30px !important;
 line-height: 50px;
 }
 .con {
-padding-top: 100px;
+padding-top: 60px;
 }
 .cDependent {
     padding-top: 50px;
@@ -141,6 +137,9 @@ background-color: #92c17c;
 height: 80px;
 z-index: 1;
 }
+.cContent {
+    min-height: 475px;
+}
 .header .menu {
  background: url("../images/menu.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
 cursor: pointer;
@@ -233,7 +232,7 @@ transition: background-color .3s ease-in-out;
 }
     .modal-portfolio .modal-close:focus::after, .modal-portfolio .modal-close:focus::before, .modal-portfolio .modal-close:hover::after, .modal-portfolio .modal-close:hover::before {
 content: '';
-background-color: #ef4034;
+background-color: #92c17c;
 -webkit-transition: background-color .3s ease-in-out;
 -moz-transition: background-color .3s ease-in-out;
 -ms-transition: background-color .3s ease-in-out;
@@ -402,14 +401,14 @@ padding: 10PX;
 }
 
       .popup {
-          width: 80%;
+         
           margin: 0 auto;
           
       }
          .cols {
   background: #eff9cd;
 width: 170px;
-min-height: 500px;
+min-height: 535px;
 float: left;
 margin-right: 4%;
          }
@@ -428,7 +427,7 @@ border-bottom: 1px solid #92c17c;
 color: #92c17c;
          }
          .pReview {
-padding: 8px 28px;
+padding: 8px 22px;
 text-align: center;
 font-size: 16px;
 font-family: DIN;

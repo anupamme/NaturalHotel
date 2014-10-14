@@ -23,15 +23,6 @@
 		    <li>
 		        <span>Image 4</span>
 		    </li>
-		    <li>
-		        <span>Image 5</span>
-		    </li>
-		    <li>
-		        <span>Image 6</span>
-		    </li>
-		    <li>
-		        <span>Image 7</span>
-		    </li>
 		</ul>
         <div class="content-holder">
             <div class="container">
@@ -41,7 +32,7 @@
                         <h1>Show <br>Up <br>hotels</h1>
                     </div>
                     <h3>A personalized hotel recommondention<br> curated by customer reviews</h3>
-                    <div class="loginButton">Sign up</div>
+                    <div class="loginButton">Login</div>
                     <div id="status"></div>
                 </div>
             </div>
@@ -132,6 +123,8 @@ function testAPI() {
     function login(response){
         console.log('Successful login for: ' + response.name);
         console.log(JSON.stringify(response)); 
+        document.getElementById('status').innerHTML =
+        'Thanks for logging in, ' + response.name + '!';
         name = response.name;
         imageUrl = 'http://graph.facebook.com/' + response.id + '/picture';
         document.cookie = 'name=' + response.name;
@@ -142,7 +135,7 @@ function testAPI() {
 </body>
 </html>
 <script>
-    debugger
+    
     $('.loginButton').on('mouseover', function() { 
         $($('.loginBackground')[0]).attr('style', 'display: inline;');
     }).on('mouseout', function() {

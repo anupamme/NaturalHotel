@@ -32,5 +32,5 @@ var slide = {
 };
 
 $(document).ready(function(){
-	slide.init({imageCount:7,transDelay:2000,staticDelay:4000});
+	slide.init({imageCount:4,transDelay:2000,staticDelay:4000});
 });

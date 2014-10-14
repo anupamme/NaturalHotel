@@ -12,7 +12,15 @@
 }
 @font-face {
     font-family: 'DINM';
-    src: url('../fonts/DIMM.ttf') format('truetype'); 
+    src: url('../fonts/DINM.ttf') format('truetype'); 
+}
+@font-face {
+    font-family: 'DIN';
+    src: url('../fonts/DIN.ttf') format('truetype'); 
+}
+@font-face {
+    font-family: 'mixBold';
+    src: url('../fonts/mixBold.otf') format('opentype'); 
 }
 body{
    
@@ -162,7 +170,7 @@ h1, h3 {
     margin: 35px  auto 0;
 }
 .travel-form .button-holder {
-    margin: 50px 0 0;
+    margin: 12px 0 0;
     text-align: center;
 }
 .travel-form input[type="button"] {
@@ -170,10 +178,10 @@ h1, h3 {
     border: medium none;
     color: #eff9cd;
     cursor: pointer;
-    font-family: "NeoSans";
+    font-family: "mixBold";
     font-size: 26px;
     padding: 15px 65px;
-    text-transform: uppercase;
+   
 }
 .travel-form input[type="button"]:hover {
     opacity: 0.8;
@@ -227,8 +235,8 @@ h1, h3 {
 .header .user .profile-image {
     background-color: #eff9cd;
     border-radius: 50%;
-    height: 56px;
-    width: 56px;
+    height: 50px;
+    width: 50px;
 }
 .hotel-list {
     margin:0 auto 50px;
@@ -418,7 +426,6 @@ cursor: pointer;
 float: right;
 font-size: 18px;
 padding: 3px 40px;
-text-transform: uppercase;
 font-family: mixBold;
 }
 .hotel-list .foot input[type="button"]:hover {
