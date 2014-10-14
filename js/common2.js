@@ -41,6 +41,11 @@ var common = {
             locationMap = data
             $.getJSON('data/out-zermatt/sentiment.json', function(data){
                 sentimentMap = data
+                $.getJSON('data/reviews/' + dummyhotelid  + '/summary.txt', function(data){
+                reviewMap = data[dummyhotelid]
+        debugger
+                common.printReviews(window.dummyhotelid)
+            })
                 //common.printReviews(selectedAttributes, sentimentMap, currentHotelId)
                 $.getJSON('data/hotels/hotelDetail.json', function(data){
                     hotelDetailMap = data
@@ -52,10 +57,8 @@ var common = {
                 hotelAttr = data
         })
         // Load when revulize is hit.
-        $.getJSON('data/reviews/' + dummyhotelid  + '/summary.txt', function(data){
-                reviewMap = data[dummyhotelid]
         
-            })
+        
         
     },
     hotelSelcted: function(hotelid){
@@ -68,15 +71,17 @@ var common = {
         
         common.getHotelList()
     },
-    printReviews: function(selectedAttrs, sentimentMap, currentHotelId) {
+    printReviews: function(currentHotelId) {
         var results = this.selectReviews(selectedAttributes, sentimentMap)
             results = common.filterReviews(results, currentHotelId)
             //results = removeDuplicates(results)
             // do look up in reviewmap for these reviews.
+            reviewLookup = []
             for (res in results){
                 reviewObj = reviewMap[res]
                 reviewLookup[res] = reviewObj // dangerous and writing to global var.
             }
+        console.log('Total Resutls: ' + results.length)
             common.refreshReviews()
             return results.length
     },
@@ -165,31 +170,36 @@ var common = {
     },
     selectReviews: function(selectedAttributes, sentimentMap){
       // find the selected reviews.
-        var results = []
+        var results_4 = []
+        var results_3 = []
+        var results_2 = []
         for (var attr in selectedAttributes){
                var sel = sentimentMap["('" + selectedAttributes[attr] + "', 4.0)"]
                if (sel !== undefined && sel.length > 0){
-                    results.push(sel)
-               }
-               sel = sentimentMap["('" + selectedAttributes[attr] + "', 5.0)"]
-               if (sel !== undefined && sel.length > 0){
-                    results.push(sel)
+                    results_4 = sel
                }
                sel = sentimentMap["('" + selectedAttributes[attr] + "', 3.0)"]
                if (sel !== undefined && sel.length > 0){
-                    results = results.concat(sel)
+                    results_3 = sel
+               }
+               sel = sentimentMap["('" + selectedAttributes[attr] + "', 2.0)"]
+               if (sel !== undefined && sel.length > 0){
+                    results_2 = sel
                }
         }
-        return results
+        return {"results4" : results_4, "results3" : results_3, "results2": results_2}
     },
     
-    filterReviews: function(args){
+    filterReviews: function(results_super, currenthotelid){
         results = {}
-        for (val in args){
-            var hotelid = args[val][0]
-            var reviewid = args[val][1]
-            if (hotelid == currentHotelId){
-                results[reviewid] = 'True'
+        for (result in results_super){
+            args = results_super[result]
+            for (val in args){
+                var hotelid = args[val][0]
+                var reviewid = args[val][1]
+                if (hotelid == currenthotelid){
+                    results[reviewid] = 'True'
+                }
             }
         }
         return Object.keys(results)
@@ -200,7 +210,7 @@ var common = {
         debugger
         $('.review-list').children().remove()
         results = []
-        for (var i = 1; i < 10; i++){
+        for (var i = 1; i < reviewLookup.length; i++){
             results.push(reviewLookup[i.toString()])
         }
         this.showReviewList(results)
@@ -360,26 +370,30 @@ var common = {
         //var place =  parseCookieValue('place') // XXX: this place is currently in format Paris, France. We need to convert it into correct format: PARIS:FRANCE.
         locationKey = 'ZERMATT:SWITZERLAND'
         
-        results = common.selectReviews(selectedAttributes, sentimentMap)
+        results_super = common.selectReviews(selectedAttributes, sentimentMap)
+        
         // find hotels for this location.
         superset = locationMap[locationKey]
         // for each of this hotel do a look up and create a detail json file
         finalhotels = []
         finalReviews = {}
-        for (res in results){
-            hotelid = results[res][0]
-            reviewid = results[res][1]
-            if (hotelid in superset){
-                finalhotels.push(hotelid)
-                if (hotelid in finalReviews){
-                    finalReviews[hotelid].push(reviewid)
+        for (resultKind in results_super){
+            var results = results_super[resultKind]
+            for (res in results){
+                hotelid = results[res][0]
+                reviewid = results[res][1]
+                if (hotelid in superset){
+                    finalhotels.push(hotelid)
+                    if (hotelid in finalReviews){
+                        finalReviews[hotelid].push(reviewid)
+                    }
+                    else {
+                        finalReviews[hotelid] = [reviewid]
+                    }
                 }
                 else {
-                    finalReviews[hotelid] = [reviewid]
+                    console.log('hotel id not there: ' + hotelid)
                 }
-            }
-            else {
-                console.log('hotel id not there: ' + hotelid)
             }
         }
         // fetch json for these final hotels.
@@ -525,23 +539,40 @@ var common = {
                 rl.slideUp("fast");
             });
 
-            $('#revulize-content ul.choice-list').on('click', 'li span', function(){
-                var li = $(this).parent().clone();
-                $(this).parent().remove();
-                $('#revulize-content ul.attr-list').append(li);
-            });
-
-            $('#revulize-content ul.attr-list').on('click', 'li span', function(){
-                var li = $(this).parent().clone();
-                $(this).parent().remove();
-                $('#revulize-content ul.choice-list').append(li);
-            });
-            
             $('ul.choice-list').on('click', function(){
-                console.log('mouse over text.')
+                console.log('click.')
+                
                 debugger
                 
             })
+            
+            $('#revulize-content ul.choice-list').on('click', 'li span', function(){
+                var attr = $(this).parent().text()
+                for (var i = 0; i < selectedAttributes.length; i++){
+                    if (selectedAttributes[i] === attr){
+                        selectedAttributes.splice(i, 1)
+                        break   
+                    }
+                }
+                var li = $(this).parent().clone();
+                $(this).parent().remove();
+                $('#revulize-content ul.attr-list').append(li);
+                debugger
+                common.printReviews(window.dummyhotelid)
+            });
+
+            $('#revulize-content ul.attr-list').on('click', 'li span', function(){
+                debugger
+                var attr = $(this).parent().text()
+                selectedAttributes.push(attr)
+
+                
+                var li = $(this).parent().clone();
+                $(this).parent().remove();
+                $('#revulize-content ul.choice-list').append(li);
+                debugger
+                common.printReviews(window.dummyhotelid)
+            });
 
             $.ajax({
                 url:        "js/review-finder.txt",
@@ -610,9 +641,9 @@ var common = {
         });
         $.each(rl, function(i, item){
             var li = rvTemplate;
-            li = li.replace('{{user-name}}', item.name);
-            li = li.replace('{{user-photo}}', item.photo);
-            li = li.replace('{{user-address}}', item.place);
+            li = li.replace('{{user-name}}', item['Reviewer Name']);
+            li = li.replace('{{user-photo}}', 'images/list-sub-image.jpg');
+            li = li.replace('{{user-address}}', item['Place']);
             var summary = item.review.substring(0, 250) + '...';
             li = li.replace('{{summary}}', summary);
             li = li.replace('{{review-full}}', item.review);
