@@ -13,9 +13,9 @@ if __name__ == "__main__":
     outputfile = sys.argv[2]
     location = locationDir[locationDir.rfind('/') + 1:] # key is between last and second last slash e.g. /data/DUBLIN:IRELAND/
     dirList = os.listdir(locationDir)
-    listOfHotelIds = []
+    listOfHotelIds = {}
     for dire in dirList:
-        listOfHotelIds.append(dire)
+        listOfHotelIds[dire] = True
     locationMap[location] = listOfHotelIds
     f = open(outputfile, 'w')
     f.write(json.dumps(locationMap))

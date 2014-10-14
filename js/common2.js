@@ -1,9 +1,8 @@
 $ = jQuery.noConflict();
 
 window.sentimentMap = {}
-window.hotelAttrMap = {}
 window.reviewMap = {}
-window.hotelMap = {}
+window.hotelDetailMap = {}
 window.hotelAttr = {}
 window.locationMap = {}
 window.purposeOfTraveling = ''
@@ -15,8 +14,7 @@ window.selectedAttributes = []
 window.suggestedAttributes = ['overall', 'staff', 'night', 'beach', 'roof']
 window.reviewFinder = []
 window.reviewLookup = []
-window.currentHotelId = 'g188098-d266043'
-window.currentLocation = 'ZERMATT:SWITZERLAND'
+window.dummyhotelid = 'g188098-d266043'
 
 var common = {
     
@@ -25,7 +23,7 @@ var common = {
         this.resize();
         this.windowScroll();
         this.setOverlay();
-        this.getHotelList();
+        //this.getHotelList();
         this.revulizeRank();
         this.setSticky();
         // load all the maps from the file system.
@@ -39,21 +37,36 @@ var common = {
         attrList = purposeToAttributes[purposeOfTraveling]
         selectedAttributes = attrList
         
-        $.getJSON('data/out-zermatt/sentiment.json', function(data){
-          sentimentMap = data
-        $.getJSON('data/' + currentHotelId  + '/summary.txt', function(data){
-            reviewMap = data[currentHotelId]
-            common.printReviews(selectedAttributes, sentimentMap, currentHotelId)
-            
-        }) 
+        $.getJSON('data/location_hotel_map/locationtohotel.json', function(data){
+            locationMap = data
+            $.getJSON('data/out-zermatt/sentiment.json', function(data){
+                sentimentMap = data
+                //common.printReviews(selectedAttributes, sentimentMap, currentHotelId)
+                $.getJSON('data/hotels/hotelDetail.json', function(data){
+                    hotelDetailMap = data
+                })
+            })
         })
-        $.getJSON('data/out-zermatt/hotel_sentiment.json', function(data){
-          this.hotelAttr = data
-        })
-        $.getJSON('data/out-zermatt/hotel_sentiment.json', function(data)){
-            hotelAttrMap = data
-        }
         
+        $.getJSON('data/out-zermatt/hotel_sentiment.json', function(data){
+                hotelAttr = data
+        })
+        // Load when revulize is hit.
+        $.getJSON('data/reviews/' + dummyhotelid  + '/summary.txt', function(data){
+                reviewMap = data[dummyhotelid]
+        
+            })
+        
+    },
+    hotelSelcted: function(hotelid){
+        // load reviews for that particular hotel
+    },
+    searchStarted: function(purpose, location){
+        // read the search params and location.
+        // filter hotels and show relevant hotels. 
+        // fetch reviews for this location and show top 5 reviews for each hotel.
+        
+        common.getHotelList()
     },
     printReviews: function(selectedAttrs, sentimentMap, currentHotelId) {
         var results = this.selectReviews(selectedAttributes, sentimentMap)
@@ -82,12 +95,12 @@ var common = {
 //        {'awesome': (['pool', 'food'], 33), 'good': [('service', 22), ('overall', 11)]}
         // intermediate results
         //        {'awesome': {'pool': 22, 'food': 33}, 'good': {'service': 22, 'overall': 11}}
-        return {'0': ([], 0), '1': ([], 0), '2': ([], 0), '3': ([], 0), '4': ([], 0)}
-        var attrArr = hotelAttrMap[hotelid]
+        //return {'0': ([], 0), '1': ([], 0), '2': ([], 0), '3': ([], 0), '4': ([], 0)}
+        var attrArr = hotelAttr[hotelid]
         var inter = {}
         for (val in attrArr){
-            var attr = val[0]
-            var senti = val[1]
+            var attr = attrArr[val][0]
+            var senti = attrArr[val][1]
             var current
             if (senti in inter) {
                 current = inter[senti]
@@ -131,15 +144,23 @@ var common = {
             var senti = maxInter[att][0]
             var value = maxInter[att][1]
             if (senti in final){
-                updatedAttList = final[senti][0].push(att)
+                final[senti][0].push(att)
                 updatedNum = Math.max(value, final[senti][1])
-                final[senti] = [updatedAttList, updatedNum]
+                final[senti][1] = updatedNum
             }
             else {
                 final[senti] = [[att], value]
             }
         }
-        
+        // normalize results
+        for (var i = 0; i < 5; i++){
+            if (i in final){
+                
+            }
+            else {
+                final[i] = [[], 0]
+            }
+        }
         return final
     },
     selectReviews: function(selectedAttributes, sentimentMap){
@@ -161,6 +182,7 @@ var common = {
         }
         return results
     },
+    
     filterReviews: function(args){
         results = {}
         for (val in args){
@@ -335,18 +357,54 @@ var common = {
         });
     },
     getHotelList: function(){
-        var place =  parseCookieValue('place')
+        //var place =  parseCookieValue('place') // XXX: this place is currently in format Paris, France. We need to convert it into correct format: PARIS:FRANCE.
+        locationKey = 'ZERMATT:SWITZERLAND'
+        
+        results = common.selectReviews(selectedAttributes, sentimentMap)
+        // find hotels for this location.
+        superset = locationMap[locationKey]
+        // for each of this hotel do a look up and create a detail json file
+        finalhotels = []
+        finalReviews = {}
+        for (res in results){
+            hotelid = results[res][0]
+            reviewid = results[res][1]
+            if (hotelid in superset){
+                finalhotels.push(hotelid)
+                if (hotelid in finalReviews){
+                    finalReviews[hotelid].push(reviewid)
+                }
+                else {
+                    finalReviews[hotelid] = [reviewid]
+                }
+            }
+            else {
+                console.log('hotel id not there: ' + hotelid)
+            }
+        }
+        // fetch json for these final hotels.
+        
+        // build the json for hotels in sample json text file format.
+        hotelListJson = {}
+        for (hotelid in finalhotels){
+            attrDetails = common.getAttributeDetails(finalhotels[hotelid])
+            details = hotelDetailMap[finalhotels[hotelid]]
+            details["sentiment"] = attrDetails
+            details["top_reviews"] = finalReviews[finalhotels[hotelid]].slice(0, 5)
+            hotelListJson[finalhotels[hotelid]] = details
+        }
+        common.populateHotelList(hotelListJson)
         // visit the location page and parse the details.
         // build the hotel map.
-        $('.travel-form input[type="button"]').on('click', function(){
-            $.ajax({
-                url:        "js/sample-result1.txt",
-                async:      false,
-                dataType:   "json",
-                success:    function(response){
-                    common.populateHotelList(response);
-                }
-            });
+//        $('.travel-form input[type="button"]').on('click', function(){
+//            $.ajax({
+//                url:        "js/sample-result1.txt",
+//                async:      false,
+//                dataType:   "json",
+//                success:    function(response){
+//                    common.populateHotelList(response);
+//                }
+//            });
             
             
             
@@ -362,7 +420,7 @@ var common = {
             $('.button-holder').slideUp(400);
              $('.goBackForm').fadeIn(1000);
                $('#hotel-list-holder').fadeIn(1000);
-        });
+        //});
         
         var formH = $('.travel-form').innerHeight();
         $(window).on('scroll', function(){
@@ -393,28 +451,29 @@ var common = {
             }
         });
         var hlItem = '';
-        $.each(jRes, function(index, item){
+        $.each(rObj, function(index, item){
+            key = item.key;
+            value = item.value;
             hlItem = hlTemplate;
-            hlItem = hlItem.replace('{{hotel-name}}', item.name);
-            hlItem = hlItem.replace('{{hotel-address}}', item.Address);
-            hlItem = hlItem.replace('{{default-image}}', item.image_link[0]);
-            hlItem = hlItem.replace('{{image-list}}', JSON.stringify(item.image_link).replace(/"/g, "'"));
-            
+            hlItem = hlItem.replace('{{hotel-name}}', item.title.substring(0, 35));
+            hlItem = hlItem.replace('{{hotel-address}}', item.locality + ' ' + item.address);
+            hlItem = hlItem.replace('{{default-image}}', item.images[1]);
+            hlItem = hlItem.replace('{{image-list}}', JSON.stringify(item.images.slice(1, 11)).replace(/"/g, "'"));
             /* review status */
-            hlItem = hlItem.replace('{{perc-awesome}}', item.review_stats.awesome);
-            hlItem = hlItem.replace('{{perc-good}}', item.review_stats.good);
-            hlItem = hlItem.replace('{{perc-ok}}', item.review_stats.okay);
-            hlItem = hlItem.replace('{{perc-bad}}', item.review_stats.average);
-            hlItem = hlItem.replace('{{perc-worst}}', item.review_stats.bad);
+            hlItem = hlItem.replace('{{perc-awesome}}', item.sentiment[4][1]);
+            hlItem = hlItem.replace('{{perc-good}}', item.sentiment[3][1]);
+            hlItem = hlItem.replace('{{perc-ok}}', item.sentiment[2][1]);
+            hlItem = hlItem.replace('{{perc-bad}}', item.sentiment[1][1]);
+            hlItem = hlItem.replace('{{perc-worst}}', item.sentiment[0][1]);
             
             var rvItem = '',
                 rvList = '';
-            $.each(item.top_reviews, function(ind, review){
+            $.each(item.top_reviews, function(ind, reviewid){
                 rvItem = rvTemplate;
-                rvItem = rvItem.replace('{{user-name}}', review.reviewer_name);
-                rvItem = rvItem.replace('{{user-address}}', review.reviewer_place);
-                rvItem = rvItem.replace('{{user-photo}}', review.reviewer_photo);
-                rvItem = rvItem.replace('{{user-review}}', review.review);
+                rvItem = rvItem.replace('{{user-name}}', reviewMap[reviewid]['Reviewer Name']);
+                rvItem = rvItem.replace('{{user-address}}', reviewMap[reviewid].Place);
+                rvItem = rvItem.replace('{{user-photo}}', 'images/list-sub-image.jpg');
+                rvItem = rvItem.replace('{{user-review}}', reviewMap[reviewid].review);
                 
                 rvList += rvItem;
             });
@@ -583,10 +642,13 @@ parseCookieValue = function(param) {
                 return undefined
             }
 
+// show up hotels is clicked.
 $('.button-holder').on('click', function(arg){
     debugger
     place = $('.op0 a').text()
     document.cookie = 'place=' + place
     purpose = $('.op1 a').text()
     document.cookie = 'purpose=' + purpose
+    
+    common.searchStarted(purpose, place)
 })
