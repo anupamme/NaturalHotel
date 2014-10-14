@@ -472,7 +472,7 @@ var common = {
             value = item.value;
             hlItem = hlTemplate;
             hlItem = hlItem.replace('{{hotel-name}}', item.title.substring(0, 35));
-            hlItem = hlItem.replace('{{hotel-address}}', item.locality + ' ' + item.address);
+            hlItem = hlItem.replace('{{hotel-address}}', item.locality);
             hlItem = hlItem.replace('{{default-image}}', item.images[1]);
             hlItem = hlItem.replace('{{image-list}}', JSON.stringify(item.images.slice(1, 11)).replace(/"/g, "'"));
             /* review status */
@@ -489,7 +489,7 @@ var common = {
                 rvItem = rvItem.replace('{{user-name}}', reviewMap[reviewid]['ReviewerName']);
                 rvItem = rvItem.replace('{{user-address}}', reviewMap[reviewid]['Place']);
                 rvItem = rvItem.replace('{{user-photo}}', reviewMap[reviewid]['ReviewerImage']);
-                rvItem = rvItem.replace('{{user-review}}', reviewMap[reviewid].review);
+                rvItem = rvItem.replace('{{user-review}}', common.summarize(reviewMap[reviewid].review, 4, 270));
                 
                 rvList += rvItem;
             });
@@ -500,6 +500,33 @@ var common = {
         hl += '</ul>';
         $('#hotel-list-holder').html(hl);
         common.setHotelList();
+    },
+    summarize: function(text, num, max){
+        if (num == 1){
+            return text.substr(0, max)
+        }
+        var stopwords = {'.' : true, '!' : true, '?' : true}
+        var minLength = 10
+        var lastIndex = 0
+        var totalSen = 0
+        var index = 0
+        while (index < text.length){
+            if (text[index] in stopwords){
+                if (index - lastIndex >  minLength){
+                    totalSen += 1
+                    lastIndex = index
+                    if (totalSen === num)
+                        break
+                }
+            }
+            index += 1
+        }
+        console.log('summary length: ' + index + " : " + max)
+        if (index > max){
+            return common.summarize(text, num - 1, max)
+        }
+        console.log('returning length: ' + index + " : " + max)
+        return text.substring(0, index)
     },
     windowScroll: function(){
         //var fh = $('.travel-form').innerHeight();//alert(fh);
@@ -646,7 +673,7 @@ var common = {
             li = li.replace('{{user-name}}', item['ReviewerName']);
             li = li.replace('{{user-photo}}', item['ReviewerImage']);
             li = li.replace('{{user-address}}', item['Place']);
-            var summary = item.review.substring(0, 150) + '...';
+            var summary = common.summarize(item.review, 4, 250);
             li = li.replace('{{summary}}', summary);
             li = li.replace('{{review-full}}', item.review);
             
