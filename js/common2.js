@@ -472,7 +472,7 @@ var common = {
             value = item.value;
             hlItem = hlTemplate;
             hlItem = hlItem.replace('{{hotel-name}}', item.title.substring(0, 35));
-            hlItem = hlItem.replace('{{hotel-address}}', item.locality + ' ' + item.address);
+            hlItem = hlItem.replace('{{hotel-address}}', item.locality);
             hlItem = hlItem.replace('{{default-image}}', item.images[1]);
             hlItem = hlItem.replace('{{image-list}}', JSON.stringify(item.images.slice(1, 11)).replace(/"/g, "'"));
             /* review status */
