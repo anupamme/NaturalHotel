@@ -1,8 +1,11 @@
 $ = jQuery.noConflict();
 
 window.sentimentMap = {}
+window.hotelAttrMap = {}
 window.reviewMap = {}
+window.hotelMap = {}
 window.hotelAttr = {}
+window.locationMap = {}
 window.purposeOfTraveling = ''
 window.purposeToAttributes = {
         'honeymoon': ['food', 'room'],
@@ -13,6 +16,7 @@ window.suggestedAttributes = ['overall', 'staff', 'night', 'beach', 'roof']
 window.reviewFinder = []
 window.reviewLookup = []
 window.currentHotelId = 'g188098-d266043'
+window.currentLocation = 'ZERMATT:SWITZERLAND'
 
 var common = {
     
@@ -39,14 +43,17 @@ var common = {
           sentimentMap = data
         $.getJSON('data/' + currentHotelId  + '/summary.txt', function(data){
             reviewMap = data[currentHotelId]
-            debugger
-            
             common.printReviews(selectedAttributes, sentimentMap, currentHotelId)
+            
         }) 
         })
         $.getJSON('data/out-zermatt/hotel_sentiment.json', function(data){
-          this.hotelAttr = data  
+          this.hotelAttr = data
         })
+        $.getJSON('data/out-zermatt/hotel_sentiment.json', function(data)){
+            hotelAttrMap = data
+        }
+        
     },
     printReviews: function(selectedAttrs, sentimentMap, currentHotelId) {
         var results = this.selectReviews(selectedAttributes, sentimentMap)
@@ -69,6 +76,71 @@ var common = {
         for (var attr in suggestedAttributes) {
             $('.attr-list').append('<li>' + suggestedAttributes[attr] + '<span></span></li>')
         }
+    },
+    // get AttributeDetails is for the pop up display of infographics.
+    getAttributeDetails: function(hotelid){
+//        {'awesome': (['pool', 'food'], 33), 'good': [('service', 22), ('overall', 11)]}
+        // intermediate results
+        //        {'awesome': {'pool': 22, 'food': 33}, 'good': {'service': 22, 'overall': 11}}
+        return {'0': ([], 0), '1': ([], 0), '2': ([], 0), '3': ([], 0), '4': ([], 0)}
+        var attrArr = hotelAttrMap[hotelid]
+        var inter = {}
+        for (val in attrArr){
+            var attr = val[0]
+            var senti = val[1]
+            var current
+            if (senti in inter) {
+                current = inter[senti]
+            } 
+            else {
+                current = {}
+                inter[senti] = current
+            }
+            if (attr in current){
+                current[attr] = current[attr] + 1
+            }
+            else {
+                current[attr] = 1
+            }
+        }
+        // find which attributes are in max over all sentiments and assign it to that sentiment.
+        var maxInter = {} // from attribute to sentiment (where it is max.) 
+        for (var senti in inter){
+            var attMap = inter[senti]
+            for (var attKey in attMap){
+                var attNum = attMap[attKey]
+                if (attKey in maxInter){
+                    var maxSoFar = maxInter[attKey]
+                    var maxSentiSoFar = maxSoFar[0]
+                    var maxValSoFar = maxSoFar[1]
+                    if (attNum > maxValSoFar){
+                        maxInter[attKey] = [senti, attNum]
+                    }
+                    else {
+                        // do nothing.
+                    }
+                }
+                else {
+                    maxInter[attKey] = [senti, attNum]
+                }
+            }
+        }
+        // final result: 
+        var final = {} // contain values like: senti => [[att], num]
+        for (var att in maxInter){
+            var senti = maxInter[att][0]
+            var value = maxInter[att][1]
+            if (senti in final){
+                updatedAttList = final[senti][0].push(att)
+                updatedNum = Math.max(value, final[senti][1])
+                final[senti] = [updatedAttList, updatedNum]
+            }
+            else {
+                final[senti] = [[att], value]
+            }
+        }
+        
+        return final
     },
     selectReviews: function(selectedAttributes, sentimentMap){
       // find the selected reviews.
@@ -100,6 +172,7 @@ var common = {
         }
         return Object.keys(results)
     },
+    
     refreshReviews: function() {
         // clean current reviews.
         debugger
@@ -262,6 +335,9 @@ var common = {
         });
     },
     getHotelList: function(){
+        var place =  parseCookieValue('place')
+        // visit the location page and parse the details.
+        // build the hotel map.
         $('.travel-form input[type="button"]').on('click', function(){
             $.ajax({
                 url:        "js/sample-result1.txt",
@@ -271,7 +347,10 @@ var common = {
                     common.populateHotelList(response);
                 }
             });
-             $('#hotel-list-holder').fadeIn(1000);
+            
+            
+            
+               $('.cContent').css('min-height',0);
           //  var formH = $('.travel-form').innerHeight();
             var formH = 500 - $('.cContent').innerHeight()-$('.button-holder').innerHeight;
             var body = $("html, body");
@@ -279,9 +358,10 @@ var common = {
                 $('.travel-form').closest('.stretch').addClass('sticky');
                 $('#hotel-list-holder').closest('.stretch').addClass('sticky-shadow');
             });
-            $('.cContent').slideUp('slow');
-            $('.button-holder').slideUp('slow');
+            $('.cContent').slideUp(400);
+            $('.button-holder').slideUp(400);
              $('.goBackForm').fadeIn(1000);
+               $('#hotel-list-holder').fadeIn(1000);
         });
         
         var formH = $('.travel-form').innerHeight();
@@ -491,3 +571,22 @@ $(document).ready(function(){
 	common.init();
 });
 
+parseCookieValue = function(param) {
+                cookieSet = document.cookie.split(';')
+                for (cook in cookieSet) {
+                    value = cookieSet[cook];
+                    name = value.substring(0, value.indexOf('='));
+                    if (name.trim() === param) {
+                        return value.substring(value.indexOf('=') + 1)
+                    }
+                }
+                return undefined
+            }
+
+$('.button-holder').on('click', function(arg){
+    debugger
+    place = $('.op0 a').text()
+    document.cookie = 'place=' + place
+    purpose = $('.op1 a').text()
+    document.cookie = 'purpose=' + purpose
+})

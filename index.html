@@ -132,8 +132,6 @@ function testAPI() {
     function login(response){
         console.log('Successful login for: ' + response.name);
         console.log(JSON.stringify(response)); 
-        document.getElementById('status').innerHTML =
-        'Thanks for logging in, ' + response.name + '!';
         name = response.name;
         imageUrl = 'http://graph.facebook.com/' + response.id + '/picture';
         document.cookie = 'name=' + response.name;

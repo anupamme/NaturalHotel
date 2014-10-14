@@ -5,8 +5,8 @@ api_version: 1
 threadsafe: true
 
 handlers:
-- url: /html-files
-  static_dir: html-files
+#- url: /demo1
+#  static_dir: demo1
 
 - url: /css
   static_dir: css
@@ -21,7 +21,14 @@ handlers:
   
 - url: /images
   static_dir: images
-  
+
+- url: /fonts
+  static_dir: fonts
+
+- url: /templates
+  static_dir: templates
+
+#
 - url: /.*
   script: review-viz.application
-  static_dir: 
+  #static_dir: /
