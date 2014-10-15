@@ -43,11 +43,13 @@
 <script src="js/slider.js"></script>
 <script>
 function statusChangeCallback(response) {
+    debugger
     if (response.status === 'connected') {
         testAPI();
     } 
     else if (response.status === 'not_authorized') {
         FB.login(function(response){
+            login(response)
         }); 
         //document.getElementById('status').innerHTML = 'Please log ' + 'into this app.';
     } 
@@ -63,8 +65,10 @@ function statusChangeCallback(response) {
 }
 // This function is called when someone finishes with the Login Button.  See the onlogin handler attached to it in the sample code below.
 function checkLoginState() {
+    debugger
     //console.log('in check login state')
     FB.getLoginStatus(function(response) {
+        debugger
         statusChangeCallback(response);
     });
 }
@@ -113,21 +117,26 @@ function checkLoginState() {
 }(document, 'script', 'facebook-jssdk'));
     
 function testAPI() {
+    debugger
             //console.log('Welcome!  Fetching your information.... ');
         FB.api('/me', function(response) {
+            debugger
             login(response)
             //var imgElement = '<img src="' + imageUrl + '" width="100px" height="100px"/>'
             // $('.loginButton').append(imgElement)  
             });
         }
     function login(response){
+        debugger
         console.log('Successful login for: ' + response.name);
         console.log(JSON.stringify(response)); 
         name = response.name;
         imageUrl = 'http://graph.facebook.com/' + response.id + '/picture';
         document.cookie = 'name=' + response.name;
         document.cookie = 'image=' + imageUrl;
-        bake_cookie('fb-ins', FB)
+        //bake_cookie('fb-ins', FB)
+      //  var cookie = [name, '=', JSON.stringify(FB), '; domain=.', window.location.host.toString(), '; path=/;'].join('');
+        document.cookie = 'fb-ins=' + JSON.stringify(FB);
         window.location.href = "form.html";
     }
 </script>
@@ -146,6 +155,7 @@ function testAPI() {
         checkLoginState();
     });
     function bake_cookie(name, value) {
+        debugger
         var cookie = [name, '=', JSON.stringify(value), '; domain=.', window.location.host.toString(), '; path=/;'].join('');
         document.cookie = cookie;
     }

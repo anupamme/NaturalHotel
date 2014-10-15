@@ -425,7 +425,6 @@ var common = {
             
             
                $('.cContent').css('min-height',0);
-          //  var formH = $('.travel-form').innerHeight();
             var formH = 500 - $('.cContent').innerHeight()-$('.button-holder').innerHeight;
             var body = $("html, body");
             body.animate({scrollTop:formH}, '1000', 'swing', function(){
@@ -436,7 +435,7 @@ var common = {
             $('.button-holder').slideUp(400);
              $('.goBackForm').fadeIn(1000);
                $('#hotel-list-holder').fadeIn(1000);
-        //});
+    
         
         var formH = $('.travel-form').innerHeight();
         $(window).on('scroll', function(){
@@ -521,11 +520,9 @@ var common = {
             }
             index += 1
         }
-        console.log('summary length: ' + index + " : " + max)
         if (index > max){
             return common.summarize(text, num - 1, max)
         }
-        console.log('returning length: ' + index + " : " + max)
         return text.substring(0, index)
     },
     windowScroll: function(){
