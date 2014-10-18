@@ -25,8 +25,19 @@ body{
 
 input:focus, textarea , span , a{ outline: none !important; }
 
-
-
+.iconclose {
+    color: #FFF;
+cursor: pointer;
+right: -35px;
+float: right;
+top: 75px;
+padding-right: 7%;
+font-size: 25px;
+padding-top: 2%;
+}
+.iconclose:hover {
+    color: #92c17c;
+}
 /************************Content section****************************/
 
 .modal-backdrop.in {
@@ -220,7 +231,7 @@ box-shadow: none;
               width: 40%;
 margin: 0 auto;
 }
-.modal-portfolio .modal-close {
+.modal-portfolio .modal-close,.overlay-holder1 .modal-close {
 position: absolute;
 z-index: 999;
 top: 25px;
@@ -234,7 +245,7 @@ cursor: pointer;
 -o-transition: background-color .3s ease-in-out;
 transition: background-color .3s ease-in-out;
 }
-    .modal-portfolio .modal-close:focus::after, .modal-portfolio .modal-close:focus::before, .modal-portfolio .modal-close:hover::after, .modal-portfolio .modal-close:hover::before {
+    .modal-portfolio .modal-close:focus::after, .modal-portfolio .modal-close:focus::before, .modal-portfolio .modal-close:hover::after, .modal-portfolio .modal-close:hover::before,.overlay-holder1 .modal-close:focus::after, .overlay-holder1 .modal-close:focus::before{
 content: '';
 background-color: #92c17c;
 -webkit-transition: background-color .3s ease-in-out;
@@ -243,7 +254,7 @@ background-color: #92c17c;
 -o-transition: background-color .3s ease-in-out;
 transition: background-color .3s ease-in-out;
 }
-.modal-portfolio .modal-close::before {
+.modal-portfolio .modal-close::before ,.overlay-holder1 .modal-close:before{
 content: '';
 position: absolute;
 left: 40px;
@@ -257,7 +268,7 @@ background-color: #aaa;
 -o-transform: rotate(-45deg);
 transform: rotate(-45deg);
 }
-    .modal-portfolio .modal-close::after {
+    .modal-portfolio .modal-close::after, .overlay-holder1 .modal-close:after{
 content: '';
 position: absolute;
 right: 40px;
@@ -407,6 +418,7 @@ padding: 10PX;
       .popup {
          
           margin: 0 auto;
+          width: 89%;
           
       }
          .cols {

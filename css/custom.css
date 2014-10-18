@@ -36,6 +36,13 @@ body{
     margin: 0;
     padding: 0;
 }
+.overlay-holder1 {
+position: fixed;
+top: 80px;
+opacity: 0;
+width:100%;
+z-index: 15;
+}
 ul {
     list-style: none outside none;
     padding: 0;
