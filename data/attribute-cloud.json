@@ -1,5 +1,5 @@
 {"food": ["food", "breakfast", "snacks", "dinner", "bread", "vegetable", "cafe", "restaurant", "buffet", "coffee"],
-"overall": ["overall", "attention to detail", "hotel", "hospitality", "experience", "family", "stay", "time", "property", "home", "vacation", "place"],
+"overall": ["overall", "attention to detail", "hotel", "hospitality", "experience", "stay", "time", "property", "home", "vacation", "place"],
 "location": ["location", "distance", "town", "access", "accessbility", "city", "walk", "area", "minute", "shopping", "train", "station", "metro"],
 "room": ["room", "view", "bed", "sheet", "bedsheet", "pillows", "bathtub", "bathroom", "balcony", "tip", "door"],
 "staff": ["staff", "attitude", "hospitality", "team", "management", "manager", "service", "guest", "desk"],
