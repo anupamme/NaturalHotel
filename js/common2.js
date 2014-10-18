@@ -5,6 +5,7 @@ window.reviewMap = {}
 window.hotelDetailMap = {}
 window.hotelAttr = {}
 window.locationMap = {}
+window.attributeMap = {}
 window.purposeOfTraveling = ''
 window.purposeToAttributes = {
         'honeymoon': ['food', 'room'],
@@ -42,10 +43,9 @@ var common = {
             $.getJSON('data/out-zermatt/sentiment.json', function(data){
                 sentimentMap = data
                 $.getJSON('data/reviews/' + dummyhotelid  + '/summary.txt', function(data){
-                reviewMap = data[dummyhotelid]
-        debugger
-                common.printReviews(window.dummyhotelid)
-            })
+                    reviewMap = data[dummyhotelid]
+                    common.printReviews(window.dummyhotelid)
+                })
                 //common.printReviews(selectedAttributes, sentimentMap, currentHotelId)
                 $.getJSON('data/hotels/hotelDetail.json', function(data){
                     hotelDetailMap = data
@@ -54,12 +54,11 @@ var common = {
         })
         
         $.getJSON('data/out-zermatt/hotel_sentiment.json', function(data){
-                hotelAttr = data
+            hotelAttr = data
         })
-        // Load when revulize is hit.
-        
-        
-        
+        $.getJSON('data/attribute-cloud.json', function(data){
+            attributeMap = data
+        })
     },
     hotelSelcted: function(hotelid){
         // load reviews for that particular hotel
@@ -100,7 +99,7 @@ var common = {
 //        {'awesome': (['pool', 'food'], 33), 'good': [('service', 22), ('overall', 11)]}
         // intermediate results
         //        {'awesome': {'pool': 22, 'food': 33}, 'good': {'service': 22, 'overall': 11}}
-        //return {'0': ([], 0), '1': ([], 0), '2': ([], 0), '3': ([], 0), '4': ([], 0)}
+        //return {'0': ([pool, breakfast], 15), '1': ([service, drinks], 25), '2': ([], 0), '3': ([], 0), '4': ([], 0)}
         var attrArr = hotelAttr[hotelid]
         var inter = {}
         for (val in attrArr){
@@ -207,7 +206,6 @@ var common = {
     
     refreshReviews: function() {
         // clean current reviews.
-        debugger
         $('.review-list').children().remove()
         results = []
         for (var i = 1; i < reviewLookup.length; i++){
@@ -467,8 +465,6 @@ var common = {
         });
         var hlItem = '';
         $.each(rObj, function(index, item){
-            key = item.key;
-            value = item.value;
             hlItem = hlTemplate;
             hlItem = hlItem.replace('{{hotel-name}}', item.title.substring(0, 35));
             hlItem = hlItem.replace('{{hotel-address}}', item.locality);
@@ -564,13 +560,6 @@ var common = {
                 sel.find('.text').text(text);
                 rl.slideUp("fast");
             });
-
-            $('ul.choice-list').on('click', function(){
-                console.log('click.')
-                
-                debugger
-                
-            })
             
             $('#revulize-content ul.choice-list').on('click', 'li span', function(){
                 var attr = $(this).parent().text()
@@ -583,12 +572,10 @@ var common = {
                 var li = $(this).parent().clone();
                 $(this).parent().remove();
                 $('#revulize-content ul.attr-list').append(li);
-                debugger
                 common.printReviews(window.dummyhotelid)
             });
 
             $('#revulize-content ul.attr-list').on('click', 'li span', function(){
-                debugger
                 var attr = $(this).parent().text()
                 selectedAttributes.push(attr)
 
@@ -596,7 +583,6 @@ var common = {
                 var li = $(this).parent().clone();
                 $(this).parent().remove();
                 $('#revulize-content ul.choice-list').append(li);
-                debugger
                 common.printReviews(window.dummyhotelid)
             });
 
@@ -654,7 +640,22 @@ var common = {
 //        arrRevList.push(common.reviewLookup["5"]);
 //        arrRevList.push(common.reviewLookup["6"]);
 //        common.showReviewList(arrRevList);
-//    },
+//    },   
+    filter: function(searchTermArr, textToCheck) {
+        for (var searchTerm in searchTermArr){
+            var searchPattern = new RegExp('('+searchTermArr[searchTerm]+')', 'ig'); 
+            textToCheck = textToCheck.replace(searchPattern, '<span style="font-family: DIN_BLACK; font-weight: bold">$1</span>'); 
+        }
+        return textToCheck;
+    },
+    highlightSetOfKeyWords: function(text, keywordSet, keywordMap){
+        var lowerText = text.toLowerCase()
+        for (var key in keywordSet){
+            var wordList = keywordMap[keywordSet[key]]
+            text = common.filter(wordList, text)
+        }
+        return text
+    },
     showReviewList: function(rl){
         var rul = '<ul>';
         var rvTemplate = '';
@@ -671,8 +672,13 @@ var common = {
             li = li.replace('{{user-photo}}', item['ReviewerImage']);
             li = li.replace('{{user-address}}', item['Place']);
             var summary = common.summarize(item.review, 4, 250);
-            li = li.replace('{{summary}}', summary);
-            li = li.replace('{{review-full}}', item.review);
+            var highlightedSummary = common.highlightSetOfKeyWords(summary, selectedAttributes, attributeMap)
+            li = li.replace('{{summary}}', highlightedSummary);
+//            var temp = "I am <span class=\"bold\">full</span> review."
+//            li = li.replace('{{review-full}}', temp);
+            debugger
+            var highlightedReview = common.highlightSetOfKeyWords(item.review, selectedAttributes, attributeMap)
+            li = li.replace('{{review-full}}', highlightedReview);
             
             rul += li;
         });
@@ -681,7 +687,9 @@ var common = {
         
         common.setReviewList();
     }
+    
 };
+
 
 $(document).ready(function(){
 	common.init();
@@ -701,7 +709,6 @@ parseCookieValue = function(param) {
 
 // show up hotels is clicked.
 $('.button-holder').on('click', function(arg){
-    debugger
     place = $('.op0 a').text()
     document.cookie = 'place=' + place
     purpose = $('.op1 a').text()
