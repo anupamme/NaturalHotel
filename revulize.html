@@ -8,9 +8,9 @@
     <style>
  .goBackForm {
     background: #494949;
-min-height: 34px;
-padding: 5px 0px;
-opacity: 0.8;
+    min-height: 34px;
+    padding: 5px 0px;
+    opacity: 0.8;
     position: fixed;
     width: 100%;
     top: 62px;
@@ -47,6 +47,7 @@ font-size: 18px;
         <div class="container">
             <div class="stretch">
                 <div class="travel-form">
+<!--
                     <form>
                         I am traveling to <input type="text" class="location" placeholder="Location" /> ,<br/>
                         from <input type="text" class="date-from date" placeholder="Date" /> to <input type="text" class="date-to date" placeholder="Date" /> .<br/>
@@ -60,6 +61,7 @@ font-size: 18px;
                             <input type="button" value="show up hotels" />
                         </div>
                     </form>
+-->
                 </div>
             </div>
             <div class="stretch">
@@ -105,31 +107,63 @@ font-size: 18px;
         </div>
     </div>
 <script src="js/common2.js"></script>
+<!--<script src="js/revulize.js"></script>-->
     <script>
-    
       $(document).ready(function() {
-              
-
-          
-
-              
-              function getCookie(cname) {
-                        var name = cname + "=";
-                        var ca = document.cookie.split(';');
-                        for(var i=0; i<ca.length; i++) {
-                                var c = ca[i];
-                                while (c.charAt(0)==' ') c = c.substring(1);
-                        if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
-                        }
-                    return "";
-                    }
-              $('.profile-name').text(getCookie('name'));       
-              $('.profile-image').css('background',"url("+getCookie('image')+")");
+          $('.profile-name').text(getCookie('name'));
+          $('.profile-image').css('background',"url("+getCookie('image')+")");
+          debugger
+          var res = sessionStorage.getItem('reviews')
+          common.refreshReviews(JSON.parse(res))
       });
-        $('.menu').on('click', function(){
-            document.cookie = 'slideup=true'
-            window.location.href = "form.html";
-        })
+      $('.menu').on('click', function(){
+          document.cookie = 'slideup=true'
+          window.location.href = "form.html";
+      })
+      getCookie = function(cname){
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0; i<ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1);
+                if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
+        }
+        return "";
+    }
+    $('#revulize-content ul.choice-list').on('click', 'li span', function(){
+                debugger
+                var attr = $(this).parent().text()
+                for (var i = 0; i < selectedAttributes.length; i++){
+                    if (selectedAttributes[i] === attr){
+                        selectedAttributes.splice(i, 1)
+                        break   
+                    }
+                }
+                var li = $(this).parent().clone();
+                $(this).parent().remove();
+                $('#revulize-content ul.attr-list').append(li);
+                debugger
+                common.printReviews(getCookie('hotelid'))
+    });
+
+    $('#revulize-content ul.attr-list').on('click', 'li span', function(){
+        debugger
+        var attr = $(this).parent().text()
+        selectedAttributes.push(attr)
+        var li = $(this).parent().clone();
+        $(this).parent().remove();
+        $('#revulize-content ul.choice-list').append(li);
+        debugger
+        common.printReviews(getCookie('hotelid'))
+    });
+    
+//
+//            $('ul.choice-list').on('click', function(){
+//                console.log('click.')
+//                
+//                debugger
+//                
+//            })
     </script>
 </body>
 </html>

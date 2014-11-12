@@ -13,9 +13,7 @@ window.purposeToAttributes = {
     }
 window.selectedAttributes = []
 window.suggestedAttributes = ['overall', 'staff', 'night', 'beach', 'roof']
-window.reviewFinder = []
-window.reviewLookup = []
-window.dummyhotelid = 'g188098-d266043'
+window.superResults = []
 
 var common = {
     
@@ -29,7 +27,6 @@ var common = {
         this.setSticky();
         // load all the maps from the file system.
         this.loadFilteringMaps();
-        this.setAttributes();
         //this.printReviews();
     },
     loadFilteringMaps: function(){
@@ -42,12 +39,14 @@ var common = {
             locationMap = data
             $.getJSON('data/out-zermatt/sentiment.json', function(data){
                 sentimentMap = data
-                $.getJSON('data/reviews/' + dummyhotelid  + '/summary.txt', function(data){
-                reviewMap = data[dummyhotelid]
-        debugger
-                common.printReviews(window.dummyhotelid)
-            })
-                //common.printReviews(selectedAttributes, sentimentMap, currentHotelId)
+                // for loop to read reviews for all the hotel ids.
+                debugger
+                window.superResults = common.selectReviews(selectedAttributes, sentimentMap)
+        
+                $.getJSON('data/reviews/summary.txt', function(data){
+                    debugger
+                    reviewMap = data
+                })
                 $.getJSON('data/hotels/hotelDetail.json', function(data){
                     hotelDetailMap = data
                 })
@@ -74,30 +73,6 @@ var common = {
         // fetch reviews for this location and show top 5 reviews for each hotel.
         
         common.getHotelList()
-    },
-    printReviews: function(currentHotelId) {
-        var results = this.selectReviews(selectedAttributes, sentimentMap)
-            results = common.filterReviews(results, currentHotelId)
-            //results = removeDuplicates(results)
-            // do look up in reviewmap for these reviews.
-            reviewLookup = []
-            for (res in results){
-                reviewObj = reviewMap[res]
-                reviewLookup[res] = reviewObj // dangerous and writing to global var.
-            }
-        console.log('Total Resutls: ' + results.length)
-            common.refreshReviews()
-            return results.length
-    },
-    setAttributes: function(){
-        $('.attr-list').children().remove()
-        $('.choice-list').children().remove()
-        for (var attr in selectedAttributes) {
-            $('.choice-list').append('<li>' + selectedAttributes[attr] + '<span></span></li>')
-        }
-        for (var attr in suggestedAttributes) {
-            $('.attr-list').append('<li>' + suggestedAttributes[attr] + '<span></span></li>')
-        }
     },
     // get AttributeDetails is for the pop up display of infographics.
     getAttributeDetails: function(hotelid){
@@ -209,16 +184,6 @@ var common = {
         return Object.keys(results)
     },
     
-    refreshReviews: function() {
-        // clean current reviews.
-        debugger
-        $('.review-list').children().remove()
-        results = []
-        for (var i = 1; i < reviewLookup.length; i++){
-            results.push(reviewLookup[i.toString()])
-        }
-        this.showReviewList(results)
-    },
     setHomeHeight: function(){
         if($('.home-block').length){
             var hbh = $('.home-block').outerHeight() + 100,
@@ -269,7 +234,7 @@ var common = {
                     }
                 });
                 
-                var k=common.getAttributeDetails(window.dummyhotelid);
+                //var k=common.getAttributeDetails(window.dummyhotelid);
                 
                 overlay = overlay.replace('{{imageList}}', imageList);
                 $('body').append(overlay);
@@ -288,7 +253,8 @@ var common = {
             
                /* Graph caraousel */
             $('.graph > li ').on('click', function(){
-                 var classname=$(this).attr('class');
+                debugger
+                var classname=$(this).attr('class');
                 var hotelId = $(this).attr('data-valueofhotel');
                 //imageSet = eval(imageSet);
                     imageList="";
@@ -311,7 +277,7 @@ var common = {
                 });
               
                 overlay = overlay.replace('{{imageList}}', imageList);
-                
+                console.log('hotelid: ' + hotelId)
                  var k=common.getAttributeDetails(hotelId);
                  var l=0,m,y=1;
                  var ullist="";
@@ -484,7 +450,7 @@ var common = {
         //var place =  parseCookieValue('place') // XXX: this place is currently in format Paris, France. We need to convert it into correct format: PARIS:FRANCE.
         locationKey = 'ZERMATT:SWITZERLAND'
         
-        results_super = common.selectReviews(selectedAttributes, sentimentMap)
+        results_super = window.superResults
         
         // find hotels for this location.
         superset = locationMap[locationKey]
@@ -581,41 +547,45 @@ var common = {
             }
         });
         var hlItem = '';
-        $.each(rObj, function(index, item){
-            key = item.key;
-            value = item.value;
+        for (var res in rObj){
+//            key = item.key;
+//            value = item.value;
+            debugger
+            item = rObj[res]
             hlItem = hlTemplate;
             hlItem = hlItem.replace('{{hotel-name}}', item.title.substring(0, 35));
             hlItem = hlItem.replace('{{hotel-address}}', item.locality);
             hlItem = hlItem.replace('{{default-image}}', item.images[1]);
             hlItem = hlItem.replace('{{image-list}}', JSON.stringify(item.images.slice(1, 11)).replace(/"/g, "'"));
             /* review status */
+            debugger
+            hlItem = hlItem.replace('{{perc-index0}}', res);
             hlItem = hlItem.replace('{{perc-awesome}}', item.sentiment[4][1]);
             hlItem = hlItem.replace('{{perc-good}}', item.sentiment[3][1]);
             hlItem = hlItem.replace('{{perc-ok}}', item.sentiment[2][1]);
             hlItem = hlItem.replace('{{perc-bad}}', item.sentiment[1][1]);
             hlItem = hlItem.replace('{{perc-worst}}', item.sentiment[0][1]);
-            hlItem = hlItem.replace('{{perc-index}}', index);
-                 hlItem = hlItem.replace('{{perc-index1}}', index);
-                 hlItem = hlItem.replace('{{perc-index2}}', index);
-               hlItem = hlItem.replace('{{perc-index3}}', index);
-                 hlItem = hlItem.replace('{{perc-index4}}', index);
+            hlItem = hlItem.replace('{{perc-index}}', res);
+            hlItem = hlItem.replace('{{perc-index1}}', res);
+            hlItem = hlItem.replace('{{perc-index2}}', res);
+            hlItem = hlItem.replace('{{perc-index3}}', res);
+            hlItem = hlItem.replace('{{perc-index4}}', res);
             
             var rvItem = '',
                 rvList = '';
             $.each(item.top_reviews, function(ind, reviewid){
                 rvItem = rvTemplate;
-                rvItem = rvItem.replace('{{user-name}}', reviewMap[reviewid]['ReviewerName']);
-                rvItem = rvItem.replace('{{user-address}}', reviewMap[reviewid]['Place']);
-                rvItem = rvItem.replace('{{user-photo}}', reviewMap[reviewid]['ReviewerImage']);
-                rvItem = rvItem.replace('{{user-review}}', common.summarize(reviewMap[reviewid].review, 4, 270))
+                rvItem = rvItem.replace('{{user-name}}', reviewMap[res][reviewid]['ReviewerName']);
+                rvItem = rvItem.replace('{{user-address}}', reviewMap[res][reviewid]['Place']);
+                rvItem = rvItem.replace('{{user-photo}}', reviewMap[res][reviewid]['ReviewerImage']);
+                rvItem = rvItem.replace('{{user-review}}', common.summarize(reviewMap[res][reviewid].review, 4, 270))
                 
                 rvList += rvItem;
             });
             hlItem = hlItem.replace('{{review-list}}', rvList);
             
             hl += hlItem;
-        });
+        }
         hl += '</ul>';
         $('#hotel-list-holder').html(hl);
         common.setHotelList();
@@ -648,6 +618,26 @@ var common = {
     windowScroll: function(){
         //var fh = $('.travel-form').innerHeight();//alert(fh);
         
+    },
+    filter: function(searchTermArr, textToCheck) {
+        for (var searchTerm in searchTermArr){
+            var searchPattern = new RegExp('('+searchTermArr[searchTerm]+')', 'ig'); 
+            textToCheck = textToCheck.replace(searchPattern, '<span style="font-family: DIN_BLACK; font-weight: bold">$1</span>'); 
+        }
+        return textToCheck;
+    },
+    highlightSetOfKeyWords: function(text, keywordSet, keywordMap){
+        var lowerText = text.toLowerCase()
+        for (var key in keywordSet){
+            var wordList = keywordMap[keywordSet[key]]
+            text = common.filter(wordList, text)
+        }
+        return text
+    },
+    setSticky: function(){
+        $('.container').on('click', '.stretch.sticky', function(){
+            window.location.href = 'form.html';
+        });
     },
     revulizeRank: function(){
         if($('#revulize-content').length){
@@ -684,42 +674,6 @@ var common = {
                 sel.find('.text').text(text);
                 rl.slideUp("fast");
             });
-
-            $('ul.choice-list').on('click', function(){
-                console.log('click.')
-                
-                debugger
-                
-            })
-            
-            $('#revulize-content ul.choice-list').on('click', 'li span', function(){
-                var attr = $(this).parent().text()
-                for (var i = 0; i < selectedAttributes.length; i++){
-                    if (selectedAttributes[i] === attr){
-                        selectedAttributes.splice(i, 1)
-                        break   
-                    }
-                }
-                var li = $(this).parent().clone();
-                $(this).parent().remove();
-                $('#revulize-content ul.attr-list').append(li);
-                debugger
-                common.printReviews(window.dummyhotelid)
-            });
-
-            $('#revulize-content ul.attr-list').on('click', 'li span', function(){
-                debugger
-                var attr = $(this).parent().text()
-                selectedAttributes.push(attr)
-
-                
-                var li = $(this).parent().clone();
-                $(this).parent().remove();
-                $('#revulize-content ul.choice-list').append(li);
-                debugger
-                common.printReviews(window.dummyhotelid)
-            });
-
             $.ajax({
                 url:        "js/review-finder.txt",
                 async:      false,
@@ -728,17 +682,6 @@ var common = {
                     common.reviewFinder = eval(response);
                 }
             });
-            
-//            $.ajax({
-//                url:        "js/review-lookup.txt",
-//                async:      false,
-//                dataType:   "json",
-//                success:    function(response){
-//                    //common.reviewLookup = eval(response);
-//                }
-//            });
-
-            //common.populateReviewList();
         }
     },
     setReviewList: function(){
@@ -760,35 +703,111 @@ var common = {
             rv.show();
         });
     },
-    setSticky: function(){
-        $('.container').on('click', '.stretch.sticky', function(){
-            window.location.href = 'form.html';
+    revulizeRank: function(){
+        if($('#revulize-content').length){
+            $('.travel-form').closest('.stretch').addClass('sticky');
+            $('#revulize-content').closest('.stretch').addClass('sticky-shadow');
+            
+            $('#revulize-content .review-list').width(757);
+            
+            var formH = $('.travel-form').innerHeight();
+            $(window).on('scroll', function(){
+                if($(window).scrollTop() > formH && $('.stretch.sticky').length < 1){
+                    $('.travel-form').closest('.stretch').addClass('sticky');
+                    $('#revulize-content').closest('.stretch').addClass('sticky-shadow');
+                }
+            });
+            
+            $('#revulize-content .attributes .rank .selection').on('click', function(){
+                var rl = $(this).siblings('.rank-list');
+                var rank = $(this).attr('data-rank');
+                rl.find('li').removeClass('selected');
+                rl.find('li[data-rank="'+ rank +'"]').addClass('selected');
+                rl.slideDown("fast");
+            });
+
+            $('#revulize-content .rank-list').on('click', 'li', function(){
+                var cLi = $(this),
+                    text = cLi.text(),
+                    rank = cLi.attr('data-rank'),
+                    rl = cLi.parent(),
+                    sel = cLi.closest('.rank').find('.selection');
+                cLi.siblings('li').removeClass('selected');
+                cLi.addClass('selected');
+                sel.attr('data-rank', rank);
+                sel.find('.text').text(text);
+                rl.slideUp("fast");
+            });
+            $.ajax({
+                url:        "js/review-finder.txt",
+                async:      false,
+                dataType:   "json",
+                success:    function(response){
+                    common.reviewFinder = eval(response);
+                }
+            });
+        }
+    },
+    setReviewList: function(){
+        $('.review-holder .photo').each(function(){
+            $(this).css('background-image', 'url("'+ $(this).attr('data-src') +'")');
+        });
+
+        $('.review-list').on('click', '.review', function(){
+            var rv = $(this),
+                rvf = $(this).siblings('.review-full-view');
+            rv.hide();
+            rvf.show();
+        });
+
+        $('.review-list').on('click', '.review-full-view', function(){
+            var rvf = $(this),
+                rv = $(this).siblings('.review');
+            rvf.hide();
+            rv.show();
         });
     },
-//    populateReviewList: function(){
-//        var arrRevList = [];
-//        arrRevList.push(common.reviewLookup["1"]);
-//        arrRevList.push(common.reviewLookup["2"]);
-//        arrRevList.push(common.reviewLookup["3"]);
-//        arrRevList.push(common.reviewLookup["4"]);
-//        arrRevList.push(common.reviewLookup["5"]);
-//        arrRevList.push(common.reviewLookup["6"]);
-//        common.showReviewList(arrRevList);
-//    },
-    filter: function(searchTermArr, textToCheck) {
-        for (var searchTerm in searchTermArr){
-            var searchPattern = new RegExp('('+searchTermArr[searchTerm]+')', 'ig'); 
-            textToCheck = textToCheck.replace(searchPattern, '<span style="font-family: DIN_BLACK; font-weight: bold">$1</span>'); 
-        }
-        return textToCheck;
+    printReviews: function(currentHotelId) {
+        debugger
+        var results = window.superResults
+            results = common.filterReviews(results, currentHotelId)
+            //results = removeDuplicates(results)
+            // do look up in reviewmap for these reviews.
+            var reviewLookup = {}
+            for (res in results){
+                reviewObj = reviewMap[currentHotelId][res]
+                reviewLookup[res] = reviewObj // dangerous and writing to global var.
+            }
+        console.log('Total Resutls: ' + results.length)
+        common.refreshReviews(reviewLookup)
+        return reviewLookup
     },
-    highlightSetOfKeyWords: function(text, keywordSet, keywordMap){
-        var lowerText = text.toLowerCase()
-        for (var key in keywordSet){
-            var wordList = keywordMap[keywordSet[key]]
-            text = common.filter(wordList, text)
+    setAttributes: function(){
+        $('.attr-list').children().remove()
+        $('.choice-list').children().remove()
+        for (var attr in selectedAttributes) {
+            $('.choice-list').append('<li>' + selectedAttributes[attr] + '<span></span></li>')
         }
-        return text
+        for (var attr in suggestedAttributes) {
+            $('.attr-list').append('<li>' + suggestedAttributes[attr] + '<span></span></li>')
+        }
+    },
+    size: function(obj) {
+        var size = 0, key;
+        for (key in obj) {
+            if (obj.hasOwnProperty(key)) size++;
+        }
+    return size;
+    },
+    refreshReviews: function(reviewLookUp) {
+        // clean current reviews.
+        $('.review-list').children().remove()
+        results = []
+        var length = common.size(reviewLookUp)
+        for (var i = 1; i < length; i++){
+            results.push(reviewLookUp[i])
+        }
+        this.showReviewList(results)
     },
     showReviewList: function(rl){
         var rul = '<ul>';
@@ -815,7 +834,6 @@ var common = {
         });
         rul += '</ul>';
         $('.review-list').html(rul);
-        
         common.setReviewList();
     }
 };
@@ -824,25 +842,27 @@ $(document).ready(function(){
 	common.init();
 });
 
-parseCookieValue = function(param) {
-                cookieSet = document.cookie.split(';')
-                for (cook in cookieSet) {
-                    value = cookieSet[cook];
-                    name = value.substring(0, value.indexOf('='));
-                    if (name.trim() === param) {
-                        return value.substring(value.indexOf('=') + 1)
-                    }
-                }
-                return undefined
-            }
 
 // show up hotels is clicked.
 $('.button-holder').on('click', function(arg){
     debugger
+    console.log('show up clicked.')
     place = $('.op0 a').text()
     document.cookie = 'place=' + place
     purpose = $('.op1 a').text()
     document.cookie = 'purpose=' + purpose
     
     common.searchStarted(purpose, place)
-})
+    
+    $('.foot').find('input').on('click', function(arg) { 
+        debugger; 
+        document.cookie = 'attributes=' + selectedAttributes.toString()
+        // find which hotel has been clicked and filter reviews only for that hotel.
+        // also put the name of that hotel.
+        var hotelId = $($(this).parentsUntil('.details')[2]).attr('data-valueofhotel')
+        document.cookie = 'hotelid=' + hotelId
+        var results = common.printReviews(hotelId)
+        common.setAttributes()
+        sessionStorage.setItem('reviews', JSON.stringify(results))
+    });
+});

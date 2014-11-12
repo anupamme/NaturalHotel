@@ -652,3 +652,6 @@ padding: 17px 0px 0px 34%;
 #revulize-content .choice-list li {
     cursor: pointer;
 }
+.choices {
+    margin-top: 100px;
+}

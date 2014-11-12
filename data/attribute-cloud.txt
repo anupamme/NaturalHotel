@@ -1,6 +1,6 @@
 food, breakfast, snacks, dinner, bread, vegetable, cafe, restaurant, buffet, coffee
 overall, attention to detail, hotel, hospitality, experience, family, stay, time, property, home, vacation, place
-location, distance, town, access, accessbility, city, walk, area, minute, shopping, train, station, metro
+location, distance, town, access, accessbility, city, walk, area, minute, shopping, train, station, metro, near to, next to
 room, view, bed, sheet, bedsheet, pillows, bathtub, bathroom, balcony, tip, door
 staff, attitude, hospitality, team, management, manager, service, guest, desk
 amenities, pool, swimming pool, gym, gymnasium, water
