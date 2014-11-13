@@ -2,6 +2,8 @@ import os
 import json
 import sys
 
+excludeList = set(['g188098-d619925', 'g188098-d550027'])
+
 if __name__ == "__main__":
     # read the path of hotel id in arg.
     locationDir = sys.argv[1]
@@ -12,6 +14,9 @@ if __name__ == "__main__":
     destination = sys.argv[2]
     masterJson = {}
     for dire in dirList:
+        if (dire in excludeList):
+            print('skipping: ' + dire)
+            continue;
         hotelDir = os.path.join(locationDir, dire)
         results = []
         reviewList = os.listdir(hotelDir)

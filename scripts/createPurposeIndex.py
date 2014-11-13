@@ -1,7 +1,6 @@
 import json
 import sys
 import os
-from enum import Enum
 
 purposeLabel = 'traveled_as'
 
@@ -12,17 +11,31 @@ purposeLabel = 'traveled_as'
 #    Friends = 4
             
 def addOrInsert(result, key, value):
+    hotel, review = value
     if key in result:
-        result[key].append(value)
+        if hotel in result[key]:
+            result[key][hotel].append(review)
+        else:
+            result[key][hotel] = [review]
     else:
-        result[key] = [value]
+        result[key] = {hotel: [review]}
     return result
+
+def sp(lt): return lt.split(' ')
+def sp2(lt): return lt.replace('\t', '')
+
+def normalize(word): return word.lower().strip()
 
 if __name__ == "__main__":
     result = {}
     # read the directory which contains all the reviews.
     locationDir = sys.argv[1]
     hotelList = os.listdir(locationDir)
+    # read the honeymoon keywords
+    honeymoonLines = open(sys.argv[2], 'r').read().split('\n')
+    temp = map(sp, honeymoonLines)
+    honeymoonWords = [item for sublist in temp for item in sublist]
+    finalHoneymoon = set(map(sp2, honeymoonWords))
     for hotelId in hotelList:
         hotelDir = os.path.join(locationDir, hotelId)
         reviewList = os.listdir(hotelDir)
@@ -34,11 +47,24 @@ if __name__ == "__main__":
             traveledAs = jsonObj[purposeLabel]
             print('traveled as: ' + traveledAs)
             if ('couple' in traveledAs):
-                # put in honeymoon.
-                key = 'honeymoon'
-                value = (hotelId, reviewId)
-                result = addOrInsert(result, key, value)
-                continue
+                # if it contains any of the keywords.
+                review_text = jsonObj['review']
+                review_words = review_text.split(' ')
+                found = False
+                for word in review_words:
+                    word = normalize(word)
+                    if word in finalHoneymoon:
+                        # put in honeymoon.
+                        key = 'honeymoon'
+                        value = (hotelId, reviewId)
+                        result = addOrInsert(result, key, value)
+                        found = True
+                        break
+                
+                if found == False:
+                    key = 'traveling'
+                    value = (hotelId, reviewId)
+                    result = addOrInsert(result, key, value)
             if ('business' in traveledAs):
                 # put in business.
                 key = 'business'
@@ -64,7 +90,7 @@ if __name__ == "__main__":
                 result = addOrInsert(result, key, value)
                 continue
     print('done!')       
-    f = open(sys.argv[2], 'w')
+    f = open(sys.argv[3], 'w')
     print('after open!')
     towrite = json.dumps(result)
     print('after dumps!')

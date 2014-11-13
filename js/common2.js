@@ -7,13 +7,16 @@ window.hotelAttr = {}
 window.locationMap = {}
 window.attributeMap = {}
 window.purposeOfTraveling = ''
-window.purposeToAttributes = {
-        'honeymoon': ['food', 'room'],
-        'business': ['location', 'amenities', 'transfer']
-    }
-window.selectedAttributes = []
+//window.purposeToAttributes = {
+//        'honeymoon': ['food', 'room'],
+//        'business': ['location', 'amenities', 'transfer']
+//    }
+window.selectedAttributes = ['overall', 'staff', 'night', 'beach', 'roof', 'amenities', 'transfer', 'food', 'location']
 window.suggestedAttributes = ['overall', 'staff', 'night', 'beach', 'roof']
 window.superResults = []
+window.excludeList = {'g188098-d619925': true, 'g188098-d550027': true}
+window.purposeMap = {}
+window.locationKey = 'ZERMATT:SWITZERLAND'
 
 var common = {
     
@@ -31,10 +34,6 @@ var common = {
     },
     loadFilteringMaps: function(){
         
-        purposeOfTraveling = 'honeymoon'
-        attrList = purposeToAttributes[purposeOfTraveling]
-        selectedAttributes = attrList
-        
         $.getJSON('data/location_hotel_map/locationtohotel.json', function(data){
             locationMap = data
             $.getJSON('data/out-zermatt/sentiment.json', function(data){
@@ -42,13 +41,16 @@ var common = {
                 // for loop to read reviews for all the hotel ids.
                 debugger
                 window.superResults = common.selectReviews(selectedAttributes, sentimentMap)
-        
+                
                 $.getJSON('data/reviews/summary.txt', function(data){
                     debugger
                     reviewMap = data
                 })
                 $.getJSON('data/hotels/hotelDetail.json', function(data){
                     hotelDetailMap = data
+                })
+                $.getJSON('data/purpose/honeymoon.json', function(data){
+                    purposeMap = data
                 })
             })
         })
@@ -59,20 +61,12 @@ var common = {
         $.getJSON('data/attribute-cloud.json', function(data){
             attributeMap = data
          })
-        // Load when revulize is hit.
-        
-        
-        
     },
     hotelSelcted: function(hotelid){
         // load reviews for that particular hotel
     },
     searchStarted: function(purpose, location){
-        // read the search params and location.
-        // filter hotels and show relevant hotels. 
-        // fetch reviews for this location and show top 5 reviews for each hotel.
-        
-        common.getHotelList()
+        common.getHotelList(window.locationKey, purpose)
     },
     // get AttributeDetails is for the pop up display of infographics.
     getAttributeDetails: function(hotelid){
@@ -446,12 +440,12 @@ var common = {
             });
         });
     },
-    getHotelList: function(){
+    getHotelList: function(locationKey, purpose){
         //var place =  parseCookieValue('place') // XXX: this place is currently in format Paris, France. We need to convert it into correct format: PARIS:FRANCE.
-        locationKey = 'ZERMATT:SWITZERLAND'
-        
+        debugger
         results_super = window.superResults
-        
+        // results for this purpose
+        purposeHotels = window.purposeMap[purpose]
         // find hotels for this location.
         superset = locationMap[locationKey]
         // for each of this hotel do a look up and create a detail json file
@@ -463,12 +457,16 @@ var common = {
                 hotelid = results[res][0]
                 reviewid = results[res][1]
                 if (hotelid in superset){
-                    finalhotels.push(hotelid)
-                    if (hotelid in finalReviews){
-                        finalReviews[hotelid].push(reviewid)
-                    }
-                    else {
-                        finalReviews[hotelid] = [reviewid]
+                    if (hotelid in purposeHotels){
+                        finalhotels.push(hotelid)
+                        if (reviewid in purposeHotels[hotelid]){
+                            if (hotelid in finalReviews){
+                                finalReviews[hotelid].push(reviewid)
+                            }
+                            else {
+                                finalReviews[hotelid] = [reviewid]
+                            }
+                        }
                     }
                 }
                 else {
@@ -477,7 +475,7 @@ var common = {
             }
         }
         // fetch json for these final hotels.
-        
+        console.log('Final Hotels: ' + finalReviews.length)
         // build the json for hotels in sample json text file format.
         hotelListJson = {}
         for (hotelid in finalhotels){
@@ -486,37 +484,28 @@ var common = {
             if (details["images"].length < 5)
                 continue
             details["sentiment"] = attrDetails
-            details["top_reviews"] = finalReviews[finalhotels[hotelid]].slice(0, 5)
+            if (finalhotels[hotelid] in finalReviews){
+                details["top_reviews"] = finalReviews[finalhotels[hotelid]].slice(0, 5)
+            }
+            else {
+                continue
+            }
             hotelListJson[finalhotels[hotelid]] = details
         }
         common.populateHotelList(hotelListJson)
-        // visit the location page and parse the details.
-        // build the hotel map.
-//        $('.travel-form input[type="button"]').on('click', function(){
-//            $.ajax({
-//                url:        "js/sample-result1.txt",
-//                async:      false,
-//                dataType:   "json",
-//                success:    function(response){
-//                    common.populateHotelList(response);
-//                }
-//            });
-            
-            
-            
-               $('.cContent').css('min-height',0);
+        
+        $('.cContent').css('min-height',0);
           //  var formH = $('.travel-form').innerHeight();
-            var formH = 500 - $('.cContent').innerHeight()-$('.button-holder').innerHeight;
-            var body = $("html, body");
-            body.animate({scrollTop:formH}, '1000', 'swing', function(){
-                $('.travel-form').closest('.stretch').addClass('sticky');
-                $('#hotel-list-holder').closest('.stretch').addClass('sticky-shadow');
-            });
-            $('.cContent').slideUp(400);
-            $('.button-holder').slideUp(400);
-             $('.goBackForm').fadeIn(1000);
-               $('#hotel-list-holder').fadeIn(1000);
-        //});
+        var formH = 500 - $('.cContent').innerHeight()-$('.button-holder').innerHeight;
+        var body = $("html, body");
+        body.animate({scrollTop:formH}, '1000', 'swing', function(){
+            $('.travel-form').closest('.stretch').addClass('sticky');
+            $('#hotel-list-holder').closest('.stretch').addClass('sticky-shadow');
+        });
+        $('.cContent').slideUp(400);
+        $('.button-holder').slideUp(400);
+        $('.goBackForm').fadeIn(1000);
+        $('#hotel-list-holder').fadeIn(1000);
         
         var formH = $('.travel-form').innerHeight();
         $(window).on('scroll', function(){
@@ -551,6 +540,9 @@ var common = {
 //            key = item.key;
 //            value = item.value;
             debugger
+            if (res in window.excludeList){
+                continue
+            }
             item = rObj[res]
             hlItem = hlTemplate;
             hlItem = hlItem.replace('{{hotel-name}}', item.title.substring(0, 35));
@@ -852,7 +844,7 @@ $('.button-holder').on('click', function(arg){
     purpose = $('.op1 a').text()
     document.cookie = 'purpose=' + purpose
     
-    common.searchStarted(purpose, place)
+    common.searchStarted(purpose.toLowerCase(), place)
     
     $('.foot').find('input').on('click', function(arg) { 
         debugger; 
