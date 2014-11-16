@@ -57,12 +57,10 @@ if __name__ == "__main__":
     cp = nltk.RegexpParser(grammar)
     # open attribute cloud and read the food line.
     print('starting...')
-    attrObj = json.loads(open(sys.argv[1], 'r').read())
-    print('loaded attribute cloud.')
-    foodTypeObj = json.loads(open(sys.argv[2], 'r').read())
-    print('loaded food type object')
+    viewTypeObj = json.loads(open(sys.argv[1], 'r').read())
+    print('loaded view type object')
     # read the directory which contains all the reviews.
-    locationDir = sys.argv[3]
+    locationDir = sys.argv[2]
     hotelList = os.listdir(locationDir)
     for hotelId in hotelList:
         print ('hotel id: ' + hotelId)
@@ -80,26 +78,21 @@ if __name__ == "__main__":
                 # if lines talks about #food.
                 words = word_tokenize(line)
                 words_pos = nltk.pos_tag(words)
-                for word in words:
-                    if word in attrObj:
-                        val = attrObj[word]
-                        if val == 'food':
-                            print('YAY: ' + line + '\n')
-                            # check which kind of food is it. divide the line into n-gram and do a dictionary look up. 
-                            parseTree = cp.parse(words_pos)
-                            # play with nltk Tree here and find patterns and do lookups.
-                            # expected results are in the form of <NN>+
-                            phraseList = parsePhrases(parseTree, ['NP', 'NN'])
-                            print ('length of phrase list: ' + str(len(phraseList)))
-                            for phr in phraseList:
-                                print ('phrase: ' + phr)
-                                if phr in foodTypeObj:
-                                    foodTypeFound = foodTypeObj[phr]
-                                    print ('YAY: food type found: ' + foodTypeFound)
-                                    key = foodTypeFound
-                                    value = (hotelId, reviewId)
-                                    result = addOrInsert(result, key, value)
-    f = open(sys.argv[4], 'w')
+                parseTree = cp.parse(words_pos)
+                # play with nltk Tree here and find patterns and do lookups.
+                # expected results are in the form of <NN>+
+                phraseList = parsePhrases(parseTree, ['NP', 'NN'])
+                print ('length of phrase list: ' + str(len(phraseList)))
+                for phr in phraseList:
+                    print ('phrase: ' + phr.encode('utf-8'))
+                    if phr in viewTypeObj:
+                        viewTypeFound = viewTypeObj[phr]
+                        print ('YAY: view type found: ' + viewTypeFound)
+                        key = viewTypeFound
+                        value = (hotelId, reviewId)
+                        result = addOrInsert(result, key, value)
+    print('opening write file...')
+    f = open(sys.argv[3], 'w')
     print('after open!')
     towrite = json.dumps(result)
     print('after dumps!')

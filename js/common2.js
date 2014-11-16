@@ -6,17 +6,13 @@ window.hotelDetailMap = {}
 window.hotelAttr = {}
 window.locationMap = {}
 window.attributeMap = {}
-window.purposeOfTraveling = ''
-//window.purposeToAttributes = {
-//        'honeymoon': ['food', 'room'],
-//        'business': ['location', 'amenities', 'transfer']
-//    }
-window.selectedAttributes = ['overall', 'staff', 'night', 'beach', 'roof', 'amenities', 'transfer', 'food', 'location']
-window.suggestedAttributes = ['overall', 'staff', 'night', 'beach', 'roof']
 window.superResults = []
 window.excludeList = {'g188098-d619925': true, 'g188098-d550027': true}
 window.purposeMap = {}
+window.foodMap = {}
 window.locationKey = 'ZERMATT:SWITZERLAND'
+window.subAttrIndexMap = {}
+window.subAttrWordCloud = {}
 
 var common = {
     
@@ -25,12 +21,9 @@ var common = {
         this.resize();
         this.windowScroll();
         this.setOverlay();
-        //this.getHotelList();
         this.revulizeRank();
         this.setSticky();
-        // load all the maps from the file system.
         this.loadFilteringMaps();
-        //this.printReviews();
     },
     loadFilteringMaps: function(){
         
@@ -39,18 +32,17 @@ var common = {
             $.getJSON('data/out-zermatt/sentiment.json', function(data){
                 sentimentMap = data
                 // for loop to read reviews for all the hotel ids.
-                debugger
-                window.superResults = common.selectReviews(selectedAttributes, sentimentMap)
-                
                 $.getJSON('data/reviews/summary.txt', function(data){
-                    debugger
-                    reviewMap = data
+                    window.reviewMap = data
                 })
                 $.getJSON('data/hotels/hotelDetail.json', function(data){
                     hotelDetailMap = data
                 })
                 $.getJSON('data/purpose/honeymoon.json', function(data){
                     purposeMap = data
+                })
+                $.getJSON('data/purpose/foodIndex.json', function(data){
+                    foodMap = data
                 })
             })
         })
@@ -61,12 +53,43 @@ var common = {
         $.getJSON('data/attribute-cloud.json', function(data){
             attributeMap = data
          })
+        $.getJSON('data/purpose/foodIndex.json', function(data){
+            subAttrIndexMap['food'] = data
+         })
+        $.getJSON('data/purpose/view/viewIndex.json', function(data){
+            subAttrIndexMap['view'] = data
+         })
+        $.getJSON('data/purpose/loc/locIndex.json', function(data){
+            subAttrIndexMap['loc'] = data
+         })
+        $.getJSON('data/foodtype.json', function(data){
+            var reverseFoodTypeMap = data
+            debugger
+            foodTypeAttr = {}
+            for (var key in reverseFoodTypeMap){
+                foodTypeAttr = common.addOrInsert(foodTypeAttr, reverseFoodTypeMap[key], key)
+            }
+            subAttrWordCloud['food'] = foodTypeAttr
+         })
+        $.getJSON('data/purpose/view/view.json', function(data){
+            var reverseFoodTypeMap = data
+            foodTypeAttr = {}
+            for (var key in reverseFoodTypeMap){
+                foodTypeAttr = common.addOrInsert(foodTypeAttr, reverseFoodTypeMap[key], key)
+            }
+            subAttrWordCloud['view'] = foodTypeAttr
+         })
+        $.getJSON('data/purpose/loc/loc.json', function(data){
+            var reverseFoodTypeMap = data
+            foodTypeAttr = {}
+            for (var key in reverseFoodTypeMap){
+                foodTypeAttr = common.addOrInsert(foodTypeAttr, reverseFoodTypeMap[key], key)
+            }
+            subAttrWordCloud['loc'] = foodTypeAttr
+         })
     },
     hotelSelcted: function(hotelid){
         // load reviews for that particular hotel
-    },
-    searchStarted: function(purpose, location){
-        common.getHotelList(window.locationKey, purpose)
     },
     // get AttributeDetails is for the pop up display of infographics.
     getAttributeDetails: function(hotelid){
@@ -74,6 +97,7 @@ var common = {
         // intermediate results
         //        {'awesome': {'pool': 22, 'food': 33}, 'good': {'service': 22, 'overall': 11}}
         //return {'0': ([], 0), '1': ([], 0), '2': ([], 0), '3': ([], 0), '4': ([], 0)}
+        debugger
         var attrArr = hotelAttr[hotelid]
         var inter = {}
         for (val in attrArr){
@@ -143,39 +167,68 @@ var common = {
     },
     selectReviews: function(selectedAttributes, sentimentMap){
       // find the selected reviews.
-        var results_4 = []
-        var results_3 = []
-        var results_2 = []
-        for (var attr in selectedAttributes){
-               var sel = sentimentMap["('" + selectedAttributes[attr] + "', 4.0)"]
+        var results = {}
+        for (var index in selectedAttributes){
+            var sub = []
+            var attr = selectedAttributes[index]
+            var sel = sentimentMap["('" + attr + "', 4.0)"]
                if (sel !== undefined && sel.length > 0){
-                    results_4 = sel
+                    sub = sub.concat(sel)
                }
-               sel = sentimentMap["('" + selectedAttributes[attr] + "', 3.0)"]
+               sel = sentimentMap["('" + attr + "', 3.0)"]
                if (sel !== undefined && sel.length > 0){
-                    results_3 = sel
+                    sub = sub.concat(sel)
                }
-               sel = sentimentMap["('" + selectedAttributes[attr] + "', 2.0)"]
+               sel = sentimentMap["('" + attr + "', 2.0)"]
                if (sel !== undefined && sel.length > 0){
-                    results_2 = sel
+                    sub = sub.concat(sel)
                }
+            results[attr] = sub
         }
-        return {"results4" : results_4, "results3" : results_3, "results2": results_2}
+        // {attr -> [(hotel, review)]}
+        return results
     },
     
     filterReviews: function(results_super, currenthotelid){
         results = {}
-        for (result in results_super){
-            args = results_super[result]
-            for (val in args){
-                var hotelid = args[val][0]
-                var reviewid = args[val][1]
+        for (attr in results_super){
+            for (val in results_super[attr]){
+                var hotelid = results_super[attr][val][0]
+                var reviewid = results_super[attr][val][1]
                 if (hotelid == currenthotelid){
-                    results[reviewid] = 'True'
+                    results = common.addOrInsert(results, attr, reviewid)
                 }
             }
         }
-        return Object.keys(results)
+        // output format: attr -> [reviewid]
+        return results
+    },
+    
+    addOrInsert: function(obj, key, val){
+        if (key in obj){
+            obj[key].push(val)
+        }
+        else {
+            obj[key] = [val]
+        }
+        return obj
+    },
+    
+    selectReviewsForSubAttributes: function(selectedAttr, subAttrMap, subAttrIndexMap, hotelId, attrReviewIdMap)
+    {
+        var final = {}
+        for (var index in selectedAttr){
+            var attr = selectedAttr[index]
+            if (attr in subAttrMap){
+                for (var subAtt in subAttrMap[attr]){
+                    final[subAttrMap[attr][subAtt]] = subAttrIndexMap[attr][subAttrMap[attr][subAtt]][hotelId]
+                }
+            }
+            else {
+                final[attr] = attrReviewIdMap[attr]
+            }
+        }
+        return final
     },
     
     setHomeHeight: function(){
@@ -443,7 +496,7 @@ var common = {
     getHotelList: function(locationKey, purpose){
         //var place =  parseCookieValue('place') // XXX: this place is currently in format Paris, France. We need to convert it into correct format: PARIS:FRANCE.
         debugger
-        results_super = window.superResults
+        results_super = window.superResults // format is {attr -> [(hotel, review)] }
         // results for this purpose
         purposeHotels = window.purposeMap[purpose]
         // find hotels for this location.
@@ -451,9 +504,9 @@ var common = {
         // for each of this hotel do a look up and create a detail json file
         finalhotels = []
         finalReviews = {}
-        for (resultKind in results_super){
-            var results = results_super[resultKind]
-            for (res in results){
+        for (resultKind in results_super){ // resultKind is the attribute.
+            var results = results_super[resultKind] // format is [(hotel, review)]
+            for (res in results){           // res is the index
                 hotelid = results[res][0]
                 reviewid = results[res][1]
                 if (hotelid in superset){
@@ -492,8 +545,9 @@ var common = {
             }
             hotelListJson[finalhotels[hotelid]] = details
         }
-        common.populateHotelList(hotelListJson)
-        
+        return hotelListJson
+    },
+    animateHotelList: function() {
         $('.cContent').css('min-height',0);
           //  var formH = $('.travel-form').innerHeight();
         var formH = 500 - $('.cContent').innerHeight()-$('.button-holder').innerHeight;
@@ -567,10 +621,10 @@ var common = {
                 rvList = '';
             $.each(item.top_reviews, function(ind, reviewid){
                 rvItem = rvTemplate;
-                rvItem = rvItem.replace('{{user-name}}', reviewMap[res][reviewid]['ReviewerName']);
-                rvItem = rvItem.replace('{{user-address}}', reviewMap[res][reviewid]['Place']);
-                rvItem = rvItem.replace('{{user-photo}}', reviewMap[res][reviewid]['ReviewerImage']);
-                rvItem = rvItem.replace('{{user-review}}', common.summarize(reviewMap[res][reviewid].review, 4, 270))
+                rvItem = rvItem.replace('{{user-name}}', window.reviewMap[res][reviewid]['ReviewerName']);
+                rvItem = rvItem.replace('{{user-address}}', window.reviewMap[res][reviewid]['Place']);
+                rvItem = rvItem.replace('{{user-photo}}', window.reviewMap[res][reviewid]['ReviewerImage']);
+                rvItem = rvItem.replace('{{user-review}}', common.summarize(window.reviewMap[res][reviewid].review, 4, 270))
                 
                 rvList += rvItem;
             });
@@ -612,17 +666,44 @@ var common = {
         
     },
     filter: function(searchTermArr, textToCheck) {
+        var originalText = textToCheck
         for (var searchTerm in searchTermArr){
             var searchPattern = new RegExp('('+searchTermArr[searchTerm]+')', 'ig'); 
             textToCheck = textToCheck.replace(searchPattern, '<span style="font-family: DIN_BLACK; font-weight: bold">$1</span>'); 
         }
+//        if (originalText !== textToCheck){
+//            console.log('text changed.')
+//        }
         return textToCheck;
     },
-    highlightSetOfKeyWords: function(text, keywordSet, keywordMap){
+    highlightSetOfKeyWords: function(text, selected, subAtt){
         var lowerText = text.toLowerCase()
-        for (var key in keywordSet){
-            var wordList = keywordMap[keywordSet[key]]
-            text = common.filter(wordList, text)
+        var mapToUse = {}
+        for (var key in selected){
+            var wordList = []
+            var attr = selected[key]
+            if (attr in subAtt){
+                // it has subattr
+                subAttrs = subAtt[attr]
+                wordList = []
+                for (var subAttr in subAttrs){
+                    // find the word cloud for this sub attr
+                    if (attr in window.subAttrWordCloud){
+                        wordList = wordList.concat(window.subAttrWordCloud[attr][subAttrs[subAttr]])
+                    }
+                }
+                if (wordList.length > 0){
+                    text = common.filter(wordList, text)
+                }
+            }
+            else{
+                // it is an attribute
+                if (attr in window.attributeMap){
+                    wordList = []
+                    wordList = wordList.concat(window.attributeMap[attr])
+                    //text = common.filter(wordList, text)
+                }
+            }
         }
         return text
     },
@@ -676,69 +757,8 @@ var common = {
             });
         }
     },
-    setReviewList: function(){
-        $('.review-holder .photo').each(function(){
-            $(this).css('background-image', 'url("'+ $(this).attr('data-src') +'")');
-        });
-
-        $('.review-list').on('click', '.review', function(){
-            var rv = $(this),
-                rvf = $(this).siblings('.review-full-view');
-            rv.hide();
-            rvf.show();
-        });
-
-        $('.review-list').on('click', '.review-full-view', function(){
-            var rvf = $(this),
-                rv = $(this).siblings('.review');
-            rvf.hide();
-            rv.show();
-        });
-    },
-    revulizeRank: function(){
-        if($('#revulize-content').length){
-            $('.travel-form').closest('.stretch').addClass('sticky');
-            $('#revulize-content').closest('.stretch').addClass('sticky-shadow');
-            
-            $('#revulize-content .review-list').width(757);
-            
-            var formH = $('.travel-form').innerHeight();
-            $(window).on('scroll', function(){
-                if($(window).scrollTop() > formH && $('.stretch.sticky').length < 1){
-                    $('.travel-form').closest('.stretch').addClass('sticky');
-                    $('#revulize-content').closest('.stretch').addClass('sticky-shadow');
-                }
-            });
-            
-            $('#revulize-content .attributes .rank .selection').on('click', function(){
-                var rl = $(this).siblings('.rank-list');
-                var rank = $(this).attr('data-rank');
-                rl.find('li').removeClass('selected');
-                rl.find('li[data-rank="'+ rank +'"]').addClass('selected');
-                rl.slideDown("fast");
-            });
-
-            $('#revulize-content .rank-list').on('click', 'li', function(){
-                var cLi = $(this),
-                    text = cLi.text(),
-                    rank = cLi.attr('data-rank'),
-                    rl = cLi.parent(),
-                    sel = cLi.closest('.rank').find('.selection');
-                cLi.siblings('li').removeClass('selected');
-                cLi.addClass('selected');
-                sel.attr('data-rank', rank);
-                sel.find('.text').text(text);
-                rl.slideUp("fast");
-            });
-            $.ajax({
-                url:        "js/review-finder.txt",
-                async:      false,
-                dataType:   "json",
-                success:    function(response){
-                    common.reviewFinder = eval(response);
-                }
-            });
-        }
+    isAttribute: function(attr){
+      return attr in window.attributeMap
     },
     setReviewList: function(){
         $('.review-holder .photo').each(function(){
@@ -759,29 +779,33 @@ var common = {
             rv.show();
         });
     },
-    printReviews: function(currentHotelId) {
-        debugger
-        var results = window.superResults
-            results = common.filterReviews(results, currentHotelId)
-            //results = removeDuplicates(results)
-            // do look up in reviewmap for these reviews.
+    printReviews: function(reviewMapArg, results, selected, subAtt) {
             var reviewLookup = {}
             for (res in results){
-                reviewObj = reviewMap[currentHotelId][res]
+                reviewObj = reviewMapArg[res]
                 reviewLookup[res] = reviewObj // dangerous and writing to global var.
             }
         console.log('Total Resutls: ' + results.length)
-        common.refreshReviews(reviewLookup)
+        common.refreshReviews(reviewLookup, selected, subAtt)
         return reviewLookup
     },
-    setAttributes: function(){
+    setAttributes: function(selected, suggested, subAtt){
         $('.attr-list').children().remove()
         $('.choice-list').children().remove()
-        for (var attr in selectedAttributes) {
-            $('.choice-list').append('<li>' + selectedAttributes[attr] + '<span></span></li>')
+        debugger
+        for (var index in selected) {
+            var attr = selected[index]
+            if (attr in subAtt){
+                for (subAttr in subAtt[attr]){
+                    $('.choice-list').append('<li data=' + attr+ '>' + subAtt[attr][subAttr] + '<span></span></li>')
+                }
+            }
+            else {
+                $('.choice-list').append('<li>' + attr + '<span></span></li>')
+            }
         }
-        for (var attr in suggestedAttributes) {
-            $('.attr-list').append('<li>' + suggestedAttributes[attr] + '<span></span></li>')
+        for (var attr in suggested) {
+            $('.attr-list').append('<li>' + suggested[attr] + '<span></span></li>')
         }
     },
     size: function(obj) {
@@ -791,7 +815,7 @@ var common = {
         }
     return size;
     },
-    refreshReviews: function(reviewLookUp) {
+    refreshReviews: function(reviewLookUp, selected, subAtt) {
         // clean current reviews.
         $('.review-list').children().remove()
         results = []
@@ -799,9 +823,9 @@ var common = {
         for (var i = 1; i < length; i++){
             results.push(reviewLookUp[i])
         }
-        this.showReviewList(results)
+        this.showReviewList(results, selected, subAtt)
     },
-    showReviewList: function(rl){
+    showReviewList: function(rl, selected, subAtt){
         var rul = '<ul>';
         var rvTemplate = '';
         $.ajax({
@@ -817,9 +841,9 @@ var common = {
             li = li.replace('{{user-photo}}', item['ReviewerImage']);
             li = li.replace('{{user-address}}', item['Place']);
             var summary = common.summarize(item.review, 4, 250);
-            var highlightedSummary = common.highlightSetOfKeyWords(summary, selectedAttributes, attributeMap)
+            var highlightedSummary = common.highlightSetOfKeyWords(summary, selected, subAtt)
             li = li.replace('{{summary}}', highlightedSummary);
-            var highlightedReview = common.highlightSetOfKeyWords(item.review, selectedAttributes, attributeMap)
+            var highlightedReview = common.highlightSetOfKeyWords(item.review, selected, subAtt)
             li = li.replace('{{review-full}}', highlightedReview);
             
             rul += li;
@@ -841,10 +865,36 @@ $('.button-holder').on('click', function(arg){
     console.log('show up clicked.')
     place = $('.op0 a').text()
     document.cookie = 'place=' + place
-    purpose = $('.op1 a').text()
+    purpose = $('.op1 a').text().toLowerCase()
     document.cookie = 'purpose=' + purpose
+    var selectedAttributes = []
+    var subAttributes = {}
+    if ('honeymoon' === purpose){
+        foodType = $($('.selectedFoods')[0]).text().toLowerCase().split(',')
+        selectedAttributes = ['overall', 'staff', 'night', 'beach', 'roof', 'amenities', 'location', 'food', 'view']
+        viewType = [$($('.nl-dd-checked')[3]).text().toLowerCase()]
+        subAttributes = {'food': foodType, 'view': viewType}
+    }
+    else if ('business' === purpose){
+        selectedAttributes = ['transfer', 'food', 'location']
+        subAttributes = {} // fill later.
+    }
+    // step 0: find results for this location.
+    // step 1: find results indexed on basic attributes
+    // step 2: Off these results indexed on sub attributes. All the results which are indexed by subattributes should be indexed by parent attribute as well
+    // so 
     
-    common.searchStarted(purpose.toLowerCase(), place)
+    // It considers attributes.
+    window.superResults = common.selectReviews(selectedAttributes, sentimentMap)
+    
+    sessionStorage.setItem('selAtt', JSON.stringify(selectedAttributes))
+    sessionStorage.setItem('sugAtt', JSON.stringify([]))
+    sessionStorage.setItem('subAtt', JSON.stringify(subAttributes))
+    
+    // It considers purpose.
+    var hotelListJson = common.getHotelList(window.locationKey, purpose)
+    common.populateHotelList(hotelListJson)
+    common.animateHotelList()
     
     $('.foot').find('input').on('click', function(arg) { 
         debugger; 
@@ -853,8 +903,12 @@ $('.button-holder').on('click', function(arg){
         // also put the name of that hotel.
         var hotelId = $($(this).parentsUntil('.details')[2]).attr('data-valueofhotel')
         document.cookie = 'hotelid=' + hotelId
-        var results = common.printReviews(hotelId)
-        common.setAttributes()
-        sessionStorage.setItem('reviews', JSON.stringify(results))
+        sessionStorage.setItem('reviewMap', JSON.stringify(window.reviewMap[hotelId]))
+        
+        var attrReviewIdMap = common.filterReviews(window.superResults, hotelId)
+        // add another filter which will filter the results as per the user spec fields.
+        debugger
+        var relevantResultsAfterSub = common.selectReviewsForSubAttributes( selectedAttributes, subAttributes, window.subAttrIndexMap, hotelId, attrReviewIdMap)
+        sessionStorage.setItem('results', JSON.stringify(relevantResultsAfterSub))
     });
 });
