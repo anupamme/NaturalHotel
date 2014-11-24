@@ -108,7 +108,6 @@ var common = {
         // intermediate results
         //        {'awesome': {'pool': 22, 'food': 33}, 'good': {'service': 22, 'overall': 11}}
         //return {'0': ([], 0), '1': ([], 0), '2': ([], 0), '3': ([], 0), '4': ([], 0)}
-        debugger
         var attrArr = hotelAttr[hotelid]
         var inter = {}
         for (val in attrArr){
@@ -632,6 +631,7 @@ var common = {
                 rvList = '';
             $.each(item.top_reviews, function(ind, reviewid){
                 rvItem = rvTemplate;
+                debugger
                 rvItem = rvItem.replace('{{user-name}}', window.reviewMap[res][reviewid]['ReviewerName']);
                 rvItem = rvItem.replace('{{user-address}}', window.reviewMap[res][reviewid]['Place']);
                 rvItem = rvItem.replace('{{user-photo}}', window.reviewMap[res][reviewid]['ReviewerImage']);
