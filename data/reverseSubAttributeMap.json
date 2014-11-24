@@ -1,0 +1,7 @@
+{ 'french': 'food', 'indian': 'food', 'thai': 'food', 'japanese': 'food', 
+ 'mountain' : 'view', 'ocean': 'view', 'forest': 'view', 
+'airport': 'location', 'city buzz': 'location', 'suburbs': 'location', 'public transport': 'location', 
+'spacious': 'room', 'entertainment': 'room', 'clean': 'room', 'view': 'room', 'privacy': 'room', 
+'behavior': 'staff', 'kids friendly': 'staff', 'elderly friendly': 'staff', 
+'spa': 'amenities', 'infinity pool': 'amenities', 'jacuzzi': 'amenities', 'kids pool': 'amenities', 'night club': 'amenities', 'swimming pool': 'amenities',
+'airport transfer': 'transfer', 'train station': 'transfer'}

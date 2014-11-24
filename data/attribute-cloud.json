@@ -3,7 +3,7 @@
 "location": ["location", "distance", "town", "access", "accessbility", "city", "walk", "area", "minute", "shopping", "train", "station", "metro"],
 "room": ["room", "bed", "sheet", "bedsheet", "pillows", "bathtub", "bathroom", "balcony", "tip", "door"],
 "staff": ["staff", "attitude", "hospitality", "team", "management", "manager", "service", "guest", "desk"],
-"amenities": ["amenities", "pool", "swimming pool", "gym", "gymnasium", "water", "spa"],
+"amenities": ["amenities", "pool", "swimming pool", "gym", "gymnasium", "water"],
 "transfer": ["transfer", "airport", "pickup", "pick", "local shuttle", "bus"],
 "roof": ["roof", "terrace", "evening", "tea", "wine", "beer", "drinks"],
 "beach": ["beach", "resort", "water"],

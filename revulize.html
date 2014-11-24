@@ -175,8 +175,6 @@ font-size: 18px;
         
       $('#revulize-content ul.choice-list').on('click', 'li span', function(){
             var attr = $(this).parent().text()
-            debugger
-            // check if it is attr or subattr
             var isAtt = common.isAttribute(attr)
             if (isAtt){
                 selected = removeFromArr(selected, attr)
@@ -194,7 +192,15 @@ font-size: 18px;
     $('#revulize-content ul.attr-list').on('click', 'li span', function(){
         debugger
         var attr = $(this).parent().text()
-        selected.push(attr)
+        var isAtt = common.isAttribute(attr)
+        if (isAtt){
+            selected.push(attr)   
+        }
+        else {
+            debugger
+            parentAtt = $($(this).parent()[0]).attr('data')
+            subAtt[parentAtt].push(attr)
+        }
         var li = $(this).parent().clone();
         $(this).parent().remove();
         $('#revulize-content ul.choice-list').append(li);

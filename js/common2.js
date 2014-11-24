@@ -62,10 +62,13 @@ var common = {
         $.getJSON('data/purpose/loc/locIndex.json', function(data){
             subAttrIndexMap['loc'] = data
          })
+        $.getJSON('data/purpose/amenity/amenityIndex.json', function(data){
+            subAttrIndexMap['amenity'] = data
+         })
         $.getJSON('data/foodtype.json', function(data){
             var reverseFoodTypeMap = data
             debugger
-            foodTypeAttr = {}
+            var foodTypeAttr = {}
             for (var key in reverseFoodTypeMap){
                 foodTypeAttr = common.addOrInsert(foodTypeAttr, reverseFoodTypeMap[key], key)
             }
@@ -73,7 +76,7 @@ var common = {
          })
         $.getJSON('data/purpose/view/view.json', function(data){
             var reverseFoodTypeMap = data
-            foodTypeAttr = {}
+            var foodTypeAttr = {}
             for (var key in reverseFoodTypeMap){
                 foodTypeAttr = common.addOrInsert(foodTypeAttr, reverseFoodTypeMap[key], key)
             }
@@ -81,11 +84,19 @@ var common = {
          })
         $.getJSON('data/purpose/loc/loc.json', function(data){
             var reverseFoodTypeMap = data
-            foodTypeAttr = {}
+            var foodTypeAttr = {}
             for (var key in reverseFoodTypeMap){
                 foodTypeAttr = common.addOrInsert(foodTypeAttr, reverseFoodTypeMap[key], key)
             }
             subAttrWordCloud['loc'] = foodTypeAttr
+         })
+        $.getJSON('data/purpose/amenity/amenity.json', function(data){
+            var reverseFoodTypeMap = data
+            var foodTypeAttr = {}
+            for (var key in reverseFoodTypeMap){
+                foodTypeAttr = common.addOrInsert(foodTypeAttr, reverseFoodTypeMap[key], key)
+            }
+            subAttrWordCloud['amenity'] = foodTypeAttr
          })
     },
     hotelSelcted: function(hotelid){
@@ -637,6 +648,11 @@ var common = {
         common.setHotelList();
     },
     summarize: function(text, num, max){
+        
+        if (text === undefined){
+            debugger
+            return ''
+        }
         if (num == 1){
             return text.substr(0, max)
         }
@@ -668,6 +684,9 @@ var common = {
     filter: function(searchTermArr, textToCheck) {
         var originalText = textToCheck
         for (var searchTerm in searchTermArr){
+            if ('croissant' === searchTerm){
+                console.log('searching for croissant')   
+            }
             var searchPattern = new RegExp('('+searchTermArr[searchTerm]+')', 'ig'); 
             textToCheck = textToCheck.replace(searchPattern, '<span style="font-family: DIN_BLACK; font-weight: bold">$1</span>'); 
         }
@@ -679,32 +698,27 @@ var common = {
     highlightSetOfKeyWords: function(text, selected, subAtt){
         var lowerText = text.toLowerCase()
         var mapToUse = {}
+        var wordList = []
         for (var key in selected){
-            var wordList = []
             var attr = selected[key]
             if (attr in subAtt){
                 // it has subattr
                 subAttrs = subAtt[attr]
-                wordList = []
-                for (var subAttr in subAttrs){
+                for (var index in subAttrs){
                     // find the word cloud for this sub attr
                     if (attr in window.subAttrWordCloud){
-                        wordList = wordList.concat(window.subAttrWordCloud[attr][subAttrs[subAttr]])
+                        wordList = wordList.concat(window.subAttrWordCloud[attr][subAttrs[index]])
                     }
-                }
-                if (wordList.length > 0){
-                    text = common.filter(wordList, text)
                 }
             }
             else{
                 // it is an attribute
                 if (attr in window.attributeMap){
-                    wordList = []
                     wordList = wordList.concat(window.attributeMap[attr])
-                    //text = common.filter(wordList, text)
                 }
             }
         }
+        text = common.filter(wordList, text)
         return text
     },
     setSticky: function(){
@@ -836,17 +850,18 @@ var common = {
             }
         });
         $.each(rl, function(i, item){
-            var li = rvTemplate;
-            li = li.replace('{{user-name}}', item['ReviewerName']);
-            li = li.replace('{{user-photo}}', item['ReviewerImage']);
-            li = li.replace('{{user-address}}', item['Place']);
-            var summary = common.summarize(item.review, 4, 250);
-            var highlightedSummary = common.highlightSetOfKeyWords(summary, selected, subAtt)
-            li = li.replace('{{summary}}', highlightedSummary);
-            var highlightedReview = common.highlightSetOfKeyWords(item.review, selected, subAtt)
-            li = li.replace('{{review-full}}', highlightedReview);
-            
-            rul += li;
+            if (item !== undefined && item.review !== undefined){
+                var li = rvTemplate;
+                li = li.replace('{{user-name}}', item['ReviewerName']);
+                li = li.replace('{{user-photo}}', item['ReviewerImage']);
+                li = li.replace('{{user-address}}', item['Place']);
+                var summary = common.summarize(item.review, 4, 250);
+                var highlightedSummary = common.highlightSetOfKeyWords(summary, selected, subAtt)
+                li = li.replace('{{summary}}', highlightedSummary);
+                var highlightedReview = common.highlightSetOfKeyWords(item.review, selected, subAtt)
+                li = li.replace('{{review-full}}', highlightedReview);
+                rul += li;
+            }
         });
         rul += '</ul>';
         $('.review-list').html(rul);
@@ -863,6 +878,7 @@ $(document).ready(function(){
 $('.button-holder').on('click', function(arg){
     debugger
     console.log('show up clicked.')
+    // load the data.
     place = $('.op0 a').text()
     document.cookie = 'place=' + place
     purpose = $('.op1 a').text().toLowerCase()
@@ -870,14 +886,15 @@ $('.button-holder').on('click', function(arg){
     var selectedAttributes = []
     var subAttributes = {}
     if ('honeymoon' === purpose){
-        foodType = $($('.selectedFoods')[0]).text().toLowerCase().split(',')
+        var foodType = $($('.selectedFoods')[0]).text().toLowerCase().split(',')
         selectedAttributes = ['overall', 'staff', 'night', 'beach', 'roof', 'amenities', 'location', 'food', 'view']
         viewType = [$($('.nl-dd-checked')[3]).text().toLowerCase()]
         subAttributes = {'food': foodType, 'view': viewType}
     }
     else if ('business' === purpose){
-        selectedAttributes = ['transfer', 'food', 'location']
-        subAttributes = {} // fill later.
+        var locationType = [$('.op2 a').text().split(' ')[0].toLowerCase()]
+        selectedAttributes = ['transfer', 'food', 'location', 'amenity']
+        subAttributes = {'loc': locationType, 'amenity': ['amenity']} // fill later.
     }
     // step 0: find results for this location.
     // step 1: find results indexed on basic attributes

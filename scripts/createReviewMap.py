@@ -26,6 +26,17 @@ if __name__ == "__main__":
             results.append(obj)
         masterJson[dire] = results
     text = json.dumps(masterJson)
-    f = open(os.path.join(destination, 'summary.txt'), 'w')
+    print('location dir: ' + locationDir)
+    locationKey = locationDir[locationDir.rfind('/') + 1:]
+    print('location key: ' + locationKey)
+    outfile = os.path.join(destination, locationKey)
+    try:
+        os.mkdir(outfile)
+    except OSError as exc:
+        if os.path.isdir(outfile):
+            pass 
+        else:
+            pass
+    f = open(os.path.join(outfile, 'summary.txt'), 'w')
     f.write(text)
     f.close()
