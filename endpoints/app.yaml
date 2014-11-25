@@ -1,4 +1,4 @@
-application: steel-index-769
+application: review-viz
 version: 1
 runtime: python27
 threadsafe: true

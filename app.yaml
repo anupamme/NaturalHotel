@@ -5,8 +5,9 @@ api_version: 1
 threadsafe: true
 
 handlers:
-#- url: /demo1
-#  static_dir: demo1
+# Endpoints handler
+- url: /_ah/spi/.*
+  script: helloworld_api.APPLICATION
 
 - url: /css
   static_dir: css
@@ -32,3 +33,9 @@ handlers:
 - url: /.*
   script: review-viz.application
   #static_dir: /
+  
+libraries:
+- name: pycrypto
+  version: latest
+- name: endpoints
+  version: 1.0
