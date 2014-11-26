@@ -346,8 +346,15 @@ var common = {
                 overlay = overlay.replace('{{imageList}}', imageList);
                 console.log('hotelid: ' + hotelId)
                  var item=common.getHotelListMp();
-                 var l=0,m,y=1;
-                 
+                for(var itemMatched in item)
+                {
+                    if(item[itemMatched].hotelId==hotelId)
+                    {
+                        hotelId=itemMatched;
+                        break;
+                    }
+                }
+       
                 var replacetext="{{ListOfitems}}";
                 
                 overlay=overlay.replace("{{awesome_people}}",item[hotelId].attributes.awesome.people);
@@ -361,24 +368,7 @@ var common = {
                 overlay=overlay.replace("{{bad_values}}",readListOfValuesFromReview(item[hotelId].attributes.bad.views))
                 overlay=overlay.replace("{{worst_values}}",readListOfValuesFromReview(item[hotelId].attributes.worst.views))
                 
-              /*     for(var j=0;j<=4;j++)
-                   {
-                       peoplecount="";
-                       ullist="";
-                       replacetext="{{ListOfitems"+j+"}}";
-                       replacePeople="{{people"+j+"}}";
-                       peoplecount=k[j][y];
-                       m=k[j][l].length;
-                       if(m != 0) {
-                       for(var t=0;t<m;t++)
-                       {
-                           ullist+="<li>"+k[j][l][t]+"</li>";
-                       }
-                       }
-                         overlay=overlay.replace(replacePeople,peoplecount);
-                         overlay=overlay.replace(replacetext,ullist);
-                   } */
-
+              
                 
                     pslectedYes="pSelected";
                     pslectedNo="";
@@ -640,17 +630,17 @@ var common = {
             hlItem = hlItem.replace('{{image-list}}', JSON.stringify(item.images.slice(1, 11)).replace(/"/g, "'"));
             /* review status */
             debugger
-            hlItem = hlItem.replace('{{perc-index0}}', res);
+            hlItem = hlItem.replace('{{perc-index0}}',item.hotelId);
             hlItem = hlItem.replace('{{perc-awesome}}', item.attributes.awesome.percentage);
             hlItem = hlItem.replace('{{perc-good}}', item.attributes.good.percentage);
             hlItem = hlItem.replace('{{perc-ok}}', item.attributes.ok.percentage);
             hlItem = hlItem.replace('{{perc-bad}}', item.attributes.bad.percentage);
             hlItem = hlItem.replace('{{perc-worst}}', item.attributes.worst.percentage);
-            hlItem = hlItem.replace('{{perc-index}}', res);
-            hlItem = hlItem.replace('{{perc-index1}}', res);
-            hlItem = hlItem.replace('{{perc-index2}}', res);
-            hlItem = hlItem.replace('{{perc-index3}}', res);
-            hlItem = hlItem.replace('{{perc-index4}}', res);
+            hlItem = hlItem.replace('{{perc-index}}',item.hotelId);
+            hlItem = hlItem.replace('{{perc-index1}}',item.hotelId);
+            hlItem = hlItem.replace('{{perc-index2}}',item.hotelId);
+            hlItem = hlItem.replace('{{perc-index3}}',item.hotelId);
+            hlItem = hlItem.replace('{{perc-index4}}',item.hotelId);
             
             var rvItem = '', rvList = '';
             var hotelReviews=item.reviews;
