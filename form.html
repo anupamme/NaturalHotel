@@ -12,13 +12,44 @@
          <link href="css/jquery-ui.css" rel="stylesheet">
        <link rel="stylesheet" type="text/css" href="css/component1.css">
       <script src="js/modernizr.custom.js"></script>
+      <style>
+      .loader {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background: url('images/page-loader1.gif') 50% 50% no-repeat rgb(249,249,249);
+}
+          .ui-menu .ui-menu-item {
+              color: #FFF;
+              font-size: 24px;
+          
+          }
+           .ui-menu .ui-menu-item:hover,.ui-menu .ui-menu-item:active {
+          background: rgba(0,0,0,0.05);
+               border-color: transparent;
+  
+           }
+          input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+ color: #92c17c;
+}
+input:-moz-placeholder, textarea:-moz-placeholder {
+  color: #92c17c;
+}
+   
+      </style>
     </head>
   <body>
+        <!-- Page Loader image Section---->
+      <div class="loader"></div>
       
         <div class="goBackForm" hidden="true">
-                 <span class="goBackFormButton">Go back to form</span>
-                </div>
-    <!-- Header Section---->
+        <span class="goBackFormButton">Go back to form</span>
+        </div>
+      
+       <!-- Header Section---->
       <div class="cHeader">
           <div class="container-fluid">
               <div class="row">
@@ -43,14 +74,16 @@
           <div class="row">
               <div class="col-md-7 col-md-offset-4">
                  <form id="nl-form" class="nl-form">
-					I am traveling to
-                     <select>
-						<option value="1" selected>Location</option>
+					I am traveling to <input id="tags" placeholder="Location">
+                     
+                     
+                   <select>
+					<option value="1" selected>Location</option>
 	
 						<option value="2">Zermatt, Switzerland</option>
                          <option value="3">Warsaw, Poland</option>
                        
-					</select>
+					</select> 
                      
 					<br />from <input type="text" class="datepicker" value="DD-MM-YYYY"> to <input type="text" class="datepicker" value="DD-MM-YYYY"> <br>
                      
@@ -720,7 +753,15 @@
        <script src="js/bootstrap.min.js"></script>
        <script src="js/common.js"></script>
       <script src="js/common2.js"></script>
-
+      
+        <!---Page Loader Jquery Code---->
+        <script type="text/javascript">
+            $(window).load(function() {
+                $(".loader").fadeOut(2000);
+            })
+        </script>
+      
+      
      <script>	
          var nlform = new NLForm( document.getElementById( 'nl-form' ) );   
     </script>
@@ -730,6 +771,55 @@
           
           
       $(function() {
+          
+          //Auto complete 
+          var availableTags = [
+      "ActionScript",
+      "AppleScript",
+      "Asp",
+      "BASIC",
+      "C",
+      "C++",
+      "Clojure",
+      "COBOL",
+      "ColdFusion",
+      "Erlang",
+      "Fortran",
+      "Groovy",
+      "Haskell",
+      "Java",
+      "JavaScript",
+      "Lisp",
+      "Perl",
+      "PHP",
+      "Python",
+      "Ruby",
+      "Scala",
+      "Scheme"
+    ];
+    
+          
+          $( "#tags" ).autocomplete({
+      source: availableTags,
+         select: function(e, ui) {
+        $('#tags').removeClass('nl-field nl-field-open');
+         hideAll();
+        $('.op1').find('a.nl-field-toggle').text('Select');
+             $('.datepicker').datepicker( "refresh" );
+    }
+    });
+          
+         $('#tags').focusin(function() {           
+              $(this).addClass('nl-field nl-field-open');
+              $('#tags').css('z-index',20000);
+              $('.ui-widget-content').css('z-index',20000);
+          });
+            $( "#tags" ).focusout(function(){
+             $('#tags').removeClass('nl-field nl-field-open');
+            });
+          
+          $('.op0').hide();
+          
           
          ///Pop up modal data
             $('.pAttributes').each(function() { 
@@ -835,7 +925,9 @@
           $( ".datepicker" ).datepicker({
                 changeMonth: true,
                 changeYear: true,
-                dateFormat:'dd-mm-yy'
+                dateFormat:'dd-mm-yy',
+                minDate: 0, 
+              maxDate: "+2Y +1M +1D"
             });
           
           $('.tepete').hide();
@@ -1024,7 +1116,7 @@
                      $('.soloTraveling5th').hide();
              $('.op6').hide();
                }
-              else  if($('.op1').find('ul>li.nl-dd-checked').text()== "Travelling ") {
+              else  if($('.op1').find('ul>li.nl-dd-checked').text()== "Traveling ") {
                   
                   $('.tepete').hide();
                      clearFood();
@@ -1058,18 +1150,21 @@
            
         
         function clearFood() {
-            
+            selectedItems=[];
               if($(".selectedFoods").text() !="" || $(".selectedFoods").text() !=null )
                 {
                      $(".selectedFoods").text("Food");
                      $('.demo-hover').each(function() {
                       $(this).find('div').removeClass('greenBack').addClass('demo-desc');
                 });
+                   
                     
                 }
         }
         function checkFood() {
-         
+                  
+                 
+                  
                 i=0;
                  $('.greenBack').each(function() {
                   selectedItems[i]= $(this).find('h3').text();
