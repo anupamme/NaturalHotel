@@ -13,6 +13,7 @@ window.foodMap = {}
 window.locationKey = 'ZERMATT:SWITZERLAND'
 window.subAttrIndexMap = {}
 window.subAttrWordCloud = {}
+window.hotelListMp={}
 
 var common = {
     
@@ -46,7 +47,9 @@ var common = {
                 })
             })
         })
-        
+         $.getJSON('data/document.json', function(data){
+                hotelListMp = data
+        })
         $.getJSON('data/out-zermatt/hotel_sentiment.json', function(data){
                 hotelAttr = data
         })
@@ -306,7 +309,14 @@ var common = {
           function xyz() {
                $('.overlay').click(function() { $('.overlay-holder1').hide(); });
           }
-            
+            function readListOfValuesFromReview(listValues) {
+                var ullist="";
+                 for(var i in listValues)
+                {
+                     ullist+="<li>"+listValues[i]+"</li>";
+                }
+                return ullist;
+            }
             
                /* Graph caraousel */
             $('.graph > li ').on('click', function(){
@@ -335,12 +345,23 @@ var common = {
               
                 overlay = overlay.replace('{{imageList}}', imageList);
                 console.log('hotelid: ' + hotelId)
-                 var k=common.getAttributeDetails(hotelId);
+                 var item=common.getHotelListMp();
                  var l=0,m,y=1;
-                 var ullist="";
+                 
                 var replacetext="{{ListOfitems}}";
-                var replacePeople="{{people}}";
-                   for(var j=0;j<=4;j++)
+                
+                overlay=overlay.replace("{{awesome_people}}",item[hotelId].attributes.awesome.people);
+                overlay=overlay.replace("{{good_people}}",item[hotelId].attributes.good.people);
+                overlay=overlay.replace("{{ok_people}}",item[hotelId].attributes.ok.people);
+                overlay=overlay.replace("{{bad_people}}",item[hotelId].attributes.bad.people);
+                overlay=overlay.replace("{{worst_people}}",item[hotelId].attributes.worst.people);   
+                overlay=overlay.replace("{{awesome_values}}",readListOfValuesFromReview(item[hotelId].attributes.awesome.views))
+                overlay=overlay.replace("{{good_values}}",readListOfValuesFromReview(item[hotelId].attributes.good.views))
+                overlay=overlay.replace("{{ok_values}}",readListOfValuesFromReview(item[hotelId].attributes.ok.views))
+                overlay=overlay.replace("{{bad_values}}",readListOfValuesFromReview(item[hotelId].attributes.bad.views))
+                overlay=overlay.replace("{{worst_values}}",readListOfValuesFromReview(item[hotelId].attributes.worst.views))
+                
+              /*     for(var j=0;j<=4;j++)
                    {
                        peoplecount="";
                        ullist="";
@@ -356,7 +377,7 @@ var common = {
                        }
                          overlay=overlay.replace(replacePeople,peoplecount);
                          overlay=overlay.replace(replacetext,ullist);
-                   }
+                   } */
 
                 
                     pslectedYes="pSelected";
@@ -557,6 +578,10 @@ var common = {
         }
         return hotelListJson
     },
+    getHotelListMp: function() {
+       
+        return hotelListMp;
+    },
     animateHotelList: function() {
         $('.cContent').css('min-height',0);
           //  var formH = $('.travel-form').innerHeight();
@@ -609,37 +634,38 @@ var common = {
             }
             item = rObj[res]
             hlItem = hlTemplate;
-            hlItem = hlItem.replace('{{hotel-name}}', item.title.substring(0, 35));
-            hlItem = hlItem.replace('{{hotel-address}}', item.locality);
+            hlItem = hlItem.replace('{{hotel-name}}', item.hotelName.substring(0, 35));
+            hlItem = hlItem.replace('{{hotel-address}}', item.address);
             hlItem = hlItem.replace('{{default-image}}', item.images[1]);
             hlItem = hlItem.replace('{{image-list}}', JSON.stringify(item.images.slice(1, 11)).replace(/"/g, "'"));
             /* review status */
             debugger
             hlItem = hlItem.replace('{{perc-index0}}', res);
-            hlItem = hlItem.replace('{{perc-awesome}}', item.sentiment[4][1]);
-            hlItem = hlItem.replace('{{perc-good}}', item.sentiment[3][1]);
-            hlItem = hlItem.replace('{{perc-ok}}', item.sentiment[2][1]);
-            hlItem = hlItem.replace('{{perc-bad}}', item.sentiment[1][1]);
-            hlItem = hlItem.replace('{{perc-worst}}', item.sentiment[0][1]);
+            hlItem = hlItem.replace('{{perc-awesome}}', item.attributes.awesome.percentage);
+            hlItem = hlItem.replace('{{perc-good}}', item.attributes.good.percentage);
+            hlItem = hlItem.replace('{{perc-ok}}', item.attributes.ok.percentage);
+            hlItem = hlItem.replace('{{perc-bad}}', item.attributes.bad.percentage);
+            hlItem = hlItem.replace('{{perc-worst}}', item.attributes.worst.percentage);
             hlItem = hlItem.replace('{{perc-index}}', res);
             hlItem = hlItem.replace('{{perc-index1}}', res);
             hlItem = hlItem.replace('{{perc-index2}}', res);
             hlItem = hlItem.replace('{{perc-index3}}', res);
             hlItem = hlItem.replace('{{perc-index4}}', res);
             
-            var rvItem = '',
-                rvList = '';
-            $.each(item.top_reviews, function(ind, reviewid){
-                rvItem = rvTemplate;
-                debugger
-                rvItem = rvItem.replace('{{user-name}}', window.reviewMap[res][reviewid]['ReviewerName']);
-                rvItem = rvItem.replace('{{user-address}}', window.reviewMap[res][reviewid]['Place']);
-                rvItem = rvItem.replace('{{user-photo}}', window.reviewMap[res][reviewid]['ReviewerImage']);
-                rvItem = rvItem.replace('{{user-review}}', common.summarize(window.reviewMap[res][reviewid].review, 4, 270))
-                
-                rvList += rvItem;
-            });
-            hlItem = hlItem.replace('{{review-list}}', rvList);
+            var rvItem = '', rvList = '';
+            var hotelReviews=item.reviews;
+            for(var i in hotelReviews)
+            {
+                 rvItem = rvTemplate;
+                rvItem = rvItem.replace('{{user-name}}', hotelReviews[i].reviewrName);
+                rvItem = rvItem.replace('{{user-address}}',hotelReviews[i].location);
+                rvItem = rvItem.replace('{{user-photo}}',hotelReviews[i].image);
+                rvItem = rvItem.replace('{{user-review}}',hotelReviews[i].description )
+                 rvList += rvItem;
+            }
+            
+              hlItem = hlItem.replace('{{review-list}}', rvList);
+
             
             hl += hlItem;
         }
@@ -909,8 +935,10 @@ $('.button-holder').on('click', function(arg){
     sessionStorage.setItem('subAtt', JSON.stringify(subAttributes))
     
     // It considers purpose.
-    var hotelListJson = common.getHotelList(window.locationKey, purpose)
-    common.populateHotelList(hotelListJson)
+    //var hotelListJson = common.getHotelList(window.locationKey, purpose)
+  //  common.populateHotelList(hotelListJson)
+    var hotelListMp1=common.getHotelListMp()
+    common.populateHotelList(hotelListMp1)
     common.animateHotelList()
     
     $('.foot').find('input').on('click', function(arg) { 

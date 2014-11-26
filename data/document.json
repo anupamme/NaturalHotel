@@ -1,0 +1,178 @@
+[{
+  "hotelName": "Hotel Mont Cervin Palace, Zermatt H",
+  "address": "Zermatt 3920 Zermatt 3920",
+  "reviews": 
+    [
+      {
+        "reviewrName": "title 1",
+        "description": "The Mont Cervin is the perfect combination of rustic ambiance and luxury. Perfectly located in Zermatt, you have access to shops, restaurants, trail heads, old town, the train station (about a 5-10 min walk) and balcony views of the Matterhorn",
+         "location":"bangalore",
+        "image": "http://media-cdn.tripadvisor.com/media/photo-l/03/b1/69/f8/flyinggreenshoes.jpg"
+      },
+      {
+        "reviewrName": "title 2",
+        "description": "description 2",
+        "location":"bangalore",
+        "image": "http://media-cdn.tripadvisor.com/media/photo-l/01/2e/70/9b/avatar062.jpg"
+      },
+      {
+        "reviewrName": "title 3",
+        "description": "description 3",
+         "location":"bangalore",
+        "image": "http://media-cdn.tripadvisor.com/media/photo-l/01/2e/70/9b/avatar062.jpg"
+      },
+      {
+        "reviewrName": "title 2",
+        "description": "description 2",
+         "location":"bangalore",
+        "image": "http://media-cdn.tripadvisor.com/media/photo-l/01/2e/70/9b/avatar062.jpg"
+      },
+      {
+        "reviewrName": "title 3",
+        "description": "description 3",
+         "location":"bangalore",
+        "image": "www.image.hsjkd"
+      }
+  ],
+  "images": [
+    "http://media-cdn.tripadvisor.com/media/photo-s/06/ab/dd/f2/lounge.jpg",
+    "http://media-cdn.tripadvisor.com/media/photo-s/06/ab/dd/f2/lounge.jpg",
+    "http://media-cdn.tripadvisor.com/media/photo-f/01/6c/28/8d/hotel-mont-cervin-palace.jpg"
+  ],
+  "attributes": {
+    "awesome": {
+      "people": "12",
+      "percentage":"49",
+      "views": [
+        "value1",
+        "Value2",
+        "Value3"
+      ]
+    },
+    "good": {
+      "people": "23",
+      "percentage":"30",
+      "views": [
+        "value1",
+        "Value2",
+        "Value3"
+      ]
+    },
+    "ok": {
+      "people": "44",
+      "percentage":"50",
+      "views": [
+        "value1",
+        "Value2",
+        "Value3"
+      ]
+    },
+    "bad": {
+      "people": "33",
+      "percentage":"26",
+      "views": [
+        "value1",
+        "Value2",
+        "Value3"
+      ]
+    },
+    "worst": {
+      "people": "33",
+      "percentage":"25",
+      "views": [
+        "value1",
+        "Value2",
+        "Value3"
+      ]
+    }
+  }
+},
+{
+  "hotelName": "lajjsil kwlejlkwe, Zermatt H",
+  "address": "Zermatt 3920 Zermatt 3920",
+  "reviews": 
+    [
+      {
+        "reviewrName": "title 1",
+        "description": "The Mont Cervin is the perfect combination of rustic ambiance and luxury. Perfectly located in Zermatt, you have access to shops, restaurants, trail heads, old town, the train station (about a 5-10 min walk) and balcony views of the Matterhorn",
+         "location":"bangalore",
+        "image": "http://media-cdn.tripadvisor.com/media/photo-l/03/b1/69/f8/flyinggreenshoes.jpg"
+      },
+      {
+        "reviewrName": "title 2",
+        "description": "description 2",
+        "location":"bangalore",
+        "image": "http://media-cdn.tripadvisor.com/media/photo-l/01/2e/70/9b/avatar062.jpg"
+      },
+      {
+        "reviewrName": "title 3",
+        "description": "description 3",
+         "location":"bangalore",
+        "image": "http://media-cdn.tripadvisor.com/media/photo-l/01/2e/70/9b/avatar062.jpg"
+      },
+      {
+        "reviewrName": "title 2",
+        "description": "description 2",
+         "location":"bangalore",
+        "image": "http://media-cdn.tripadvisor.com/media/photo-l/01/2e/70/9b/avatar062.jpg"
+      },
+      {
+        "reviewrName": "title 3",
+        "description": "description 3",
+         "location":"bangalore",
+        "image": "www.image.hsjkd"
+      }
+  ],
+  "images": [
+    "http://media-cdn.tripadvisor.com/media/photo-s/06/ab/dd/f2/lounge.jpg",
+    "http://media-cdn.tripadvisor.com/media/photo-s/06/ab/dd/f2/lounge.jpg",
+    "http://media-cdn.tripadvisor.com/media/photo-f/01/6c/28/8d/hotel-mont-cervin-palace.jpg"
+  ],
+  "attributes": {
+    "awesome": {
+      "people": "12",
+      "percentage":"49",
+      "views": [
+        "value1",
+        "Value2",
+        "Value3"
+      ]
+    },
+    "good": {
+      "people": "23",
+      "percentage":"30",
+      "views": [
+        "value1",
+        "Value2",
+        "Value3"
+      ]
+    },
+    "ok": {
+      "people": "44",
+      "percentage":"50",
+      "views": [
+        "value1",
+        "Value2",
+        "Value3"
+      ]
+    },
+    "bad": {
+      "people": "33",
+      "percentage":"26",
+      "views": [
+        "value1",
+        "Value2",
+        "Value3"
+      ]
+    },
+    "worst": {
+      "people": "33",
+      "percentage":"25",
+      "views": [
+        "value1",
+        "Value2",
+        "Value3"
+      ]
+    }
+  }
+}]

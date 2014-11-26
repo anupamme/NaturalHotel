@@ -39,6 +39,7 @@
 	margin: 0;
 	-webkit-appearance: none;
 	-moz-appearance: none;
+   
 }
 
 .nl-form input:focus {
@@ -53,6 +54,7 @@
 
 .nl-field.nl-field-open {
 	z-index: 10000;
+
 }
 
 /* the toggle is the visible part in the form */

@@ -38,6 +38,18 @@
 input:-moz-placeholder, textarea:-moz-placeholder {
   color: #92c17c;
 }
+          .ui-autocomplete {
+    max-height: 400px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+  }
+  /* IE 6 doesn't support max-height
+   * we use height instead, but this forces the menu to always be this tall
+   */
+  * html .ui-autocomplete {
+    height: 400px;
+  }
    
       </style>
     </head>
@@ -774,33 +786,116 @@ input:-moz-placeholder, textarea:-moz-placeholder {
           
           //Auto complete 
           var availableTags = [
-      "ActionScript",
-      "AppleScript",
-      "Asp",
-      "BASIC",
-      "C",
-      "C++",
-      "Clojure",
-      "COBOL",
-      "ColdFusion",
-      "Erlang",
-      "Fortran",
-      "Groovy",
-      "Haskell",
-      "Java",
-      "JavaScript",
-      "Lisp",
-      "Perl",
-      "PHP",
-      "Python",
-      "Ruby",
-      "Scala",
-      "Scheme"
+      'Boston,Massachusetts',	
+'New York,New York',	
+'Vienna,Austria',	
+'San Francisco Bay Area,California',	
+'Paris,France',	
+'Munich,Germany',	
+'London,United kingdom',	
+'Copenhagen,Denmark',	
+'Amsterdam,Netherlands',	
+'Seattle,Washington',	
+'Toronto,Canda',	
+'Los Angeles,California',	
+'Berlin,Germany',	
+'Hong Kong,Hong Kong',	
+'Frankfurt,Germany',	
+'Stockholm,Swedan',	
+'Lyon,France',	
+'Melbourne,VIC',	
+'Hamburg,Germany',	
+'Sydney,NSW',	
+'Seoul,Korea, South',	
+'Washington DC,District of Columbia',	
+'Philadelphia,Pennsylvania',	
+'Manchester,United Kingdom',	
+'Tokyo,Tokyo',	
+'Chicago,Illinois',	
+'Stuttgart,Germany',	
+'Tel Aviv,Israel',	
+'Shanghai,Shanghai',	
+'Singapore,Singapore',	
+'Montreal,Canada',	
+'Kyoto,Kyoto',	
+'Brussels,Belgium',	
+'Dubai,United Arab Emirates',	
+'Vancouver,Canada',	
+'Helsinki,Finland',	
+'Leipzig,Germany',	
+'Oslo,Norway',	
+'Dallas-Fort Worth,Texas',	
+'Marseille,France',	
+'Dusseldorf,Germany',	
+'Strasbourg,France',	
+'Austin,Texas',	
+'Cologne,Germany',	
+'The Hague,Netherlands',	
+'Milan,Italy',	
+'Osaka,Osaka',	
+'Raleigh-Durham,North Carolina',	
+'San Diego,California',	
+'Orlando,Florida',	
+'Portland,Oregon',	
+'Minneapolis-St Paul,Minnesota',	
+'Beijing,Beijing',	
+'Bordeaux,France',	
+'Prague,Czech Republic',	
+'Barcelona,Spain',	
+'Denver,Colorado',	
+'Budapest,Hungary',	
+'Edinburgh,United Kingdom',	
+'Houston,Texas',	
+'Atlanta,Georgia',	
+'Miami,Florida',	
+'Toulouse,France',	
+'Newark,New Jersey',	
+'Baltimore,Maryland',	
+'Kuala Lumpur,Malaysia',	
+'Quebec,Canada',	
+'Abu Dhabi,United Arab Emirates',	
+'Rotterdam,Netherlands',	
+'Dresden,Germany',	
+'Shenzhen,Guangdong',	
+'Zurich,Switzerland',	
+'Karlsruhe,Germany',	
+'Moscow,Russia',	
+'Rome,Italy',	
+'Hannover,Germany',	
+'Santa Ana-Anaheim,California',	
+'Nantes,France',	
+'Pittsburgh,Pennsylvania',	
+'Kobe,Hyogo',	
+'Kansas City,KO/MO',	
+'Geneva,Switzerland',	
+'Tampa,Florida',	
+'St Petersburg,Russia',	
+'Brisbane,QLD',	
+'Montpellier,France',	
+'Richmond,Virginia',	
+'Torino,Italy',	
+'Istanbul,Turkey',	
+'Ann Arbor,Michigan',	
+'Auckland,New Zealand',	
+'Glasgow,United Kingdom',	
+'Mexico City,Mexico',	
+'Madrid,Spain',	
+'Taipei,Taiwan',	
+'Aachen,Germany',	
+'Bangkok,Thailand',	
+'Providence,Rhode Island',	
+'Nice,France',	
+'Mannheim-Heidelberg,Germany',	
     ];
     
           
           $( "#tags" ).autocomplete({
       source: availableTags,
+              focus:function(e,ui) {
+                $('#tags').addClass('nl-field nl-field-open');
+               $('#tags').css('z-index',20000);
+              $('.ui-widget-content').css('z-index',20000);
+              },
          select: function(e, ui) {
         $('#tags').removeClass('nl-field nl-field-open');
          hideAll();
@@ -808,15 +903,14 @@ input:-moz-placeholder, textarea:-moz-placeholder {
              $('.datepicker').datepicker( "refresh" );
     }
     });
-          
-         $('#tags').focusin(function() {           
+         $('#tags').focus(function() {           
               $(this).addClass('nl-field nl-field-open');
               $('#tags').css('z-index',20000);
               $('.ui-widget-content').css('z-index',20000);
           });
             $( "#tags" ).focusout(function(){
              $('#tags').removeClass('nl-field nl-field-open');
-            });
+            }); 
           
           $('.op0').hide();
           
@@ -911,13 +1005,15 @@ input:-moz-placeholder, textarea:-moz-placeholder {
           });
           
           $('body').keypress(function() {
-               if(clearTextOnlyOnce==1) {
-              $('#typewriter').text("").focus();
-              $('#typed-cursor').hide();
+             if(!$("#tags").is(":focus")) {
+                if(clearTextOnlyOnce==1) {
+                  $('#typewriter').text("").focus();
+                  $('#typed-cursor').hide();
                   clearTextOnlyOnce++;
-              }
+              }             
               else {
-                     $('#typewriter').focus();
+               $('#typewriter').focus();
+              }
               }
           });
           
