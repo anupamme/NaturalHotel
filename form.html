@@ -13,6 +13,9 @@
        <link rel="stylesheet" type="text/css" href="css/component1.css">
       <script src="js/modernizr.custom.js"></script>
       <style>
+          #tags {
+              width: 126px;
+          }
       .loader {
 	position: fixed;
 	left: 0px;
@@ -20,7 +23,8 @@
 	width: 100%;
 	height: 100%;
 	z-index: 9999;
-	background: url('images/page-loader1.gif') 50% 50% no-repeat rgb(249,249,249);
+          background: url('images/page-loader1.gif') 50% 50% no-repeat rgb(249,249,249);
+
 }
           .ui-menu .ui-menu-item {
               color: #FFF;
@@ -37,6 +41,7 @@
 }
 input:-moz-placeholder, textarea:-moz-placeholder {
   color: #92c17c;
+     opacity: 1;
 }
           .ui-autocomplete {
     max-height: 400px;
@@ -769,7 +774,7 @@ input:-moz-placeholder, textarea:-moz-placeholder {
         <!---Page Loader Jquery Code---->
         <script type="text/javascript">
             $(window).load(function() {
-                $(".loader").fadeOut(2000);
+                $(".loader").fadeOut(1000);
             })
         </script>
       
@@ -897,6 +902,22 @@ input:-moz-placeholder, textarea:-moz-placeholder {
               $('.ui-widget-content').css('z-index',20000);
               },
          select: function(e, ui) {
+              var ss=ui.item.value.length;
+               if(ss <=18)
+              {
+                 ss=ss+220;
+              }
+              else if(ss <= 23)
+              {
+               ss=ss+320;
+              }
+              else if(ss<=25) {
+              ss=ss+350;
+              }
+              else  {
+              ss=ss+420;
+              }
+              $('#tags').css("width",ss+"px")
         $('#tags').removeClass('nl-field nl-field-open');
          hideAll();
         $('.op1').find('a.nl-field-toggle').text('Select');
