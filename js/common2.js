@@ -585,7 +585,7 @@ var common = {
          $.ajax({
              type: "POST",
                async: false,
-                contentType: application/json,
+                contentType: "application/json",
                 crossDomain: true,
                 data: queryParams,
                 url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
@@ -598,8 +598,8 @@ var common = {
                 async: false,
                 url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
                 success: function(response){
-                hotelListMp = response;
-                   }
+                    hotelListMp = response;
+                }
                 });
             }
         },2000);
