@@ -47,9 +47,9 @@ var common = {
                 })
             })
         })
-         $.getJSON('data/document.json', function(data){
-                hotelListMp = data
-        })
+       
+
+        
         $.getJSON('data/out-zermatt/hotel_sentiment.json', function(data){
                 hotelAttr = data
         })
@@ -309,6 +309,7 @@ var common = {
           function xyz() {
                $('.overlay').click(function() { $('.overlay-holder1').hide(); });
           }
+            
             function readListOfValuesFromReview(listValues) {
                 var ullist="";
                  for(var i in listValues)
@@ -318,6 +319,7 @@ var common = {
                 return ullist;
             }
             
+           
                /* Graph caraousel */
             $('.graph > li ').on('click', function(){
                 debugger
@@ -346,9 +348,9 @@ var common = {
                 overlay = overlay.replace('{{imageList}}', imageList);
                 console.log('hotelid: ' + hotelId)
                  var item=common.getHotelListMp();
-                for(var itemMatched in item)
+                for(var itemMatched in item.items)
                 {
-                    if(item[itemMatched].hotelId==hotelId)
+                    if(item.items[itemMatched].hotelid==hotelId)
                     {
                         hotelId=itemMatched;
                         break;
@@ -357,16 +359,27 @@ var common = {
        
                 var replacetext="{{ListOfitems}}";
                 
-                overlay=overlay.replace("{{awesome_people}}",item[hotelId].attributes.awesome.people);
-                overlay=overlay.replace("{{good_people}}",item[hotelId].attributes.good.people);
-                overlay=overlay.replace("{{ok_people}}",item[hotelId].attributes.ok.people);
-                overlay=overlay.replace("{{bad_people}}",item[hotelId].attributes.bad.people);
-                overlay=overlay.replace("{{worst_people}}",item[hotelId].attributes.worst.people);   
-                overlay=overlay.replace("{{awesome_values}}",readListOfValuesFromReview(item[hotelId].attributes.awesome.views))
-                overlay=overlay.replace("{{good_values}}",readListOfValuesFromReview(item[hotelId].attributes.good.views))
-                overlay=overlay.replace("{{ok_values}}",readListOfValuesFromReview(item[hotelId].attributes.ok.views))
-                overlay=overlay.replace("{{bad_values}}",readListOfValuesFromReview(item[hotelId].attributes.bad.views))
-                overlay=overlay.replace("{{worst_values}}",readListOfValuesFromReview(item[hotelId].attributes.worst.views))
+                overlay=overlay.replace("{{awesome_people}}",item.items[hotelId].attributes[4].people);
+                overlay=overlay.replace("{{good_people}}",item.items[hotelId].attributes[3].people);
+                overlay=overlay.replace("{{ok_people}}",item.items[hotelId].attributes[2].people);
+                overlay=overlay.replace("{{bad_people}}",item.items[hotelId].attributes[1].people);
+                overlay=overlay.replace("{{worst_people}}",item.items[hotelId].attributes[0].people);   
+                
+                if(item.items[hotelId].attributes[4].numpeople !=0){               
+                overlay=overlay.replace("{{awesome_values}}",readListOfValuesFromReview(item.items[hotelId].attributes[4].views))
+                }
+                if(item.items[hotelId].attributes[3].numpeople !=0 ) {             
+                overlay=overlay.replace("{{good_values}}",readListOfValuesFromReview(item.items[hotelId].attributes[3].views))
+                }
+                if(item.items[hotelId].attributes[2].numpeople !=0 ) {
+                overlay=overlay.replace("{{ok_values}}",readListOfValuesFromReview(item.items[hotelId].attributes[2].views))
+                }
+                if(item.items[hotelId].attributes[1].numpeople !=0 ) {
+                overlay=overlay.replace("{{bad_values}}",readListOfValuesFromReview(item.items[hotelId].attributes[1].views))
+                }
+                if(item.items[hotelId].attributes[0].numpeople !=0 ) {
+                overlay=overlay.replace("{{worst_values}}",readListOfValuesFromReview(item.items[hotelId].attributes[0].views))
+                }
                 
               
                 
@@ -568,9 +581,31 @@ var common = {
         }
         return hotelListJson
     },
+    getHotelListFromServer:function() {
+         $.ajax({
+             type: "GET",
+               async: false,
+                url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
+                success: function(response){
+                hotelListMp = response;
+            },
+            error: function(error){
+                $.ajax({
+             type: "GET",
+               async: false,
+                url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
+                success: function(response){
+                hotelListMp = response;
+                   }
+                });
+            }
+        },2000);
+    },
     getHotelListMp: function() {
-       
         return hotelListMp;
+    },
+    checkURL: function(url) {
+        return(url.match(/\.(gif)$/) != null);
     },
     animateHotelList: function() {
         $('.cContent').css('min-height',0);
@@ -615,42 +650,53 @@ var common = {
             }
         });
         var hlItem = '';
-        for (var res in rObj){
+        for (var res in rObj.items){
 //            key = item.key;
 //            value = item.value;
             debugger
             if (res in window.excludeList){
                 continue
             }
-            item = rObj[res]
+            
+            item = rObj.items[res]
+            
+            var customimages=[],k=0;
+            for(var img in item.images)
+            {
+                  if(!common.checkURL(item.images[img]))
+                  {
+                      customimages[k]=item.images[img];
+                      k++;
+                  }
+            }
+            if(customimages.length != 0)
+            {
             hlItem = hlTemplate;
-            hlItem = hlItem.replace('{{hotel-name}}', item.hotelName.substring(0, 35));
+            hlItem = hlItem.replace('{{hotel-name}}', item.name.substring(0, 35));
             hlItem = hlItem.replace('{{hotel-address}}', item.address);
-            hlItem = hlItem.replace('{{default-image}}', item.images[1]);
-            hlItem = hlItem.replace('{{image-list}}', JSON.stringify(item.images.slice(1, 11)).replace(/"/g, "'"));
-            /* review status */
-            debugger
-            hlItem = hlItem.replace('{{perc-index0}}',item.hotelId);
-            hlItem = hlItem.replace('{{perc-awesome}}', item.attributes.awesome.percentage);
-            hlItem = hlItem.replace('{{perc-good}}', item.attributes.good.percentage);
-            hlItem = hlItem.replace('{{perc-ok}}', item.attributes.ok.percentage);
-            hlItem = hlItem.replace('{{perc-bad}}', item.attributes.bad.percentage);
-            hlItem = hlItem.replace('{{perc-worst}}', item.attributes.worst.percentage);
-            hlItem = hlItem.replace('{{perc-index}}',item.hotelId);
-            hlItem = hlItem.replace('{{perc-index1}}',item.hotelId);
-            hlItem = hlItem.replace('{{perc-index2}}',item.hotelId);
-            hlItem = hlItem.replace('{{perc-index3}}',item.hotelId);
-            hlItem = hlItem.replace('{{perc-index4}}',item.hotelId);
+            hlItem = hlItem.replace('{{default-image}}', customimages[0]);
+            hlItem = hlItem.replace('{{image-list}}', JSON.stringify(customimages.slice(1, 11)).replace(/"/g, "'"));
+            hlItem = hlItem.replace('{{perc-index0}}',item.hotelid);
+            hlItem = hlItem.replace('{{perc-awesome}}', item.attributes[4].percentageAttr);
+            hlItem = hlItem.replace('{{perc-good}}', item.attributes[3].percentageAttr);
+            hlItem = hlItem.replace('{{perc-ok}}', item.attributes[2].percentageAttr);
+            hlItem = hlItem.replace('{{perc-bad}}', item.attributes[1].percentageAttr);
+            hlItem = hlItem.replace('{{perc-worst}}', item.attributes[0].percentageAttr);
+            hlItem = hlItem.replace('{{perc-index}}',item.hotelid);
+            hlItem = hlItem.replace('{{perc-index1}}',item.hotelid);
+            hlItem = hlItem.replace('{{perc-index2}}',item.hotelid);
+            hlItem = hlItem.replace('{{perc-index3}}',item.hotelid);
+            hlItem = hlItem.replace('{{perc-index4}}',item.hotelid);
             
             var rvItem = '', rvList = '';
             var hotelReviews=item.reviews;
             for(var i in hotelReviews)
             {
                  rvItem = rvTemplate;
-                rvItem = rvItem.replace('{{user-name}}', hotelReviews[i].reviewrName);
+                rvItem = rvItem.replace('{{user-name}}', hotelReviews[i].reviewer);
                 rvItem = rvItem.replace('{{user-address}}',hotelReviews[i].location);
                 rvItem = rvItem.replace('{{user-photo}}',hotelReviews[i].image);
-                rvItem = rvItem.replace('{{user-review}}',hotelReviews[i].description )
+                rvItem = rvItem.replace('{{user-review}}',hotelReviews[i].review.substring(0,329)+"...more")
                  rvList += rvItem;
             }
             
@@ -658,6 +704,7 @@ var common = {
 
             
             hl += hlItem;
+        }
         }
         hl += '</ul>';
         $('#hotel-list-holder').html(hl);
@@ -887,13 +934,16 @@ var common = {
 
 $(document).ready(function(){
 	common.init();
+   
 });
 
 
 // show up hotels is clicked.
 $('.button-holder').on('click', function(arg){
     debugger
-    console.log('show up clicked.')
+    common.getHotelListFromServer();
+     
+    
     // load the data.
     place = $('.op0 a').text()
     document.cookie = 'place=' + place

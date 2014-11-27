@@ -261,6 +261,7 @@ width: 23px;
     width: 300px;
 }
 .hotel-list > li .image img {
+    height: 210px;
     transform: scale(1);
     transition-duration: 500ms;
     transition-timing-function: ease-out;
