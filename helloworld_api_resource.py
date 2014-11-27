@@ -51,12 +51,8 @@ class MyRequest(messages.Message):
     location = messages.StringField(1, required=True)
     purpose = messages.StringField(2, required=True)
 
-#STORED_GREETINGS = GreetingCollection(items=[
-#    Greeting(message='hello world!'),
-#    Greeting(message='goodbye world!'),
-#])
 
-@endpoints.api(name='helloworld', version='v1')
+@endpoints.api(name='helloworld_custom', version='v1')
 class HelloWorldApi(remote.Service):
     """Helloworld API v1."""
 
@@ -65,7 +61,8 @@ class HelloWorldApi(remote.Service):
     @endpoints.method(ID_RESOURCE, HotelCollection,
                       path='hellogreeting', http_method='GET',
                       name='greetings.listGreeting')
-    def greetings_list(self, unused_request):
+    def greetings_list(self, request):
+        print 'params: ' + request.location + ';' + request.purpose
         return STORED_HOTELS
 
     

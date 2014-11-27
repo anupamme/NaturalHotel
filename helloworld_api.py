@@ -60,14 +60,6 @@ class Hotel(messages.Message):
 
 class HotelCollection(messages.Message):
     items = messages.MessageField(Hotel, 1, repeated=True)
-
-#STORED_HOTELS = HotelCollection(items=[
-#    Hotel(name='My Hotel', address='bl-5, shalimar bagh', images=[], reviews=[
-#                Review(review='Too good!', reviewer='anupam'),
-#                Review(review='Too bad!', reviewer='gaurang')
-#            ]),
-#        Hotel(name='Your Hotel', address='bl-4, shalimar bagh', images=[], reviews=[])
-#])
     
 class Greeting(messages.Message):
     """Greeting that stores a message."""
@@ -77,12 +69,6 @@ class Greeting(messages.Message):
 class GreetingCollection(messages.Message):
     """Collection of Greetings."""
     items = messages.MessageField(Greeting, 1, repeated=True)
-
-
-#STORED_GREETINGS = GreetingCollection(items=[
-#    Greeting(message='hello world!'),
-#    Greeting(message='goodbye world!'),
-#])
 
 @endpoints.api(name='helloworld', version='v1')
 class HelloWorldApi(remote.Service):
@@ -257,40 +243,5 @@ class HelloWorldApi(remote.Service):
     ID_RESOURCE = endpoints.ResourceContainer(
             message_types.VoidMessage,
             id=messages.IntegerField(1, variant=messages.Variant.INT32))
-
-#    @endpoints.method(ID_RESOURCE, Hotel,
-#                      path='hellogreeting/{location}', http_method='GET',
-#                      name='greetings.getGreeting')
-#    def greeting_get(self, request):
-#        # 1. parse location, purpose, foodtype, desired location, amenities.
-#        # 2. load all the maps from the file system.
-#        # 3. create JSON object of the json structure.
-#        # 4. return the list of that json structure.
-#        try:
-#            index = -1
-#            if request.location == 'paris':
-#                index = 0
-#            if request.location == 'london':
-#                index = 1
-#            return STORED_HOTELS.items[index]
-#        except (IndexError, TypeError):
-#            raise endpoints.NotFoundException('Greeting %s not found.' %
-#                                              (request.location,))
-#    @endpoints.method(ID_RESOURCE, Hotel,
-#                      path='hellogreeting/{id}', http_method='GET',
-#                      name='greetings.getGreeting')
-#    def greeting_get(self, request):
-#        # 1. parse location, purpose, foodtype, desired location, amenities.
-#        # 2. load all the maps from the file system.
-#        # 3. create JSON object of the json structure.
-#        # 4. return the list of that json structure.
-#        
-#        
-#        
-#        try:
-#            return STORED_HOTELS.items[request.id]
-#        except (IndexError, TypeError):
-#            raise endpoints.NotFoundException('Greeting %s not found.' %
-#                                              (request.id,))
             
 APPLICATION = endpoints.api_server([HelloWorldApi])
