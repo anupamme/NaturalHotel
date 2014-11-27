@@ -594,8 +594,8 @@ var common = {
                 },
             error: function(error){
                 $.ajax({
-             type: "GET",
-               async: false,
+                type: "GET",
+                async: false,
                 url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
                 success: function(response){
                 hotelListMp = response;
@@ -949,7 +949,7 @@ $('.button-holder').on('click', function(arg){
     document.cookie = 'purpose=' + purpose
     var foodType = $($('.selectedFoods')[0]).text().toLowerCase().split(',')
     
-    var queryParams = {"location": place, "purpose":purpose, "food": foodType }
+    var queryParams = {"location": window.locationKey, "purpose":purpose, "food": foodType }
     common.getHotelListFromServer(queryParams);
     
     // load the data.
