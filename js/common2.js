@@ -39,7 +39,7 @@ var common = {
                 $.getJSON('data/hotels/hotelDetail.json', function(data){
                     hotelDetailMap = data
                 })
-                $.getJSON('data/purpose/honeymoon.json', function(data){
+                $.getJSON('data/purpose/purpose.json', function(data){
                     purposeMap = data
                 })
                 $.getJSON('data/purpose/foodIndex.json', function(data){
