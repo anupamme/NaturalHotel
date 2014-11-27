@@ -34,9 +34,6 @@ excludeList = {'g188098-d619925': True, 'g188098-d550027': True}
 
 readMap = lambda x: json.loads(open(x, 'r').read())
 
-class Image(messages.Message):
-    url = messages.StringField(1)
-    
 class Review(messages.Message):
     review = messages.StringField(1)
     reviewer = messages.StringField(2)
@@ -45,14 +42,14 @@ class Review(messages.Message):
     
 class Attribute(messages.Message):
     title = messages.IntegerField(1)
-    numpeople = messages.IntegerField(2)
+    people = messages.IntegerField(2)
     percentageAttr = messages.IntegerField(3)
     views = messages.StringField(4, repeated=True)
 
 class Hotel(messages.Message):
     name = messages.StringField(1)
     address = messages.StringField(2)
-    images = messages.MessageField(Image, 3, repeated=True)
+    images = messages.StringField(3, repeated=True)
     reviews = messages.MessageField(Review, 4, repeated=True)
     match = messages.StringField(5)     # high, medium, low
     hotelid = messages.StringField(6)   # 
@@ -97,12 +94,7 @@ class HelloWorldApi(remote.Service):
             hotel = hotelDetailMap[hotelid]
             obj.name = hotel['title']
             obj.address = hotel['address']
-            imageArr = []
-            for img in hotel['images']:
-                imgObj = Image()
-                imgObj.url = img
-                imageArr.append(imgObj)
-            obj.images = imageArr
+            obj.images = hotel['images']
             obj.match = 'not defined'
             obj.hotelid = hotelid
             attDetails = self.getAttributeDetails(hotelid)
@@ -110,7 +102,7 @@ class HelloWorldApi(remote.Service):
             for quality in attDetails:
                 att = Attribute()
                 att.title = int(quality)
-                att.numpeople = attDetails[quality][1]
+                att.people = attDetails[quality][1]
                 att.percentageAttr = 33
                 att.views = attDetails[quality][0]
                 attributeArr.append(att)
