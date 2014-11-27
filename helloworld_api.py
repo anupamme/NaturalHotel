@@ -189,10 +189,16 @@ class HelloWorldApi(remote.Service):
     
     
     
-    @endpoints.method(message_types.VoidMessage, HotelCollection,
-                      path='hellogreeting', http_method='GET',
+    
+    MULTIPLY_METHOD_RESOURCE = endpoints.ResourceContainer(
+            purpose = messages.StringField(1, required=True),
+            food = messages.StringField(2, repeated=True),
+            location=messages.StringField(3))
+    
+    @endpoints.method(MULTIPLY_METHOD_RESOURCE, HotelCollection,
+                      path='hellogreeting', http_method='POST',
                       name='greetings.listGreeting')
-    def greetings_list(self, unused_request):
+    def greetings_list(self, request):
         locationMap = readMap(locationPath)
         sentimentMap = readMap(sentimentPath)
         global reviewMap
@@ -211,12 +217,11 @@ class HelloWorldApi(remote.Service):
         subAttrIndexMap['view'] = readMap(viewIndexPath)
         subAttrIndexMap['loc'] = readMap(locIndexPath)
         subAttrIndexMap['amenity'] = readMap(amenityIndexPath)
-        
         # algorithm: read the location map, purpose, food type, hotel attr, 
-        locationKey = 'ZERMATT:SWITZERLAND'
-        purpose = 'honeymoon'
-        food = ['french', 'japanese']
-        view = ['mountain']
+        locationKey = request.location
+        purpose = request.purpose
+        food = request.food
+        #view = ['mountain']
         attributes = ['overall', 'staff', 'night', 'beach', 'roof', 'amenities', 'location', 'food', 'view']
         # can be made parallel
         res_loc = set(locationMap[locationKey])  # [hotelids] - not needed as all other maps will take care of location.
