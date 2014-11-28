@@ -75,6 +75,7 @@ class Review(messages.Message):
     reviewer = messages.StringField(2)
     location = messages.StringField(3)
     image = messages.StringField(4)
+    score = messages.IntegerField(5)
     
 class Attribute(messages.Message):
     title = messages.IntegerField(1)
@@ -90,6 +91,7 @@ class Hotel(messages.Message):
     match = messages.StringField(5)     # high, medium, low
     hotelid = messages.StringField(6)   # 
     attributes = messages.MessageField(Attribute, 7, repeated=True)
+    score = messages.IntegerField(8)
 
 class HotelCollection(messages.Message):
     items = messages.MessageField(Hotel, 1, repeated=True)
@@ -106,20 +108,44 @@ class GreetingCollection(messages.Message):
 @endpoints.api(name='helloworld', version='v1')
 class HelloWorldApi(remote.Service):
     """Helloworld API v1."""
+    
+    def IncrementOrInsert(final, hotelId, reviewId):
+        if hotelId in final:
+            if reviewId in final[hotelId]:
+                final[hotelId][reviewId] += 1
+            else:
+                final[hotelId][reviewId] = 1
+        else:
+            final[hotelId][reviewId] = 1
+        return final
+    
+    def findCountFromUnion(self, union_map):    #union_map: key -> [hotelid -> [reviewid]]
+        final = {}                              # hotelid -> reviewid -> count.
+        for attr in union_map:
+            hotelRevMap = union_map[attr]
+            for hotelId in hotelRevMap:
+                reviewArr = hotelRevMap[hotelId]
+                for index in reviewArr:
+                    reviewId = reviewArr[index]
+                    final = IncrementOrInsert(final, hotelId, reviewId)
+        return final
+                
 
     def takeUnion(self, purpose_map, food_map):
         final = purpose_map
-        for key in food_map:
-            val = food_map[key]
-            if key in final:
+        for key in food_map:    # key = 'indian', 'french'
+            val = food_map[key] # val = {'hotelid': [reviewid]}
+            if key in final:    # final = attr -> [hotelid -> [reviewid]]
                 for hotelkey in val:
                     if hotelkey in final[key]:
                         final[key][hotelkey] = [set(final[key][hotelkey] + val[hotelkey])]
                     else:
                         final[key][hotelkey] = val[hotelkey]
+            else:
+                final[key] = food_map[key]
         return final
     
-    def convertToDomainResults(self, arg_res):
+    def convertToDomainResults(self, arg_res, rankingCount):
         final = []
         for hotelid in arg_res:
             if hotelid in excludeList:
@@ -155,11 +181,34 @@ class HelloWorldApi(remote.Service):
                 reviewIns.reviewer = reviewObj.get('ReviewerName')
                 reviewIns.location = reviewObj.get('Place')
                 reviewIns.image = reviewObj.get('ReviewerImage')
+                reviewIns.score = rankingCount[hotelid][rev_int]
                 reviewArr.append(reviewIns)
             obj.reviews = reviewArr
             final.append(obj)
         return HotelCollection(items = final)
-             
+            
+        
+    def rankResults(self, hotelCollection, rankingResults):
+        # calculate score per hotel
+        hotelScore = {}
+        for hotelId in rankingResults:
+            total = 0
+            for reviewId in rankingResults[hotelId]:
+                total += rankingResults[hotelId][reviewId]
+            hotelScore[hotelId] = total
+            
+        # fill this value in hotelCollection
+        for hotel in hotelCollection:
+            hotelId = hotel.hotelid
+            score = hotelScore(hotelId)
+            hotel.score = score
+            hote.reviews.sort(key=lambda x: x.score, reverse=True)
+            
+        # rank the hotels
+        sortedList = sorted(hotelCollection, key=lambda x: x.score, reverse=True)
+        return sortedList
+            
+                
             
     # get AttributeDetails is for the pop up display of infographics.
     def getAttributeDetails(self, hotelid):
@@ -263,8 +312,12 @@ class HelloWorldApi(remote.Service):
         res_food = subAttrIndexMap['food']  # {(hotelid: [review])}
         # take union
         res_union = self.takeUnion(res_purpose, res_food) # format is {(hotelid: [reviewid])}
-        domain_results = self.convertToDomainResults(res_union)
-        return domain_results
+        rankingCount = self.findCountFromUnion(res_union) # rankingcount format: (hotelid -> reviewid) -> count
+        domain_results = self.convertToDomainResults(res_union, rankingCount)
+        # do ranking
+        # rank the domain_results
+        rankedDomainResults = self.rankResults(domain_results, rankingCount)
+        return rankedDomainResults
 
     ID_RESOURCE = endpoints.ResourceContainer(
             message_types.VoidMessage,
