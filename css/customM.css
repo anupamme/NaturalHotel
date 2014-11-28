@@ -155,14 +155,14 @@ z-index: 1;
 .cContent {
     min-height: 475px;
 }
-.header .menu {
+/*.header .menu {
  background: url("../images/menu.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
 cursor: pointer;
 float: left;
 margin: 25px 0 0 27px;
 width: 36px;
     height: 27px;
-}
+} */
 .header .user {
    float: right;
 margin: 4px 27px 0 0;

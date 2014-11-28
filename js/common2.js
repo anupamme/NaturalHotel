@@ -70,7 +70,7 @@ var common = {
          })
         $.getJSON('data/foodtype.json', function(data){
             var reverseFoodTypeMap = data
-            debugger
+           
             var foodTypeAttr = {}
             for (var key in reverseFoodTypeMap){
                 foodTypeAttr = common.addOrInsert(foodTypeAttr, reverseFoodTypeMap[key], key)
@@ -348,6 +348,10 @@ var common = {
                 overlay = overlay.replace('{{imageList}}', imageList);
                 console.log('hotelid: ' + hotelId)
                  var item=common.getHotelListMp();
+                if($.isEmptyObject(item)) {
+                     var hotelListSessionData=sessionStorage.getItem("hotelList");
+                      item = $.parseJSON(hotelListSessionData); 
+                }
                 for(var itemMatched in item.items)
                 {
                     if(item.items[itemMatched].hotelid==hotelId)
@@ -653,7 +657,7 @@ var common = {
         for (var res in rObj.items){
 //            key = item.key;
 //            value = item.value;
-            debugger
+            
             if (res in window.excludeList){
                 continue
             }
@@ -937,13 +941,27 @@ $(document).ready(function(){
    
 });
 
+$('.menu').on('click', function() {
+    $(this).fadeOut(100);
+    $('.title').fadeOut(100);
+    $('#revulize-content').fadeOut(100);
+    var hotelListSessionData=sessionStorage.getItem("hotelList");
+    var viewName = $.parseJSON(hotelListSessionData); 
+    common.populateHotelList(viewName)
+    common.animateHotelList()
+    
+});
 
 // show up hotels is clicked.
 $('.button-holder').on('click', function(arg){
     debugger
+    
+    
+  
+    
     common.getHotelListFromServer();
      
-    
+   
     // load the data.
     place = $('.op0 a').text()
     document.cookie = 'place=' + place
@@ -970,6 +988,7 @@ $('.button-holder').on('click', function(arg){
     // It considers attributes.
     window.superResults = common.selectReviews(selectedAttributes, sentimentMap)
     
+   
     sessionStorage.setItem('selAtt', JSON.stringify(selectedAttributes))
     sessionStorage.setItem('sugAtt', JSON.stringify([]))
     sessionStorage.setItem('subAtt', JSON.stringify(subAttributes))
@@ -979,6 +998,7 @@ $('.button-holder').on('click', function(arg){
   //  common.populateHotelList(hotelListJson)
     var hotelListMp1=common.getHotelListMp()
     common.populateHotelList(hotelListMp1)
+     sessionStorage.setItem('hotelList',JSON.stringify(hotelListMp1))
     common.animateHotelList()
     
     $('.foot').find('input').on('click', function(arg) { 

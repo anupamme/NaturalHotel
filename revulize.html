@@ -3,9 +3,16 @@
 <head>
     <title>Reviews Visualization | Show up hotels</title>
     <meta charset="UTF-8">
+     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/custom.css" />
+     <link href="css/customM.css" rel="stylesheet">
+    
     <script src='js/jquery.min.js'></script>
     <style>
+        a:hover {
+            text-decoration: none;
+            color: #eff9cd;
+        }
  .goBackForm {
     background: #494949;
     min-height: 34px;
@@ -28,14 +35,27 @@ font-size: 18px;
     padding: 7px 0px 0px 43%;
     text-decoration: none;
 }
+        .loader {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+          background: url('images/page-loader1.gif') 50% 50% no-repeat rgb(249,249,249);
+
+}
 
     </style>
+    
 </head>
 <body>
+     <div class="loader"></div>
+    
     <div class="goBackForm">
                  <span ><a href="form.html" class="goBackFormButton1">Go back to form</a></span>
                 </div>
-    <div class="page-container revulize-page">
+    <div class="revulize-page">
         <div class="header">
             <div class="menu"></div>
             <div class="title">Reviews Visualization</div>
@@ -106,7 +126,27 @@ font-size: 18px;
             </div>
         </div>
     </div>
+    
+    
+                <div class="page-container">
+              
+      <div class="container travel-form">
+               
+
+                <div id="hotel-list-holder">
+
+                </div>
+          
+
+            </div>
+        </div>
+    
 <script src="js/common2.js"></script>
+    <script type="text/javascript">
+            $(window).load(function() {
+                $(".loader").fadeOut(500);
+            })
+        </script>
 <!--<script src="js/revulize.js"></script>-->
     <script>
       $(document).ready(function() {
@@ -122,10 +162,11 @@ font-size: 18px;
             common.setAttributes(selected, suggested, subAtt)
             common.printReviews(reviewMap2, mergeResults(results2, selected, subAtt), selected, subAtt)
       });
-      $('.menu').on('click', function(){
+    /*  $('.menu').on('click', function(){
+          
           document.cookie = 'slideup=true'
-          window.location.href = "form.html";
-      })
+       //   window.location.href = "form.html";
+      }) */
       getCookie = function(cname){
         var name = cname + "=";
         var ca = document.cookie.split(';');
