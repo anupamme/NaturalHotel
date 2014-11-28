@@ -256,11 +256,8 @@ class HelloWorldApi(remote.Service):
         # normalize results
         i = 0
         while (i < 5):
-            if (i in final):
-                print 'ello!'
-            else:
+            if (i not in final):
                 final[i] = [[], 0]
-            
             i += 1
         return final
     
