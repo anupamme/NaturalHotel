@@ -109,40 +109,33 @@ class GreetingCollection(messages.Message):
 class HelloWorldApi(remote.Service):
     """Helloworld API v1."""
     
-    def IncrementOrInsert(final, hotelId, reviewId):
+    def IncrementOrInsert(self, final, hotelId, reviewId):
         if hotelId in final:
             if reviewId in final[hotelId]:
                 final[hotelId][reviewId] += 1
             else:
                 final[hotelId][reviewId] = 1
         else:
+            final[hotelId] = {}
             final[hotelId][reviewId] = 1
         return final
     
-    def findCountFromUnion(self, union_map):    #union_map: key -> [hotelid -> [reviewid]]
-        final = {}                              # hotelid -> reviewid -> count.
-        for attr in union_map:
-            hotelRevMap = union_map[attr]
-            for hotelId in hotelRevMap:
-                reviewArr = hotelRevMap[hotelId]
-                for index in reviewArr:
-                    reviewId = reviewArr[index]
-                    final = IncrementOrInsert(final, hotelId, reviewId)
+    def findCountFromUnion(self, arrayOfMaps):    #union_map: key -> [hotelid -> [reviewid]]
+        final = {}
+        for mapIns in arrayOfMaps:    # key = hotelId
+            for hotelId in mapIns: # val = [reviewid]
+                for reviewId in mapIns[hotelId]:
+                    final = self.IncrementOrInsert(final, hotelId, reviewId)
         return final
-                
 
-    def takeUnion(self, purpose_map, food_map):
-        final = purpose_map
-        for key in food_map:    # key = 'indian', 'french'
-            val = food_map[key] # val = {'hotelid': [reviewid]}
-            if key in final:    # final = attr -> [hotelid -> [reviewid]]
-                for hotelkey in val:
-                    if hotelkey in final[key]:
-                        final[key][hotelkey] = [set(final[key][hotelkey] + val[hotelkey])]
-                    else:
-                        final[key][hotelkey] = val[hotelkey]
-            else:
-                final[key] = food_map[key]
+    def takeUnion(self, arrayOfMaps):
+        final = {}
+        for mapIns in arrayOfMaps:    # key = hotelId
+            for hotelId in mapIns: # val = [reviewid]
+                if hotelId in final:    # final = attr -> [hotelid -> [reviewid]]
+                    final[hotelId] = final[hotelId] + mapIns[hotelId]
+                else:
+                    final[hotelId] = mapIns[hotelId]
         return final
     
     def convertToDomainResults(self, arg_res, rankingCount):
@@ -181,7 +174,8 @@ class HelloWorldApi(remote.Service):
                 reviewIns.reviewer = reviewObj.get('ReviewerName')
                 reviewIns.location = reviewObj.get('Place')
                 reviewIns.image = reviewObj.get('ReviewerImage')
-                reviewIns.score = rankingCount[hotelid][rev_int]
+                
+                reviewIns.score = rankingCount[hotelid][rev]
                 reviewArr.append(reviewIns)
             obj.reviews = reviewArr
             final.append(obj)
@@ -198,15 +192,15 @@ class HelloWorldApi(remote.Service):
             hotelScore[hotelId] = total
             
         # fill this value in hotelCollection
-        for hotel in hotelCollection:
+        for hotel in hotelCollection.items:
             hotelId = hotel.hotelid
-            score = hotelScore(hotelId)
+            score = hotelScore[hotelId]
             hotel.score = score
-            hote.reviews.sort(key=lambda x: x.score, reverse=True)
+            hotel.reviews.sort(key=lambda x: x.score, reverse=True)
             
         # rank the hotels
-        sortedList = sorted(hotelCollection, key=lambda x: x.score, reverse=True)
-        return sortedList
+        sortedList = sorted(hotelCollection.items, key=lambda x: x.score, reverse=True)
+        return HotelCollection(items=sortedList)
             
                 
             
@@ -309,10 +303,13 @@ class HelloWorldApi(remote.Service):
                     resultsAsPerAttr = resultsAsPerAttr + sentimentMap[(att, x)]
         res_purpose = purposeMap[purpose]   # {(hotelid: [review])}
         #food.map
-        res_food = subAttrIndexMap['food']  # {(hotelid: [review])}
+        res_food = map(lambda x: subAttrIndexMap['food'][x], food)  #[{hotelid -> [reviewId]}]
+        #res_food = subAttrIndexMap['food']  # {(hotelid: [review])}
         # take union
-        res_union = self.takeUnion(res_purpose, res_food) # format is {(hotelid: [reviewid])}
-        rankingCount = self.findCountFromUnion(res_union) # rankingcount format: (hotelid -> reviewid) -> count
+        res_food.append(res_purpose)
+        rankingCount = self.findCountFromUnion(res_food) # rankingcount format: (hotelid -> reviewid) -> count
+        
+        res_union = self.takeUnion(res_food) # format is {(hotelid: [reviewid])}
         domain_results = self.convertToDomainResults(res_union, rankingCount)
         # do ranking
         # rank the domain_results
