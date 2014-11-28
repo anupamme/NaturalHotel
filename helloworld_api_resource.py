@@ -63,22 +63,23 @@ class HelloWorldApi(remote.Service):
                       name='greetings.listGreeting')
     def greetings_list(self, request):
         print 'params: ' + request.location + ';' + request.purpose
+        #print 'params: ' + request.location + ';' + request.purpose
         return STORED_HOTELS
 
     
-    @endpoints.method(ID_RESOURCE, Hotel,
-                      path='hellogreeting/{location}', http_method='GET',
-                      name='greetings.getGreeting')
-    def greeting_get(self, request):
-        try:
-            index = -1
-            if request.location == 'paris':
-                index = 0
-            if request.location == 'london':
-                index = 1
-            return STORED_HOTELS.items[index]
-        except (IndexError, TypeError):
-            raise endpoints.NotFoundException('Greeting %s not found.' %
-                                              (request.location))
+#    @endpoints.method(ID_RESOURCE, Hotel,
+#                      path='hellogreeting_resource', http_method='GET',
+#                      name='greetings.getGreeting')
+#    def greeting_get(self, request):
+#        try:
+#            index = -1
+#            if request.location == 'paris':
+#                index = 0
+#            if request.location == 'london':
+#                index = 1
+#            return STORED_HOTELS.items[index]
+#        except (IndexError, TypeError):
+#            raise endpoints.NotFoundException('Greeting %s not found.' %
+#                                              (request.location))
             
 APPLICATION = endpoints.api_server([HelloWorldApi])

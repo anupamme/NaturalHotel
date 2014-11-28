@@ -9,6 +9,7 @@ handlers:
 - url: /_ah/spi/.*
   script: helloworld_api.APPLICATION
   #script: helloworld_api_resource.APPLICATION
+  #script: helloworld_api_post.APPLICATION
 
 - url: /css
   static_dir: css

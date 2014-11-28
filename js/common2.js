@@ -585,22 +585,24 @@ var common = {
         }
         return hotelListJson
     },
-    getHotelListFromServer:function() {
+    getHotelListFromServer:function(queryParams) {
          $.ajax({
-             type: "GET",
-               async: false,
+             type: "POST",
+               async: true,
+                contentType: "application/json",
+                data: queryParams,
                 url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
                 success: function(response){
-                hotelListMp = response;
-            },
+                    hotelListMp = response;
+                },
             error: function(error){
                 $.ajax({
-             type: "GET",
-               async: false,
+                type: "GET",
+                async: false,
                 url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
                 success: function(response){
-                hotelListMp = response;
-                   }
+                    hotelListMp = response;
+                }
                 });
             }
         },2000);
@@ -954,7 +956,6 @@ $('.menu').on('click', function() {
 
 // show up hotels is clicked.
 $('.button-holder').on('click', function(arg){
-    debugger
     
     
   
@@ -967,6 +968,12 @@ $('.button-holder').on('click', function(arg){
     document.cookie = 'place=' + place
     purpose = $('.op1 a').text().toLowerCase()
     document.cookie = 'purpose=' + purpose
+    var foodType = $($('.selectedFoods')[0]).text().toLowerCase().split(',')
+    
+    var queryParams = {"location": window.locationKey, "purpose":purpose, "food": foodType }
+    common.getHotelListFromServer(queryParams);
+    
+    // load the data.
     var selectedAttributes = []
     var subAttributes = {}
     if ('honeymoon' === purpose){
