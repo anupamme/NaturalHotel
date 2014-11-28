@@ -193,7 +193,7 @@ class HelloWorldApi(remote.Service):
     MULTIPLY_METHOD_RESOURCE = endpoints.ResourceContainer(
             purpose = messages.StringField(1, required=True),
             food = messages.StringField(2, repeated=True),
-            location=messages.StringField(3))
+            location=messages.StringField(3, required=True))
     
     @endpoints.method(MULTIPLY_METHOD_RESOURCE, HotelCollection,
                       path='hellogreeting', http_method='POST',
