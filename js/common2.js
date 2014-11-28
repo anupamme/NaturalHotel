@@ -584,9 +584,8 @@ var common = {
     getHotelListFromServer:function(queryParams) {
          $.ajax({
              type: "POST",
-               async: false,
+               async: true,
                 contentType: "application/json",
-                crossDomain: true,
                 data: queryParams,
                 url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
                 success: function(response){

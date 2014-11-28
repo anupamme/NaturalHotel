@@ -26,13 +26,49 @@ viewIndexPath = prefix + 'viewIndex.json'
 locIndexPath = prefix + 'locIndex.json'
 amenityIndexPath = prefix + 'amenityIndex.json'
 
+locationMap = {}
+sentimentMap = {}
+purposeMap = {}
 hotelDetailMap = {}
 reviewMap = {}
 hotelAttrMap = {}
 subAttrIndexMap = {}
+attributeMap = {}
 excludeList = {'g188098-d619925': True, 'g188098-d550027': True}
+isLoaded = False
 
 readMap = lambda x: json.loads(open(x, 'r').read())
+
+rankMap = {} # stores hotelid -> reviewid -> count
+
+def findScoreOfHotel(hotelId):
+    return -1
+
+
+
+def loadData():
+    global isLoaded
+    if isLoaded == False:
+        global locationMap
+        locationMap = readMap(locationPath)
+        global sentimentMap
+        sentimentMap = readMap(sentimentPath)
+        global reviewMap
+        reviewMap = readMap(reviewMapPath)
+        global hotelDetailMap
+        hotelDetailMap = readMap(hotelMapPath)
+        global purposeMap 
+        purposeMap = readMap(purposeMapPath)
+        global hotelAttrMap
+        hotelAttrMap = readMap(hotelAttrPath)
+        global attributeMap
+        attributeMap = readMap(attributePath)
+        global subAttrIndexMap
+        subAttrIndexMap['food'] = readMap(foodIndexPath)
+        subAttrIndexMap['view'] = readMap(viewIndexPath)
+        subAttrIndexMap['loc'] = readMap(locIndexPath)
+        subAttrIndexMap['amenity'] = readMap(amenityIndexPath)
+        isLoaded = True
 
 class Review(messages.Message):
     review = messages.StringField(1)
@@ -76,9 +112,11 @@ class HelloWorldApi(remote.Service):
         for key in food_map:
             val = food_map[key]
             if key in final:
-                final[key] = [set(final[key] + val)]
-            else:
-                final[key] = val
+                for hotelkey in val:
+                    if hotelkey in final[key]:
+                        final[key][hotelkey] = [set(final[key][hotelkey] + val[hotelkey])]
+                    else:
+                        final[key][hotelkey] = val[hotelkey]
         return final
     
     def convertToDomainResults(self, arg_res):
@@ -88,9 +126,7 @@ class HelloWorldApi(remote.Service):
                 continue
             obj = Hotel()
             if (hotelid not in hotelDetailMap):
-                print('hotel not found: ' + hotelid)
                 continue
-            print "found hotelid: " + hotelid
             hotel = hotelDetailMap[hotelid]
             obj.name = hotel['title']
             obj.address = hotel['address']
@@ -109,9 +145,7 @@ class HelloWorldApi(remote.Service):
             obj.attributes = attributeArr
             reviewArr = []
             totalReviews = arg_res[hotelid]
-            print totalReviews
             for rev in totalReviews[0:5]:
-                print 'checking: ' + hotelid + ';' + rev
                 reviewTmp = reviewMap[hotelid]
                 rev_int = int(rev)
                 
@@ -191,46 +225,41 @@ class HelloWorldApi(remote.Service):
     
     
     MULTIPLY_METHOD_RESOURCE = endpoints.ResourceContainer(
-            purpose = messages.StringField(1, required=True),
+            purpose = messages.StringField(1),
             food = messages.StringField(2, repeated=True),
-            location=messages.StringField(3, required=True))
+            destination=messages.StringField(3),
+            view=messages.StringField(4))
     
     @endpoints.method(MULTIPLY_METHOD_RESOURCE, HotelCollection,
-                      path='hellogreeting', http_method='POST',
+                      path='hellogreeting', http_method='GET',
                       name='greetings.listGreeting')
     def greetings_list(self, request):
-        locationMap = readMap(locationPath)
-        sentimentMap = readMap(sentimentPath)
-        global reviewMap
-        reviewMap = readMap(reviewMapPath)
-        print 'reading hotel detail map: ' + hotelMapPath
-        global hotelDetailMap
-        hotelDetailMap = readMap(hotelMapPath)
-        print 'after reading hotel detail map: ' + hotelMapPath
-        print 'length of hotel detail map: ' + str(len(hotelDetailMap))
-        purposeMap = readMap(purposeMapPath)
-        global hotelAttrMap
-        hotelAttrMap = readMap(hotelAttrPath)
-        attributeMap = readMap(attributePath)
-        global subAttrIndexMap
-        subAttrIndexMap['food'] = readMap(foodIndexPath)
-        subAttrIndexMap['view'] = readMap(viewIndexPath)
-        subAttrIndexMap['loc'] = readMap(locIndexPath)
-        subAttrIndexMap['amenity'] = readMap(amenityIndexPath)
-        # algorithm: read the location map, purpose, food type, hotel attr, 
-        locationKey = request.location
-        purpose = request.purpose
-        food = request.food
-        #view = ['mountain']
+        loadData()
+        locationKey = request.destination
+#        purpose = request.purpose
+#        food = request.food
+#        view = request.view
+        
+#        locationKey = "ZERMATT:SWITZERLAND"
+        purpose = "honeymoon"
+        food = ["indian", "french"]
+        view = ["mountain"]
+        
+        print locationKey
+#        print purpose
+#        print view
+#        print food
+        
         attributes = ['overall', 'staff', 'night', 'beach', 'roof', 'amenities', 'location', 'food', 'view']
         # can be made parallel
         res_loc = set(locationMap[locationKey])  # [hotelids] - not needed as all other maps will take care of location.
-        res_attr = []                       # [(hotelid, reviewid)]
+        resultsAsPerAttr = []                       # [(hotelid, reviewid)]
         for att in attributes:
             for x in [2.0, 3.0, 4.0]:
                 if (att, x) in sentimentMap:
-                    res_attr = res_attr + sentimentMap[(att, x)]
+                    resultsAsPerAttr = resultsAsPerAttr + sentimentMap[(att, x)]
         res_purpose = purposeMap[purpose]   # {(hotelid: [review])}
+        #food.map
         res_food = subAttrIndexMap['food']  # {(hotelid: [review])}
         # take union
         res_union = self.takeUnion(res_purpose, res_food) # format is {(hotelid: [reviewid])}
