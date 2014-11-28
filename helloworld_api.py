@@ -235,12 +235,12 @@ class HelloWorldApi(remote.Service):
                       name='greetings.listGreeting')
     def greetings_list(self, request):
         loadData()
-        locationKey = request.destination
+#        locationKey = request.destination
 #        purpose = request.purpose
 #        food = request.food
 #        view = request.view
         
-#        locationKey = "ZERMATT:SWITZERLAND"
+        locationKey = "ZERMATT:SWITZERLAND"
         purpose = "honeymoon"
         food = ["indian", "french"]
         view = ["mountain"]
