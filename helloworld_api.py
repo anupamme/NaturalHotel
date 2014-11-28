@@ -270,11 +270,11 @@ class HelloWorldApi(remote.Service):
     MULTIPLY_METHOD_RESOURCE = endpoints.ResourceContainer(
             purpose = messages.StringField(1),
             food = messages.StringField(2, repeated=True),
-            destination=messages.StringField(3),
+            destination=messages.StringField(3, required=True),
             view=messages.StringField(4))
     
     @endpoints.method(MULTIPLY_METHOD_RESOURCE, HotelCollection,
-                      path='hellogreeting', http_method='GET',
+                      path='hellogreeting', http_method='POST',
                       name='greetings.listGreeting')
     def greetings_list(self, request):
         loadData()
