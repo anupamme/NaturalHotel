@@ -10,6 +10,7 @@ from protorpc import messages
 from protorpc import message_types
 from protorpc import remote
 import json
+import gc
 
 package = 'Hello'
 prefix = ''
