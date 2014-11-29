@@ -307,15 +307,15 @@ class HelloWorldApi(remote.Service):
         #food.map
         res_food = []
         try:
-            food
-            res_food = map(lambda x: subAttrIndexMap['food'][x], food)  #[{hotelid -> [reviewId]}]
+            if food != None:
+                res_food = map(lambda x: subAttrIndexMap['food'][x], food)  #[{hotelid -> [reviewId]}]
         except NameError:
             pass
         
         res_view = []
         try:
-            view
-            res_view = subAttrIndexMap['view'][view]
+            if view != None:
+                res_view = subAttrIndexMap['view'][view]
         except NameError:
             pass
         # take union
