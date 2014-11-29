@@ -1040,7 +1040,7 @@ $('.button-holder').on('click', function(arg){
     }
     document.cookie = 'foodType=' + foodType.toString()
     
-    view = $('.op1 a').text().toLowerCase()
+    view = $('.op3 a').text().toLowerCase()
     if (view === 'select'){
         view = 'mountain'
     }
