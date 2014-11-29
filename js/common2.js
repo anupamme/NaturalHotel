@@ -1017,8 +1017,6 @@ $('.button-holder').on('click', function(arg){
      sessionStorage.setItem('sessionSetForOnlicking',"true");
      sessionStorage.setItem('storeRevilizeStateAttributes', JSON.stringify(objForSession));
     
-    common.getHotelListFromServer();
-     
     // load the data.
     place = $('.op0 a').text()
     document.cookie = 'place=' + place

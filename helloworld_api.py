@@ -281,20 +281,20 @@ class HelloWorldApi(remote.Service):
     def greetings_list(self, request):
         loadData()
         locationKey = request.destination
-#        purpose = request.purpose
-#        food = request.food
-#        view = request.view
+        purpose = request.purpose
+        food = request.food
+        view = request.view
         
 #        locationKey = "ZERMATT:SWITZERLAND"
-        purpose = "honeymoon"
-        food = ["indian", "french"]
-        view = ["mountain"]
+#        purpose = "honeymoon"
+#        food = ["indian", "french"]
+#        view = ["mountain"]
         
         print 'start params'
         print locationKey
         print purpose
-#        print view
-#        print food
+        print view
+        print food
         print 'end params'
         
         attributes = ['overall', 'staff', 'night', 'beach', 'roof', 'amenities', 'location', 'food', 'view']
@@ -308,9 +308,10 @@ class HelloWorldApi(remote.Service):
         res_purpose = purposeMap[purpose]   # {(hotelid: [review])}
         #food.map
         res_food = map(lambda x: subAttrIndexMap['food'][x], food)  #[{hotelid -> [reviewId]}]
-        #res_food = subAttrIndexMap['food']  # {(hotelid: [review])}
+        res_view = subAttrIndexMap['view'][view]
         # take union
         res_food.append(res_purpose)
+        res_food.append(res_view)
         rankingCount = self.findCountFromUnion(res_food) # rankingcount format: (hotelid -> reviewid) -> count
         
         res_union = self.takeUnion(res_food) # format is {(hotelid: [reviewid])}
