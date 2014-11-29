@@ -273,7 +273,9 @@ class HelloWorldApi(remote.Service):
             purpose = messages.StringField(1, required=True),
             food = messages.StringField(2, repeated=True),
             destination=messages.StringField(3, required=True),
-            view=messages.StringField(4))
+            view=messages.StringField(4),
+            location=messages.StringField(5),
+            amenities=messages.StringField(6, repeated=True))
     
     @endpoints.method(MULTIPLY_METHOD_RESOURCE, HotelCollection,
                       path='hellogreeting', http_method='POST',
@@ -295,9 +297,7 @@ class HelloWorldApi(remote.Service):
         print purpose
         print 'end params'
         
-        attributes = ['overall', 'staff', 'night', 'beach', 'roof', 'amenities', 'location', 'food', 'view']
-        # can be made parallel
-        res_loc = set(locationMap[locationKey])  # [hotelids] - not needed as all other maps will take care of location.
+        #res_loc = set(locationMap[locationKey])  # [hotelids] - not needed as all other maps will take care of location.
 #        resultsAsPerAttr = []                       # [(hotelid, reviewid)]
 #        for att in attributes:
 #            for x in [2.0, 3.0, 4.0]:
@@ -318,9 +318,26 @@ class HelloWorldApi(remote.Service):
                 res_view = subAttrIndexMap['view'][view]
         except NameError:
             pass
+        
+        res_loc = []
+        try:
+            if location != None:
+                res_loc = subAttrIndexMap['loc'][view]
+        except NameError:
+            pass
+        
+        res_amenities = []
+        try:
+            if amenities != None:
+                res_amenities = map(lambda x: subAttrIndexMap['amenity'][x], amenities)  #[{hotelid -> [reviewId]}]
+        except NameError:
+            pass
+        
         # take union
         res_food.append(res_purpose)
         res_food.append(res_view)
+        res_food.append(res_loc)
+        res_food.append(res_amenities)
         rankingCount = self.findCountFromUnion(res_food) # rankingcount format: (hotelid -> reviewid) -> count
         
         res_union = self.takeUnion(res_food) # format is {(hotelid: [reviewid])}
@@ -329,7 +346,7 @@ class HelloWorldApi(remote.Service):
         # rank the domain_results
         self.rankResults(domain_results, rankingCount)
         free = gc.collect()
-        print ('freeed memory: ' + str(free))
+        print ('freed memory: ' + str(free))
         return domain_results
 
     ID_RESOURCE = endpoints.ResourceContainer(
