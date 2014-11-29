@@ -297,11 +297,11 @@ class HelloWorldApi(remote.Service):
         attributes = ['overall', 'staff', 'night', 'beach', 'roof', 'amenities', 'location', 'food', 'view']
         # can be made parallel
         res_loc = set(locationMap[locationKey])  # [hotelids] - not needed as all other maps will take care of location.
-        resultsAsPerAttr = []                       # [(hotelid, reviewid)]
-        for att in attributes:
-            for x in [2.0, 3.0, 4.0]:
-                if (att, x) in sentimentMap:
-                    resultsAsPerAttr = resultsAsPerAttr + sentimentMap[(att, x)]
+#        resultsAsPerAttr = []                       # [(hotelid, reviewid)]
+#        for att in attributes:
+#            for x in [2.0, 3.0, 4.0]:
+#                if (att, x) in sentimentMap:
+#                    resultsAsPerAttr = resultsAsPerAttr + sentimentMap[(att, x)]
         res_purpose = purposeMap[purpose]   # {(hotelid: [review])}
         #food.map
         res_food = map(lambda x: subAttrIndexMap['food'][x], food)  #[{hotelid -> [reviewId]}]
@@ -315,6 +315,8 @@ class HelloWorldApi(remote.Service):
         # do ranking
         # rank the domain_results
         self.rankResults(domain_results, rankingCount)
+        free = gc.collect()
+        print ('freeed memory: ' + str(free))
         return domain_results
 
     ID_RESOURCE = endpoints.ResourceContainer(
