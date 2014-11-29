@@ -586,33 +586,35 @@ var common = {
         return hotelListJson
     },
     getHotelListFromServer:function(queryParams) {
+        fd = new FormData()
+        fd.append('destination', window.locationKey)
+        fd.append('purpose', 'honeymoon')
          $.ajax({
-                type: "POST",
-                contentType: "multipart/form-data; charset=UTF-8",
-                async: true,
-                data: JSON.stringify({destination: window.locationKey}),
-                dataType: 'json',
-                processData: false,
-                cache: false,
-                url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
-                success: function(response){
-                    hotelListMp = response;
-                },
+             async: true,
+            type: "POST",
+            contentType: "multipart/form-data",
+            data: fd,
+            processData: false,
+            contentType: false,
+            url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
+            success: function(response){
+                hotelListMp = response;
+            },
             error: function(error){
                  $.ajax({
-                type: "POST",
-                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-                async: true,
-                data: queryParams,
-                dataType: 'json',
-                processData: false,
-                url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
-                success: function(response){
-                    hotelListMp = response;
-                },
-                 },2000);
+                    async: true,
+                     type: "POST",
+                    contentType: "multipart/form-data",
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
+                    success: function(response){
+                        hotelListMp = response;
+                    }
+                 },10000);
             }
-        },2000);
+        },10000);
     },
     getHotelListMp: function() {
         return hotelListMp;

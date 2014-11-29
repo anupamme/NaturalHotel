@@ -290,10 +290,12 @@ class HelloWorldApi(remote.Service):
         food = ["indian", "french"]
         view = ["mountain"]
         
+        print 'start params'
         print locationKey
-#        print purpose
+        print purpose
 #        print view
 #        print food
+        print 'end params'
         
         attributes = ['overall', 'staff', 'night', 'beach', 'roof', 'amenities', 'location', 'food', 'view']
         # can be made parallel
