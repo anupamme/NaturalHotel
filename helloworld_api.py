@@ -109,6 +109,7 @@ class GreetingCollection(messages.Message):
 class HelloWorldApi(remote.Service):
     """Helloworld API v1."""
     
+    ''' modifies the dict final and returns in.'''
     def IncrementOrInsert(self, final, hotelId, reviewId):
         if hotelId in final:
             if reviewId in final[hotelId]:
@@ -120,7 +121,8 @@ class HelloWorldApi(remote.Service):
             final[hotelId][reviewId] = 1
         return final
     
-    def findCountFromUnion(self, arrayOfMaps):    #union_map: key -> [hotelid -> [reviewid]]
+    '''find the count against each hotelid, reviewid paid'''
+    def findCountFromUnion(self, arrayOfMaps):
         final = {}
         for mapIns in arrayOfMaps:    # key = hotelId
             for hotelId in mapIns: # val = [reviewid]
@@ -128,6 +130,7 @@ class HelloWorldApi(remote.Service):
                     final = self.IncrementOrInsert(final, hotelId, reviewId)
         return final
 
+    '''combines elements of arguments to produce hotelid -> [reviewid]'''
     def takeUnion(self, arrayOfMaps):
         final = {}
         for mapIns in arrayOfMaps:    # key = hotelId
@@ -138,6 +141,7 @@ class HelloWorldApi(remote.Service):
                     final[hotelId] = mapIns[hotelId]
         return final
     
+    '''converts the result into the format UI expects.'''
     def convertToDomainResults(self, arg_res, rankingCount):
         final = []
         for hotelid in arg_res:
@@ -182,6 +186,7 @@ class HelloWorldApi(remote.Service):
         return HotelCollection(items = final)
             
         
+    '''mutates the order of hotels within hotelCollection as per the score. '''
     def rankResults(self, hotelCollection, rankingResults):
         # calculate score per hotel
         hotelScore = {}
@@ -199,8 +204,7 @@ class HelloWorldApi(remote.Service):
             hotel.reviews.sort(key=lambda x: x.score, reverse=True)
             
         # rank the hotels
-        sortedList = sorted(hotelCollection.items, key=lambda x: x.score, reverse=True)
-        return HotelCollection(items=sortedList)
+        hotelCollection.items.sort(key=lambda x: x.score, reverse = True)
             
                 
             
@@ -310,8 +314,8 @@ class HelloWorldApi(remote.Service):
         domain_results = self.convertToDomainResults(res_union, rankingCount)
         # do ranking
         # rank the domain_results
-        rankedDomainResults = self.rankResults(domain_results, rankingCount)
-        return rankedDomainResults
+        self.rankResults(domain_results, rankingCount)
+        return domain_results
 
     ID_RESOURCE = endpoints.ResourceContainer(
             message_types.VoidMessage,
