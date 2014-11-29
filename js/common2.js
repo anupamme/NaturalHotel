@@ -588,7 +588,15 @@ var common = {
     getHotelListFromServer:function(queryParams) {
         fd = new FormData()
         for (key in queryParams){
-            fd.append(key, queryParams[key])
+            value = queryParams[key]
+            if (typeof value === 'string'){
+                fd.append(key, value)
+            }
+            else {  // value is an array.
+                for (index in value){
+                    fd.append(key, value[index])
+                }
+            }
         }
        // $('.loader').show();
          $.ajax({
@@ -1040,12 +1048,12 @@ $('.button-holder').on('click', function(arg){
     
     loc = $('.op2 a').text().split(' ')[0].toLowerCase()
     if (loc === 'select'){
-        view = 'city buzz'
+        loc = 'city buzz'
     }
     document.cookie = 'loc=' + loc
     
     var queryParams = {"destination": window.locationKey, "purpose":purpose, "food": foodType, "view": view,
-                      "loc": loc, "amenities": []}
+                      "location": loc, "amenities": ['amenity']}
     debugger
     common.getHotelListFromServer(queryParams);
     
