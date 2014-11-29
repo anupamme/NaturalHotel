@@ -587,23 +587,30 @@ var common = {
     },
     getHotelListFromServer:function(queryParams) {
          $.ajax({
-             type: "POST",
-               async: true,
-                contentType: "application/json",
-                data: queryParams,
+                type: "POST",
+                contentType: "multipart/form-data; charset=UTF-8",
+                async: true,
+                data: JSON.stringify({destination: window.locationKey}),
+                dataType: 'json',
+                processData: false,
+                cache: false,
                 url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
                 success: function(response){
                     hotelListMp = response;
                 },
             error: function(error){
-                $.ajax({
-                type: "GET",
-                async: false,
+                 $.ajax({
+                type: "POST",
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                async: true,
+                data: queryParams,
+                dataType: 'json',
+                processData: false,
                 url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
                 success: function(response){
                     hotelListMp = response;
-                }
-                });
+                },
+                 },2000);
             }
         },2000);
     },
@@ -956,13 +963,6 @@ $('.menu').on('click', function() {
 
 // show up hotels is clicked.
 $('.button-holder').on('click', function(arg){
-    
-    
-  
-    
-    common.getHotelListFromServer();
-     
-   
     // load the data.
     place = $('.op0 a').text()
     document.cookie = 'place=' + place
@@ -970,7 +970,8 @@ $('.button-holder').on('click', function(arg){
     document.cookie = 'purpose=' + purpose
     var foodType = $($('.selectedFoods')[0]).text().toLowerCase().split(',')
     
-    var queryParams = {"location": window.locationKey, "purpose":purpose, "food": foodType }
+    var queryParams = {"destination": window.locationKey, "purpose":purpose, "food": foodType }
+    debugger
     common.getHotelListFromServer(queryParams);
     
     // load the data.

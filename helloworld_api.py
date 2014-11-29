@@ -270,7 +270,7 @@ class HelloWorldApi(remote.Service):
     
     
     MULTIPLY_METHOD_RESOURCE = endpoints.ResourceContainer(
-            purpose = messages.StringField(1),
+            purpose = messages.StringField(1, required=True),
             food = messages.StringField(2, repeated=True),
             destination=messages.StringField(3, required=True),
             view=messages.StringField(4))
