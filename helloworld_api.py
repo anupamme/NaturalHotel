@@ -307,8 +307,19 @@ class HelloWorldApi(remote.Service):
 #                    resultsAsPerAttr = resultsAsPerAttr + sentimentMap[(att, x)]
         res_purpose = purposeMap[purpose]   # {(hotelid: [review])}
         #food.map
-        res_food = map(lambda x: subAttrIndexMap['food'][x], food)  #[{hotelid -> [reviewId]}]
-        res_view = subAttrIndexMap['view'][view]
+        res_food = []
+        try:
+            food
+            res_food = map(lambda x: subAttrIndexMap['food'][x], food)  #[{hotelid -> [reviewId]}]
+        except NameError:
+            pass
+        
+        res_view = []
+        try:
+            view
+            res_view = subAttrIndexMap['view'][view]
+        except NameError:
+            pass
         # take union
         res_food.append(res_purpose)
         res_food.append(res_view)
