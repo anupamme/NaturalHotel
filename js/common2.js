@@ -589,6 +589,7 @@ var common = {
         fd = new FormData()
         fd.append('destination', window.locationKey)
         fd.append('purpose', 'honeymoon')
+       // $('.loader').show();
          $.ajax({
              async: true,
             type: "POST",
@@ -599,6 +600,7 @@ var common = {
             url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
             success: function(response){
                 hotelListMp = response;
+                 $('.loader').hide();
             },
             error: function(error){
                  $.ajax({
@@ -611,6 +613,7 @@ var common = {
                     url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
                     success: function(response){
                         hotelListMp = response;
+                          $('.loader').hide();
                     }
                  },10000);
             }
@@ -967,6 +970,10 @@ $('.goBackFormButton1').on('click',function() {
     window.location.href="form.html";
     
 });
+$('.logoutbutton').on('click',function() {
+    sessionStorage.clear();
+    window.location.href='/';
+});
 // show up hotels is clicked.
 $('.button-holder').on('click', function(arg){
     var storeRevilizeState=[],revilizeNumber=0;
@@ -1007,7 +1014,7 @@ $('.button-holder').on('click', function(arg){
     
     objForSession.userEntry=$('#typewriter').text();
     
-    
+     sessionStorage.setItem('sessionSetForOnlicking',"true");
      sessionStorage.setItem('storeRevilizeStateAttributes', JSON.stringify(objForSession));
     
     common.getHotelListFromServer();

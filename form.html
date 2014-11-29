@@ -857,8 +857,9 @@ input:-moz-placeholder, textarea:-moz-placeholder {
         
           $(document).ready(function() {
               
-         
-           revilizeState();
+               console.log(sessionStorage.getItem('sessionSetForOnlicking'));
+              if( sessionStorage.getItem('sessionSetForOnlicking')=="true")
+                revilizeState();
               
               
               function getCookie(cname) {
