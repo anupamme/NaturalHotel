@@ -293,8 +293,6 @@ class HelloWorldApi(remote.Service):
         print 'start params'
         print locationKey
         print purpose
-        print view
-        print food
         print 'end params'
         
         attributes = ['overall', 'staff', 'night', 'beach', 'roof', 'amenities', 'location', 'food', 'view']
