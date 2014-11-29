@@ -102,7 +102,7 @@ input:-moz-placeholder, textarea:-moz-placeholder {
                        
 					</select> 
                      
-					<br />from <input type="text" class="datepicker" value="DD-MM-YYYY"> to <input type="text" class="datepicker" value="DD-MM-YYYY"> <br>
+					<br />from <input type="text" class="datepicker date1" value="DD-MM-YYYY"> to <input type="text" class="datepicker date2" value="DD-MM-YYYY"> <br>
                      
                      My purpose of traveling is
 					<select>
@@ -119,10 +119,11 @@ input:-moz-placeholder, textarea:-moz-placeholder {
                        <span class="business4th">                      
                          I want my room in middle of </span>
                          <select>
-                        <option value="1" selected>City Buzz</option>
-						<option value="1">Near Airport</option>
-						<option value="2">Suburbs</option>
-						<option value="3">Silent </option>			
+                        <option value="0" selected>Select</option>
+                        <option value="1">City Buzz</option>
+						<option value="2">Near Airport</option>
+						<option value="3">Suburbs</option>
+						<option value="4">Silent </option>			
 					</select> 
                       <span class="Traveling4th"> We Enjoy <a href="#modal02" data-toggle="modal" class="nl-field-toggle"> <span class="selectedFoods">Food</span>  </a> </span>
                      <span class="soloTraveling4th"> We Enjoy <a href="#modal02" data-toggle="modal" class="nl-field-toggle"> <span class="selectedFoods">Food</span>  </a></span>
@@ -131,16 +132,17 @@ input:-moz-placeholder, textarea:-moz-placeholder {
                       <br/> 
                      <span class="honeymoon5th"> We want our room to be in middle of </span>
                          <select>
-                        <option value="1" selected>Mountain</option>
-						<option value="1">Ocean</option>
-						<option value="2">Forest</option>
-						<option value="3">City </option>			
+                        <option value="0" selected>Select</option>
+                        <option value="1">Mountain</option>
+						<option value="2">Ocean</option>
+						<option value="3">Forest</option>
+						<option value="4">City </option>			
 					     </select> 
                         
                      <span class="business5th">                          
                         I want my hotel to have   </span>
                           <select>
-                        <option value="1" selected>Select</option>
+                        <option value="0" selected>Select</option>
 						<option value="1">Cafeteria</option>
 						<option value="2">Conference room</option>
 						<option value="3">Gym</option>	
@@ -150,7 +152,8 @@ input:-moz-placeholder, textarea:-moz-placeholder {
              
                      <span class="Traveling5th"> We want our room to be in middle of </span>
                          <select>
-                        <option value="1" selected>Mountain</option>
+                             <option value="0" selected>Select</option>
+                        <option value="1">Mountain</option>
 						<option value="1">Ocean</option>
 						<option value="2">Forest</option>
 						<option value="3">City</option>			
@@ -161,7 +164,7 @@ input:-moz-placeholder, textarea:-moz-placeholder {
                          
                          We Like to do  </span>
                          <select>
-                             <option value="0" selected>Activity</option>
+                             <option value="0" selected>Activity Like</option>
                         <option value="1" >Water Sports</option>
 						<option value="1">Campfire</option>
 						<option value="2">Cultural</option>
@@ -321,7 +324,7 @@ input:-moz-placeholder, textarea:-moz-placeholder {
     </script>
 
       <script>
-          
+          var clearTextOnlyOnce=1;
           
           
       $(function() {
@@ -507,7 +510,7 @@ input:-moz-placeholder, textarea:-moz-placeholder {
                   $(this).removeClass('nl-field nl-field-open');
               }
           });
-          var clearTextOnlyOnce=1;
+           clearTextOnlyOnce=1;
           $('#typewriter').keypress(function() {
                 $(this).css('font-family','NeoSans');
                 if($(this).text().length > 150 )
@@ -588,7 +591,7 @@ input:-moz-placeholder, textarea:-moz-placeholder {
           
           function typer() {
                    $('#typewriter').css('font-family','NeoSans-italic');
-                 var str = "Please tell us your any further requirements ",
+                 var str = "Please tell us your any further requirements",
                  i = 0,
                  isTag,
                  text;
@@ -597,36 +600,41 @@ input:-moz-placeholder, textarea:-moz-placeholder {
                 text = str.slice(0, ++i);
                 if (text === str) return;
     
-                document.getElementById('typewriter').innerHTML = text;
-
+                document.getElementById('typewriter').innerHTML = text+" ";
+                 placeCaretAtEnd( document.getElementById("typewriter") );
                 var char = text.slice(-1);
                 if( char === '<' ) isTag = true;
                 if( char === '>' ) isTag = false;
 
                 if (isTag) return type();
-                setTimeout(type, 50);
+                setTimeout(type, 40);
                 }()); 
-               $('#typewriter').focus();
+               //$('#typewriter').focus();
+                 
            }
             $('.op3').click(function() {
                  $('.tepete').fadeIn();
+            
                 typer();
                 clearTextOnlyOnce=1;
             });
            $('.op4').click(function() {
                  $('.tepete').fadeIn();
+              
                 typer();
                
                   clearTextOnlyOnce=1;
             });
            $('.op5').click(function() {
                  $('.tepete').fadeIn();
+             
                 typer();
              
                   clearTextOnlyOnce=1;
             });
            $('.op6').click(function() {
                  $('.tepete').fadeIn();
+               
                 typer();
                
                   clearTextOnlyOnce=1;
@@ -845,12 +853,12 @@ input:-moz-placeholder, textarea:-moz-placeholder {
           
       });
           
-     
+        
           $(document).ready(function() {
               
          
-          
-
+           revilizeState();
+              
               
               function getCookie(cname) {
                         var name = cname + "=";
@@ -882,6 +890,78 @@ input:-moz-placeholder, textarea:-moz-placeholder {
                 }
                 return undefined
             }
+            function revilizeState() {
+                 var revilizestaeattr=sessionStorage.getItem('storeRevilizeStateAttributes');
+                  var itemState=JSON.parse(revilizestaeattr)
+                  $('#tags').val(itemState.location);
+                
+                  var ss=itemState.location.length;
+                    if(ss <= 17)
+                    {
+                        ss=ss+220;
+                    }
+                    else if(ss <= 23)
+                    {
+                        ss=ss+320;
+                    }
+                    else if(ss<=25) {
+                        ss=ss+350;
+                    }
+                    else  {
+                        ss=ss+420;
+                    }
+                    $('#tags').css("width",ss+"px")
+                
+                
+                  $('.date1').val(itemState.fromDate);
+                  $('.date2').val(itemState.toDate);
+                  $('.op1 > a.nl-field-toggle').text(itemState.purposeOfTraveling);
+                 if(itemState.purposeOfTraveling != "Business") {
+                        $('.'+itemState.firstChoosenOption+'').show();
+                        $('.selectedFoods').text(itemState.selectedFoodItems);
+                        $('.'+itemState.secondChoosenOption+'').show();
+                        $('.'+itemState.selectedClassTwo+'').show();
+                        $('.'+itemState.selectedClassTwo+'> a.nl-field-toggle').text(itemState.secondSelectedOption);
+                   } else {
+                        $('.'+itemState.firstChoosenOption+'').show();
+                        $('.'+itemState.secondChoosenOption+'').show();
+                        $('.'+itemState.selectedClassOne+'').show();
+                        $('.'+itemState.selectedClassTwo+'').show();
+                        $('.'+itemState.selectedClassOne+'> a.nl-field-toggle').text(itemState.firstSelectedOption);
+                        $('.'+itemState.selectedClassTwo+'> a.nl-field-toggle').text(itemState.secondSelectedOption);
+                }
+                if(itemState.userEntry !="")
+                {
+                    $('.tepete').show();
+                    $('#typewriter').text(itemState.userEntry+" ");
+                    placeCaretAtEnd( document.getElementById("typewriter") );
+
+                    clearTextOnlyOnce=2;
+                }
+                
+                
+                
+            }
+          
+          function placeCaretAtEnd(el) {
+                        el.focus();
+                        if (typeof window.getSelection != "undefined"
+                                && typeof document.createRange != "undefined") {
+                            var range = document.createRange();
+                            range.selectNodeContents(el);
+                            range.collapse(false);
+                            var sel = window.getSelection();
+                            sel.removeAllRanges();
+                            sel.addRange(range);
+                        } else if (typeof document.body.createTextRange != "undefined") {
+                            var textRange = document.body.createTextRange();
+                            textRange.moveToElementText(el);
+                            textRange.collapse(false);
+                            textRange.select();
+                        }
+                    }
+
+
       
       </script>
 

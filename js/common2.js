@@ -940,7 +940,7 @@ var common = {
 
 $(document).ready(function(){
 	common.init();
-   
+ 
 });
 
 $('.menu').on('click', function() {
@@ -954,11 +954,53 @@ $('.menu').on('click', function() {
     
 });
 
+$('.goBackFormButton1').on('click',function() {
+    window.location.href="form.html";
+    
+});
 // show up hotels is clicked.
 $('.button-holder').on('click', function(arg){
     
+    var storeRevilizeState=[],revilizeNumber=0;
+    var objForSession = {}  
     
-  
+    objForSession.location=$('#tags').val();
+    objForSession.fromDate= $('.date1').val();
+    objForSession.toDate=$('.date2').val();
+    objForSession.purposeOfTraveling=$('.op1 > a.nl-field-toggle').text();
+    
+    $('span[style="display: inline;"]').each(function() {
+         storeRevilizeState[revilizeNumber]=$(this).attr('class');
+         revilizeNumber++;
+    });
+    
+    objForSession.firstChoosenOption=storeRevilizeState[0];
+    objForSession.secondChoosenOption=storeRevilizeState[1];
+    
+    if(objForSession.purposeOfTraveling != "Business") {
+        $('div[style="display: inline-block;"]').each(function() {
+         storeRevilizeState[revilizeNumber]=$(this).attr('class').split(/[ ]+/).pop();
+         revilizeNumber++;
+    });
+        objForSession.selectedFoodItems=$('.selectedFoods:first').text();
+        objForSession.selectedClassTwo=storeRevilizeState[2];
+        objForSession.secondSelectedOption=$('.'+storeRevilizeState[2]+'> a.nl-field-toggle').text();
+    }
+    else {
+    $('div[style="display: inline-block;"]').each(function() {
+         storeRevilizeState[revilizeNumber]=$(this).attr('class').split(/[ ]+/).pop();
+         revilizeNumber++;
+    });
+         objForSession.selectedClassOne=storeRevilizeState[2];
+         objForSession.selectedClassTwo=storeRevilizeState[3];
+         objForSession.firstSelectedOption=$('.'+storeRevilizeState[2]+'> a.nl-field-toggle').text();
+        objForSession.secondSelectedOption=$('.'+storeRevilizeState[3]+'> a.nl-field-toggle').text();
+    }
+    
+    objForSession.userEntry=$('#typewriter').text();
+    
+    
+     sessionStorage.setItem('storeRevilizeStateAttributes', JSON.stringify(objForSession));
     
     common.getHotelListFromServer();
      
