@@ -137,7 +137,7 @@ class HelloWorldApi(remote.Service):
         for mapIns in arrayOfMaps:    # key = hotelId
             for hotelId in mapIns: # val = [reviewid]
                 if hotelId in final:    # final = attr -> [hotelid -> [reviewid]]
-                    final[hotelId] = final[hotelId] + mapIns[hotelId]
+                    final[hotelId] = list(set(final[hotelId] + mapIns[hotelId]))
                 else:
                     final[hotelId] = mapIns[hotelId]
         return final
