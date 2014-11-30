@@ -516,7 +516,8 @@ padding: 17px 0px 0px 34%;
     font-family: "NeoSans";
     width: 260px;
     position: fixed;
-    min-height: 705px;
+  overflow-y: scroll;
+height: 900px;
 }
 #revulize-content h2,
 #revulize-content .rank-list li,

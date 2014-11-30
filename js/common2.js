@@ -1023,10 +1023,13 @@ var common = {
                 rvTemplate = response;
             }
         });
+        var top=0;
         $.each(rl, function(i, item){
+            top++;
             if (item !== undefined && item.review !== undefined){
                 var li = rvTemplate;
                 li = li.replace('{{score}}', item['score']);
+                 li = li.replace('{{top}}', "top"+top+"");
                 li = li.replace('{{user-name}}', item['ReviewerName']);
                 li = li.replace('{{user-photo}}', item['ReviewerImage']);
                 li = li.replace('{{user-address}}', item['Place']);
