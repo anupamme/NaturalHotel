@@ -247,7 +247,15 @@ var common = {
         }
         return final
     },
-    
+    incrementOrInsert: function(final, reviewId){
+        if (reviewId in final){
+            final[reviewId] += 1
+        }
+        else{
+            final[reviewId] = 1
+        }
+        return final
+    },
     setHomeHeight: function(){
         if($('.home-block').length){
             var hbh = $('.home-block').outerHeight() + 100,
@@ -614,7 +622,6 @@ var common = {
             contentType: false,
             url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
             success: function(response){
-                console.log(response)
                     $('.loader').hide();
                     common.populateHotelList(response)
                     sessionStorage.setItem('hotelList',JSON.stringify(response))
@@ -780,11 +787,32 @@ var common = {
 
                     var attrReviewIdMap = common.filterReviews(window.superResults, hotelId)
                     // add another filter which will filter the results as per the user spec fields.
-                    debugger
+                    selectedAttributes = JSON.parse(sessionStorage.getItem('selAtt'))
+                    subAttributes = JSON.parse(sessionStorage.getItem('subAtt'))
+                    
                     var relevantResultsAfterSub = common.selectReviewsForSubAttributes( selectedAttributes, subAttributes, window.subAttrIndexMap, hotelId, attrReviewIdMap)
                     sessionStorage.setItem('results', JSON.stringify(relevantResultsAfterSub))
-                    window.location.href='/phase2/revulize.html';
+                    window.location.href='revulize.html';
                 });
+    },
+    calculateRankOfReviews: function(selectedAttributes, subAttrMap, attrReviewIdMap){
+        // returns a map of review to rank.
+        // find which maps to consider based on the selected attributes.
+        // calculate score for each review based on the sum of maps.
+        // sort by score and calculate the ranking map.
+        // calculate ranks
+        debugger
+        var rankMap = {}
+        for (attrIndex in selectedAttributes){
+            attr = selectedAttributes[attrIndex]
+            if (attr in attrReviewIdMap){
+               reviewArr = attrReviewIdMap[attr]
+               for (reviewIndex in reviewArr){
+                    rankMap = common.incrementOrInsert(rankMap, reviewArr[reviewIndex])
+               } 
+            }   
+        }
+        return rankMap
     },
     summarize: function(text, num, max){
         
@@ -932,10 +960,17 @@ var common = {
             rv.show();
         });
     },
-    printReviews: function(reviewMapArg, results, selected, subAtt) {
+    printReviews: function(reviewMapArg, results, selected, subAtt, rankMap) {
             var reviewLookup = {}
             for (res in results){
                 reviewObj = reviewMapArg[res]
+                if (reviewObj === undefined){
+                    continue
+                }
+                if (res in rankMap)
+                    reviewObj['score'] = rankMap[res]
+                else
+                    reviewObj['score'] = -1
                 reviewLookup[res] = reviewObj // dangerous and writing to global var.
             }
         console.log('Total Resutls: ' + results.length)
@@ -991,6 +1026,7 @@ var common = {
         $.each(rl, function(i, item){
             if (item !== undefined && item.review !== undefined){
                 var li = rvTemplate;
+                li = li.replace('{{score}}', item['score']);
                 li = li.replace('{{user-name}}', item['ReviewerName']);
                 li = li.replace('{{user-photo}}', item['ReviewerImage']);
                 li = li.replace('{{user-address}}', item['Place']);
@@ -1108,12 +1144,10 @@ $('.button-holder').on('click', function(arg){
     
     var queryParams = {"destination": window.locationKey, "purpose":purpose, "food": foodType, "view": view,
                       "location": loc, "amenities": ['amenity']}
-    debugger
     common.getHotelListFromServer(queryParams);
-    
     // load the data.
-    
-   
+    selectedAttributes = []
+    subAttributes = {}
     if ('honeymoon' === purpose){
         var foodType = $($('.selectedFoods')[0]).text().toLowerCase().split(',')
         selectedAttributes = ['overall', 'staff', 'night', 'beach', 'roof', 'amenities', 'location', 'food', 'view']
@@ -1125,27 +1159,14 @@ $('.button-holder').on('click', function(arg){
         selectedAttributes = ['transfer', 'food', 'location', 'amenity']
         subAttributes = {'loc': locationType, 'amenity': ['amenity']} // fill later.
     }
-    // step 0: find results for this location.
-    // step 1: find results indexed on basic attributes
-    // step 2: Off these results indexed on sub attributes. All the results which are indexed by subattributes should be indexed by parent attribute as well
-    // so 
-    
     // It considers attributes.
     window.superResults = common.selectReviews(selectedAttributes, sentimentMap)
-    
-   
+    debugger
     sessionStorage.setItem('selAtt', JSON.stringify(selectedAttributes))
     sessionStorage.setItem('sugAtt', JSON.stringify([]))
     sessionStorage.setItem('subAtt', JSON.stringify(subAttributes))
     
-    // It considers purpose.
-    //var hotelListJson = common.getHotelList(window.locationKey, purpose)
-  //  common.populateHotelList(hotelListJson)
-   /* var hotelListMp1=common.getHotelListMp()
-    common.populateHotelList(hotelListMp1)
-     sessionStorage.setItem('hotelList',JSON.stringify(hotelListMp1))
-    common.animateHotelList() */
-      common.animateHotelList()
+    common.animateHotelList()
   
   
 });
