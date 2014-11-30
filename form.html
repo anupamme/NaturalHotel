@@ -462,7 +462,9 @@ input:-moz-placeholder, textarea:-moz-placeholder {
         $('#tags').removeClass('nl-field nl-field-open');
          hideAll();
         $('.op1').find('a.nl-field-toggle').text('Select');
-             $('.datepicker').datepicker( "refresh" );
+             $('.datepicker').each(function() {
+              $(this).val("DD-MM-YYYY");
+              });
     }
     });
          $('#tags').focus(function() {           

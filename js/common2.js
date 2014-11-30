@@ -598,7 +598,7 @@ var common = {
                 }
             }
         }
-       // $('.loader').show();
+        $('.loader').show();
          $.ajax({
             async: true,
             type: "POST",
@@ -609,8 +609,11 @@ var common = {
             url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
             success: function(response){
                 console.log(response)
-                hotelListMp = response;
-                 $('.loader').hide();
+                    $('.loader').hide();
+                    common.populateHotelList(response)
+                    sessionStorage.setItem('hotelList',JSON.stringify(response))
+                    common.animateHotelList()
+                    console.log("1");
             },
             error: function(error){
                 console.log(error)
@@ -623,9 +626,11 @@ var common = {
                     contentType: false,
                     url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
                     success: function(response){
-                        console.log(response)
-                        hotelListMp = response;
-                        $('.loader').hide();
+                                $('.loader').hide();
+                    common.populateHotelList(response)
+                    sessionStorage.setItem('hotelList',JSON.stringify(response))
+                    common.animateHotelList()
+                     console.log("2");
                     },
                      error: function(error){
                         console.log(error)
@@ -638,9 +643,11 @@ var common = {
                             contentType: false,
                             url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
                             success: function(response){
-                                console.log(response)
-                                hotelListMp = response;
-                                $('.loader').hide();
+                                       $('.loader').hide();
+                    common.populateHotelList(response)
+                    sessionStorage.setItem('hotelList',JSON.stringify(response))
+                    common.animateHotelList()
+                     console.log("3");
                             }
                         },3000);
                      }
@@ -1107,10 +1114,11 @@ $('.button-holder').on('click', function(arg){
     // It considers purpose.
     //var hotelListJson = common.getHotelList(window.locationKey, purpose)
   //  common.populateHotelList(hotelListJson)
-    var hotelListMp1=common.getHotelListMp()
+   /* var hotelListMp1=common.getHotelListMp()
     common.populateHotelList(hotelListMp1)
      sessionStorage.setItem('hotelList',JSON.stringify(hotelListMp1))
-    common.animateHotelList()
+    common.animateHotelList() */
+      common.animateHotelList()
     
     $('.foot').find('input').on('click', function(arg) { 
         debugger; 
