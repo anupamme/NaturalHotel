@@ -961,6 +961,7 @@ var common = {
         });
     },
     printReviews: function(reviewMapArg, results, selected, subAtt, rankMap) {
+            results = list(set(results))
             var reviewLookup = {}
             for (res in results){
                 reviewObj = reviewMapArg[res]
