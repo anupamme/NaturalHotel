@@ -12,6 +12,7 @@ class FormPage(webapp2.RequestHandler):
 
     def get(self):
         html = open('form.html', 'r').read()
+        self.response.headers.add_header("Access-Control-Allow-Origin", "*")
         self.response.headers['Content-Type'] = 'text/html'
     	self.response.write(html)
         
@@ -19,6 +20,7 @@ class RevulizePage(webapp2.RequestHandler):
 
     def get(self):
         html = open('revulize.html', 'r').read()
+        self.response.headers.add_header("Access-Control-Allow-Origin", "*")
         self.response.headers['Content-Type'] = 'text/html'
     	self.response.write(html)
         
