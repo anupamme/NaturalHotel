@@ -792,7 +792,7 @@ var common = {
                     
                     var relevantResultsAfterSub = common.selectReviewsForSubAttributes( selectedAttributes, subAttributes, window.subAttrIndexMap, hotelId, attrReviewIdMap)
                     sessionStorage.setItem('results', JSON.stringify(relevantResultsAfterSub))
-                    window.location.href='revulize.html';
+                    window.location.href=document.URL.replace("form.html","revulize.html");
                 });
     },
     calculateRankOfReviews: function(selectedAttributes, subAttrMap, attrReviewIdMap){
