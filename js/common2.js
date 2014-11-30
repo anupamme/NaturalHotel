@@ -608,10 +608,12 @@ var common = {
             contentType: false,
             url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
             success: function(response){
+                console.log(response)
                 hotelListMp = response;
                  $('.loader').hide();
             },
             error: function(error){
+                console.log(error)
                  $.ajax({
                     async: true,
                     type: "POST",
@@ -621,12 +623,30 @@ var common = {
                     contentType: false,
                     url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
                     success: function(response){
+                        console.log(response)
                         hotelListMp = response;
                         $('.loader').hide();
-                    }
-                 },10000);
+                    },
+                     error: function(error){
+                        console.log(error)
+                        $.ajax({
+                            async: true,
+                            type: "POST",
+                            contentType: "multipart/form-data",
+                            data: fd,
+                            processData: false,
+                            contentType: false,
+                            url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
+                            success: function(response){
+                                console.log(response)
+                                hotelListMp = response;
+                                $('.loader').hide();
+                            }
+                        },3000);
+                     }
+                 },3000);
             }
-        },10000);
+        },3000);
     },
     getHotelListMp: function() {
         return hotelListMp;
