@@ -587,11 +587,20 @@ var common = {
     },
     getHotelListFromServer:function(queryParams) {
         fd = new FormData()
-        fd.append('destination', window.locationKey)
-        fd.append('purpose', 'honeymoon')
+        for (key in queryParams){
+            value = queryParams[key]
+            if (typeof value === 'string'){
+                fd.append(key, value)
+            }
+            else {  // value is an array.
+                for (index in value){
+                    fd.append(key, value[index])
+                }
+            }
+        }
        // $('.loader').show();
          $.ajax({
-             async: true,
+            async: true,
             type: "POST",
             contentType: "multipart/form-data",
             data: fd,
@@ -605,7 +614,7 @@ var common = {
             error: function(error){
                  $.ajax({
                     async: true,
-                     type: "POST",
+                    type: "POST",
                     contentType: "multipart/form-data",
                     data: fd,
                     processData: false,
@@ -613,7 +622,7 @@ var common = {
                     url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
                     success: function(response){
                         hotelListMp = response;
-                          $('.loader').hide();
+                        $('.loader').hide();
                     }
                  },10000);
             }
@@ -1021,10 +1030,30 @@ $('.button-holder').on('click', function(arg){
     place = $('.op0 a').text()
     document.cookie = 'place=' + place
     purpose = $('.op1 a').text().toLowerCase()
+    if (purpose === 'select'){
+        purpose = 'honeymoon'
+    }
     document.cookie = 'purpose=' + purpose
     var foodType = $($('.selectedFoods')[0]).text().toLowerCase().split(',')
+    if (foodType.length === 1 && foodType[0] === 'food'){
+        foodType = ['french', 'indian']
+    }
+    document.cookie = 'foodType=' + foodType.toString()
     
-    var queryParams = {"destination": window.locationKey, "purpose":purpose, "food": foodType }
+    view = $('.op3 a').text().toLowerCase()
+    if (view === 'select'){
+        view = 'mountain'
+    }
+    document.cookie = 'view=' + view
+    
+    loc = $('.op2 a').text().split(' ')[0].toLowerCase()
+    if (loc === 'select'){
+        loc = 'city buzz'
+    }
+    document.cookie = 'loc=' + loc
+    
+    var queryParams = {"destination": window.locationKey, "purpose":purpose, "food": foodType, "view": view,
+                      "location": loc, "amenities": ['amenity']}
     debugger
     common.getHotelListFromServer(queryParams);
     
