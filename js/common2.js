@@ -15,6 +15,10 @@ window.subAttrIndexMap = {}
 window.subAttrWordCloud = {}
 window.hotelListMp={}
 
+var selectedAttributes = [];
+ var subAttributes = {};
+
+
 var common = {
     
     init: function(){
@@ -436,6 +440,8 @@ var common = {
             
             
             common.setReviewCarousel();
+            
+            
         }
     },
     setReviewCarousel: function(){
@@ -763,6 +769,22 @@ var common = {
         hl += '</ul>';
         $('#hotel-list-holder').html(hl);
         common.setHotelList();
+         $('.revulizeBtn').on('click', function(arg) { 
+                    debugger; 
+                    document.cookie = 'attributes=' + selectedAttributes.toString()
+                    // find which hotel has been clicked and filter reviews only for that hotel.
+                    // also put the name of that hotel.
+                    var hotelId = $($(this).parentsUntil('.details')[2]).attr('data-valueofhotel')
+                    document.cookie = 'hotelid=' + hotelId
+                    sessionStorage.setItem('reviewMap', JSON.stringify(window.reviewMap[hotelId]))
+
+                    var attrReviewIdMap = common.filterReviews(window.superResults, hotelId)
+                    // add another filter which will filter the results as per the user spec fields.
+                    debugger
+                    var relevantResultsAfterSub = common.selectReviewsForSubAttributes( selectedAttributes, subAttributes, window.subAttrIndexMap, hotelId, attrReviewIdMap)
+                    sessionStorage.setItem('results', JSON.stringify(relevantResultsAfterSub))
+                    window.location.href='/phase2/revulize.html';
+                });
     },
     summarize: function(text, num, max){
         
@@ -988,9 +1010,12 @@ var common = {
 
 $(document).ready(function(){
 	common.init();
- 
+
+  
 });
 
+
+    
 $('.menu').on('click', function() {
     $(this).fadeOut(100);
     $('.title').fadeOut(100);
@@ -998,7 +1023,9 @@ $('.menu').on('click', function() {
     var hotelListSessionData=sessionStorage.getItem("hotelList");
     var viewName = $.parseJSON(hotelListSessionData); 
     common.populateHotelList(viewName)
-    common.animateHotelList()
+    common.animateHotelList();
+  
+  
     
 });
 
@@ -1085,8 +1112,8 @@ $('.button-holder').on('click', function(arg){
     common.getHotelListFromServer(queryParams);
     
     // load the data.
-    var selectedAttributes = []
-    var subAttributes = {}
+    
+   
     if ('honeymoon' === purpose){
         var foodType = $($('.selectedFoods')[0]).text().toLowerCase().split(',')
         selectedAttributes = ['overall', 'staff', 'night', 'beach', 'roof', 'amenities', 'location', 'food', 'view']
@@ -1119,20 +1146,8 @@ $('.button-holder').on('click', function(arg){
      sessionStorage.setItem('hotelList',JSON.stringify(hotelListMp1))
     common.animateHotelList() */
       common.animateHotelList()
-    
-    $('.foot').find('input').on('click', function(arg) { 
-        debugger; 
-        document.cookie = 'attributes=' + selectedAttributes.toString()
-        // find which hotel has been clicked and filter reviews only for that hotel.
-        // also put the name of that hotel.
-        var hotelId = $($(this).parentsUntil('.details')[2]).attr('data-valueofhotel')
-        document.cookie = 'hotelid=' + hotelId
-        sessionStorage.setItem('reviewMap', JSON.stringify(window.reviewMap[hotelId]))
-        
-        var attrReviewIdMap = common.filterReviews(window.superResults, hotelId)
-        // add another filter which will filter the results as per the user spec fields.
-        debugger
-        var relevantResultsAfterSub = common.selectReviewsForSubAttributes( selectedAttributes, subAttributes, window.subAttrIndexMap, hotelId, attrReviewIdMap)
-        sessionStorage.setItem('results', JSON.stringify(relevantResultsAfterSub))
-    });
+  
+  
 });
+
+
