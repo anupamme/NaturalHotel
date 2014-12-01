@@ -960,8 +960,24 @@ var common = {
             rv.show();
         });
     },
+    contains: function(arr, v) {
+    for(var i = 0; i < arr.length; i++) {
+        if(arr[i] === v) return true;
+    }
+    return false;
+},
+
+unique: function(arg) {
+    var arr = [];
+    for(var i = 0; i < arg.length; i++) {
+        if(!this.contains(arr, arg[i])) {
+            arr.push(arg[i]);
+        }
+    }
+    return arr; 
+},
     printReviews: function(reviewMapArg, results, selected, subAtt, rankMap) {
-            results = list(set(results))
+            results = this.unique(results)
             var reviewLookup = {}
             for (res in results){
                 reviewObj = reviewMapArg[res]
