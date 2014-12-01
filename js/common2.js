@@ -946,19 +946,19 @@ var common = {
             $(this).css('background-image', 'url("'+ $(this).attr('data-src') +'")');
         });
 
-        $('.review-list').on('click', '.review', function(){
-            var rv = $(this),
-                rvf = $(this).siblings('.review-full-view');
-            rv.hide();
-            rvf.show();
-        });
-
-        $('.review-list').on('click', '.review-full-view', function(){
-            var rvf = $(this),
-                rv = $(this).siblings('.review');
-            rvf.hide();
-            rv.show();
-        });
+//        $('.review-list').on('click', '.review', function(){
+//            var rv = $(this),
+//                rvf = $(this).siblings('.review-full-view');
+//            rv.hide();
+//            rvf.show();
+//        });
+//
+//        $('.review-list').on('click', '.review-full-view', function(){
+//            var rvf = $(this),
+//                rv = $(this).siblings('.review');
+//            rvf.hide();
+//            rv.show();
+//        });
     },
     contains: function(arr, v) {
     for(var i = 0; i < arr.length; i++) {
