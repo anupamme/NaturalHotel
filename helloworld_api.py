@@ -143,7 +143,7 @@ class HelloWorldApi(remote.Service):
                     final[hotelId] = mapIns[hotelId]
         return final
     
-    def findRandomDistribution:
+    def findRandomDistribution():
         z = [random.random(), random.random(), random.random(), random.random(), random.random()]
         y = reduce(lambda a,b: a+b, z, 0)
         return map(lambda x: (x/y)*100, z)
