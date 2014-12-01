@@ -11,6 +11,7 @@ from protorpc import message_types
 from protorpc import remote
 import json
 import gc
+import random
 
 package = 'Hello'
 prefix = ''
@@ -142,6 +143,11 @@ class HelloWorldApi(remote.Service):
                     final[hotelId] = mapIns[hotelId]
         return final
     
+    def findRandomDistribution:
+        z = [random.random(), random.random(), random.random(), random.random(), random.random()]
+        y = reduce(lambda a,b: a+b, z, 0)
+        return map(lambda x: (x/y)*100, z)
+    
     '''converts the result into the format UI expects.'''
     def convertToDomainResults(self, arg_res, rankingCount):
         final = []
@@ -159,11 +165,14 @@ class HelloWorldApi(remote.Service):
             obj.hotelid = hotelid
             attDetails = self.getAttributeDetails(hotelid)
             attributeArr = []
+            random = findRandomDistribution()
+            count = 0
             for quality in attDetails:
                 att = Attribute()
                 att.title = int(quality)
                 att.people = attDetails[quality][1]
-                att.percentageAttr = 33
+                att.percentageAttr = int(random[count])
+                count += 1
                 att.views = attDetails[quality][0]
                 attributeArr.append(att)
             obj.attributes = attributeArr
