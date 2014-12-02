@@ -143,7 +143,7 @@ class HelloWorldApi(remote.Service):
                     final[hotelId] = mapIns[hotelId]
         return final
     
-    def findRandomDistribution():
+    def findRandomDistribution(self):
         z = [random.random(), random.random(), random.random(), random.random(), random.random()]
         y = reduce(lambda a,b: a+b, z, 0)
         return map(lambda x: (x/y)*100, z)
@@ -165,7 +165,7 @@ class HelloWorldApi(remote.Service):
             obj.hotelid = hotelid
             attDetails = self.getAttributeDetails(hotelid)
             attributeArr = []
-            random = findRandomDistribution()
+            random = self.findRandomDistribution()
             count = 0
             for quality in attDetails:
                 att = Attribute()
