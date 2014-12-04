@@ -602,7 +602,7 @@ var common = {
     doWhenAjaxWorks: function(response){
         $('.loader').hide();
         hotelResults, reviewMapLocal = response
-        window.reviewMap = reviewMapLocal
+        window.reviewMap = JSON.parse(reviewMapLocal)
         common.populateHotelList(hotelResults)
         sessionStorage.setItem('hotelList',JSON.stringify(hotelResults))
         common.animateHotelList()

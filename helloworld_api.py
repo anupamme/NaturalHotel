@@ -98,14 +98,10 @@ class Hotel(messages.Message):
 class HotelCollection(messages.Message):
     items = messages.MessageField(Hotel, 1, repeated=True)
     
-class Greeting(messages.Message):
-    """Greeting that stores a message."""
-    message = messages.StringField(1)
-
-
-class GreetingCollection(messages.Message):
-    """Collection of Greetings."""
-    items = messages.MessageField(Greeting, 1, repeated=True)
+class Group(messages.Message):
+    hotelC = messages.MessageField(HotelCollection, 1)
+    reviewMap = messages.StringField(2)
+    
 
 @endpoints.api(name='helloworld', version='v1')
 class HelloWorldApi(remote.Service):
@@ -286,7 +282,7 @@ class HelloWorldApi(remote.Service):
             location=messages.StringField(5),
             amenities=messages.StringField(6, repeated=True))
     
-    @endpoints.method(MULTIPLY_METHOD_RESOURCE, tuple,
+    @endpoints.method(MULTIPLY_METHOD_RESOURCE, Group,
                       path='hellogreeting', http_method='POST',
                       name='greetings.listGreeting')
     def greetings_list(self, request):
@@ -356,7 +352,8 @@ class HelloWorldApi(remote.Service):
         self.rankResults(domain_results, rankingCount)
         free = gc.collect()
         print ('freed memory: ' + str(free))
-        return domain_results, reviewMap
+        
+        return Group(hotelC = domain_results, reviewMap = json.dumps(reviewMap))
 
     ID_RESOURCE = endpoints.ResourceContainer(
             message_types.VoidMessage,
