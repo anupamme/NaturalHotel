@@ -152,8 +152,12 @@ function testAPI() {
     });
     
     $('.loginButton').on('click', function() {
-        //console.log('I am clicked.'); 
-        checkLoginState();
+        //console.log('I am clicked.');
+        imageUrl = 'http://graph.facebook.com/' + '10104357371654159/picture';
+        document.cookie = 'name=Anupam Mediratta';
+        document.cookie = 'image=' + imageUrl;
+//        bake_cookie('name', 'Anupam Mediratta')
+//        checkLoginState();
     });
     function bake_cookie(name, value) {
         debugger
