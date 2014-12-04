@@ -286,7 +286,7 @@ class HelloWorldApi(remote.Service):
             location=messages.StringField(5),
             amenities=messages.StringField(6, repeated=True))
     
-    @endpoints.method(MULTIPLY_METHOD_RESOURCE, HotelCollection,
+    @endpoints.method(MULTIPLY_METHOD_RESOURCE, tuple,
                       path='hellogreeting', http_method='POST',
                       name='greetings.listGreeting')
     def greetings_list(self, request):
