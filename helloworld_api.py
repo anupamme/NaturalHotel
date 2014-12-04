@@ -356,7 +356,7 @@ class HelloWorldApi(remote.Service):
         self.rankResults(domain_results, rankingCount)
         free = gc.collect()
         print ('freed memory: ' + str(free))
-        return domain_results
+        return domain_results, reviewMap
 
     ID_RESOURCE = endpoints.ResourceContainer(
             message_types.VoidMessage,

@@ -37,9 +37,9 @@ var common = {
             $.getJSON('data/out-zermatt/sentiment.json', function(data){
                 sentimentMap = data
                 // for loop to read reviews for all the hotel ids.
-                $.getJSON('data/reviews/summary.txt', function(data){
-                    window.reviewMap = data
-                })
+//                $.getJSON('data/reviews/summary.txt', function(data){
+//                    window.reviewMap = data
+//                })
                 $.getJSON('data/hotels/hotelDetail.json', function(data){
                     hotelDetailMap = data
                 })
@@ -599,6 +599,14 @@ var common = {
         }
         return hotelListJson
     },
+    doWhenAjaxWorks: function(response){
+        $('.loader').hide();
+        hotelResults, reviewMapLocal = response
+        window.reviewMap = reviewMapLocal
+        common.populateHotelList(hotelResults)
+        sessionStorage.setItem('hotelList',JSON.stringify(hotelResults))
+        common.animateHotelList()
+    },
     getHotelListFromServer:function(queryParams) {
         fd = new FormData()
         for (key in queryParams){
@@ -622,10 +630,7 @@ var common = {
             contentType: false,
             url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
             success: function(response){
-                    $('.loader').hide();
-                    common.populateHotelList(response)
-                    sessionStorage.setItem('hotelList',JSON.stringify(response))
-                    common.animateHotelList()
+                    common.doWhenAjaxWorks(response)
                     console.log("1");
             },
             error: function(error){
@@ -639,11 +644,8 @@ var common = {
                     contentType: false,
                     url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
                     success: function(response){
-                                $('.loader').hide();
-                    common.populateHotelList(response)
-                    sessionStorage.setItem('hotelList',JSON.stringify(response))
-                    common.animateHotelList()
-                     console.log("2");
+                        common.doWhenAjaxWorks(response)
+                        console.log("2");
                     },
                      error: function(error){
                         console.log(error)
@@ -656,11 +658,8 @@ var common = {
                             contentType: false,
                             url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
                             success: function(response){
-                                       $('.loader').hide();
-                    common.populateHotelList(response)
-                    sessionStorage.setItem('hotelList',JSON.stringify(response))
-                    common.animateHotelList()
-                     console.log("3");
+                                common.doWhenAjaxWorks(response)
+                                console.log("3");
                             }
                         },3000);
                      }
