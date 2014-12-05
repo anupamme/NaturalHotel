@@ -37,9 +37,9 @@ var common = {
             $.getJSON('data/out-zermatt/sentiment.json', function(data){
                 sentimentMap = data
                 // for loop to read reviews for all the hotel ids.
-//                $.getJSON('data/reviews/summary.txt', function(data){
-//                    window.reviewMap = data
-//                })
+                $.getJSON('data/reviews/summary.txt', function(data){
+                    window.reviewMap = data
+                })
                 $.getJSON('data/hotels/hotelDetail.json', function(data){
                     hotelDetailMap = data
                 })
@@ -601,8 +601,9 @@ var common = {
     },
     doWhenAjaxWorks: function(response){
         $('.loader').hide();
-        hotelResults, reviewMapLocal = response
-        window.reviewMap = JSON.parse(reviewMapLocal)
+        //hotelResults, reviewMapLocal = response
+        hotelResults = response
+        //window.reviewMap = JSON.parse(reviewMapLocal)
         common.populateHotelList(hotelResults)
         sessionStorage.setItem('hotelList',JSON.stringify(hotelResults))
         common.animateHotelList()

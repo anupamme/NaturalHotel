@@ -282,7 +282,7 @@ class HelloWorldApi(remote.Service):
             location=messages.StringField(5),
             amenities=messages.StringField(6, repeated=True))
     
-    @endpoints.method(MULTIPLY_METHOD_RESOURCE, Group,
+    @endpoints.method(MULTIPLY_METHOD_RESOURCE, HotelCollection,
                       path='hellogreeting', http_method='POST',
                       name='greetings.listGreeting')
     def greetings_list(self, request):
@@ -353,7 +353,8 @@ class HelloWorldApi(remote.Service):
         free = gc.collect()
         print ('freed memory: ' + str(free))
         
-        return Group(hotelC = domain_results, reviewMap = json.dumps(reviewMap))
+        return domain_results
+        #return Group(hotelC = domain_results, reviewMap = json.dumps(reviewMap))
 
     ID_RESOURCE = endpoints.ResourceContainer(
             message_types.VoidMessage,
