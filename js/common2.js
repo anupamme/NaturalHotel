@@ -947,7 +947,7 @@ var common = {
             $(this).css('background-image', 'url("'+ $(this).attr('data-src') +'")');
         });
 
-<<<<<<< HEAD
+
       /*  $('.review-list').on('click', '.review', function(){
             var rv = $(this),
                 rvf = $(this).siblings('.review-full-view');
@@ -961,7 +961,6 @@ var common = {
             rvf.hide();
             rv.show();
         }); */
-=======
 //        $('.review-list').on('click', '.review', function(){
 //            var rv = $(this),
 //                rvf = $(this).siblings('.review-full-view');
@@ -975,7 +974,6 @@ var common = {
 //            rvf.hide();
 //            rv.show();
 //        });
->>>>>>> 60b3432fb71f273d6df9fbb12dc1f6fcc478231f
     },
     contains: function(arr, v) {
     for(var i = 0; i < arr.length; i++) {
