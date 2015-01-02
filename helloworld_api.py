@@ -11,6 +11,7 @@ from protorpc import message_types
 from protorpc import remote
 import json
 import gc
+import random
 
 package = 'Hello'
 prefix = ''
@@ -97,14 +98,10 @@ class Hotel(messages.Message):
 class HotelCollection(messages.Message):
     items = messages.MessageField(Hotel, 1, repeated=True)
     
-class Greeting(messages.Message):
-    """Greeting that stores a message."""
-    message = messages.StringField(1)
-
-
-class GreetingCollection(messages.Message):
-    """Collection of Greetings."""
-    items = messages.MessageField(Greeting, 1, repeated=True)
+class Group(messages.Message):
+    hotelC = messages.MessageField(HotelCollection, 1)
+    reviewMap = messages.StringField(2)
+    
 
 @endpoints.api(name='helloworld', version='v1')
 class HelloWorldApi(remote.Service):
@@ -137,10 +134,15 @@ class HelloWorldApi(remote.Service):
         for mapIns in arrayOfMaps:    # key = hotelId
             for hotelId in mapIns: # val = [reviewid]
                 if hotelId in final:    # final = attr -> [hotelid -> [reviewid]]
-                    final[hotelId] = final[hotelId] + mapIns[hotelId]
+                    final[hotelId] = list(set(final[hotelId] + mapIns[hotelId]))
                 else:
                     final[hotelId] = mapIns[hotelId]
         return final
+    
+    def findRandomDistribution(self):
+        z = [random.random(), random.random(), random.random(), random.random(), random.random()]
+        y = reduce(lambda a,b: a+b, z, 0)
+        return map(lambda x: (x/y)*100, z)
     
     '''converts the result into the format UI expects.'''
     def convertToDomainResults(self, arg_res, rankingCount):
@@ -159,11 +161,14 @@ class HelloWorldApi(remote.Service):
             obj.hotelid = hotelid
             attDetails = self.getAttributeDetails(hotelid)
             attributeArr = []
+            random = self.findRandomDistribution()
+            count = 0
             for quality in attDetails:
                 att = Attribute()
                 att.title = int(quality)
                 att.people = attDetails[quality][1]
-                att.percentageAttr = 33
+                att.percentageAttr = int(random[count])
+                count += 1
                 att.views = attDetails[quality][0]
                 attributeArr.append(att)
             obj.attributes = attributeArr
@@ -347,7 +352,9 @@ class HelloWorldApi(remote.Service):
         self.rankResults(domain_results, rankingCount)
         free = gc.collect()
         print ('freed memory: ' + str(free))
+        
         return domain_results
+        #return Group(hotelC = domain_results, reviewMap = json.dumps(reviewMap))
 
     ID_RESOURCE = endpoints.ResourceContainer(
             message_types.VoidMessage,

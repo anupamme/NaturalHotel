@@ -97,3 +97,29 @@ window.location = encodeURI("https://www.facebook.com/dialog/oauth?client_id=" +
 </script>
 </body>
 </html>
+<<<<<<< HEAD
+=======
+<script>
+    
+    $('.loginButton').on('mouseover', function() { 
+        $($('.loginBackground')[0]).attr('style', 'display: inline;');
+    }).on('mouseout', function() {
+        $($('.loginBackground')[0]).attr('style', 'display: none;');
+    });
+    
+    $('.loginButton').on('click', function() {
+        //console.log('I am clicked.');
+        imageUrl = 'http://graph.facebook.com/' + '10104357371654159/picture';
+        document.cookie = 'name=Anupam Mediratta';
+        document.cookie = 'image=' + imageUrl;
+        window.location.href = "form.html";
+//        bake_cookie('name', 'Anupam Mediratta')
+//        checkLoginState();
+    });
+    function bake_cookie(name, value) {
+        debugger
+        var cookie = [name, '=', JSON.stringify(value), '; domain=.', window.location.host.toString(), '; path=/;'].join('');
+        document.cookie = cookie;
+    }
+</script>
+>>>>>>> 60b3432fb71f273d6df9fbb12dc1f6fcc478231f

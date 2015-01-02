@@ -599,6 +599,15 @@ var common = {
         }
         return hotelListJson
     },
+    doWhenAjaxWorks: function(response){
+        $('.loader').hide();
+        //hotelResults, reviewMapLocal = response
+        hotelResults = response
+        //window.reviewMap = JSON.parse(reviewMapLocal)
+        common.populateHotelList(hotelResults)
+        sessionStorage.setItem('hotelList',JSON.stringify(hotelResults))
+        common.animateHotelList()
+    },
     getHotelListFromServer:function(queryParams) {
         fd = new FormData()
         for (key in queryParams){
@@ -623,10 +632,7 @@ var common = {
             contentType: false,
             url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
             success: function(response){
-                    $('.loader').hide();
-                    common.populateHotelList(response)
-                    sessionStorage.setItem('hotelList',JSON.stringify(response))
-                    common.animateHotelList()
+                    common.doWhenAjaxWorks(response)
                     console.log("1");
             },
             error: function(error){
@@ -640,11 +646,8 @@ var common = {
                     contentType: false,
                     url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
                     success: function(response){
-                                $('.loader').hide();
-                    common.populateHotelList(response)
-                    sessionStorage.setItem('hotelList',JSON.stringify(response))
-                    common.animateHotelList()
-                     console.log("2");
+                        common.doWhenAjaxWorks(response)
+                        console.log("2");
                     },
                      error: function(error){
                         console.log(error)
@@ -657,11 +660,8 @@ var common = {
                             contentType: false,
                             url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
                             success: function(response){
-                                       $('.loader').hide();
-                    common.populateHotelList(response)
-                    sessionStorage.setItem('hotelList',JSON.stringify(response))
-                    common.animateHotelList()
-                     console.log("3");
+                                common.doWhenAjaxWorks(response)
+                                console.log("3");
                             }
                         },3000);
                      }
@@ -947,6 +947,7 @@ var common = {
             $(this).css('background-image', 'url("'+ $(this).attr('data-src') +'")');
         });
 
+<<<<<<< HEAD
       /*  $('.review-list').on('click', '.review', function(){
             var rv = $(this),
                 rvf = $(this).siblings('.review-full-view');
@@ -960,8 +961,40 @@ var common = {
             rvf.hide();
             rv.show();
         }); */
+=======
+//        $('.review-list').on('click', '.review', function(){
+//            var rv = $(this),
+//                rvf = $(this).siblings('.review-full-view');
+//            rv.hide();
+//            rvf.show();
+//        });
+//
+//        $('.review-list').on('click', '.review-full-view', function(){
+//            var rvf = $(this),
+//                rv = $(this).siblings('.review');
+//            rvf.hide();
+//            rv.show();
+//        });
+>>>>>>> 60b3432fb71f273d6df9fbb12dc1f6fcc478231f
     },
+    contains: function(arr, v) {
+    for(var i = 0; i < arr.length; i++) {
+        if(arr[i] === v) return true;
+    }
+    return false;
+},
+
+unique: function(arg) {
+    var arr = [];
+    for(var i = 0; i < arg.length; i++) {
+        if(!this.contains(arr, arg[i])) {
+            arr.push(arg[i]);
+        }
+    }
+    return arr; 
+},
     printReviews: function(reviewMapArg, results, selected, subAtt, rankMap) {
+            results = this.unique(results)
             var reviewLookup = {}
             for (res in results){
                 reviewObj = reviewMapArg[res]
