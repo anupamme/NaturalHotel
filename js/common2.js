@@ -612,6 +612,7 @@ var common = {
                 }
             }
         }
+        debugger;
         $('.loader').show();
          $.ajax({
             async: true,
@@ -946,7 +947,7 @@ var common = {
             $(this).css('background-image', 'url("'+ $(this).attr('data-src') +'")');
         });
 
-        $('.review-list').on('click', '.review', function(){
+      /*  $('.review-list').on('click', '.review', function(){
             var rv = $(this),
                 rvf = $(this).siblings('.review-full-view');
             rv.hide();
@@ -958,7 +959,7 @@ var common = {
                 rv = $(this).siblings('.review');
             rvf.hide();
             rv.show();
-        });
+        }); */
     },
     printReviews: function(reviewMapArg, results, selected, subAtt, rankMap) {
             var reviewLookup = {}
