@@ -623,7 +623,7 @@ var common = {
         }
         debugger;
         $('.loader').show();
-        urlToUse = "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/"
+        urlToUse = "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting_m/"
          $.ajax({
             async: true,
             type: "POST",
