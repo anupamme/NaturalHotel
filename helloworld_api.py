@@ -528,10 +528,6 @@ class HelloWorldApi(remote.Service):
         #prepare list of files.
         global locationPath
         global reviewMapPath
-#        arg = [(locationPath, LocationMapClass), (reviewMapPath, ReviewMapClass),   
-#               (purposeMapPath, PurposeMapClass), 
-#               (foodIndexPath, FoodIndexMapClass), (viewIndexPath, ViewIndexMapClass),
-#              (amenityIndexPath, AmenityMapClass), (attributePath, AttributeMapClass)]
         arg = [(hotelMapPath, HotelDetailMapClass)]
         storeData(arg)
         return Whether(val = 1)

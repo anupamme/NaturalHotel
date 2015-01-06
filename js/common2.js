@@ -623,6 +623,7 @@ var common = {
         }
         debugger;
         $('.loader').show();
+        urlToUse = "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/"
          $.ajax({
             async: true,
             type: "POST",
@@ -630,7 +631,7 @@ var common = {
             data: fd,
             processData: false,
             contentType: false,
-            url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
+            url: urlToUse,
             success: function(response){
                     common.doWhenAjaxWorks(response)
                     console.log("1");
@@ -644,7 +645,7 @@ var common = {
                     data: fd,
                     processData: false,
                     contentType: false,
-                    url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
+                    url: urlToUse,
                     success: function(response){
                         common.doWhenAjaxWorks(response)
                         console.log("2");
@@ -658,7 +659,7 @@ var common = {
                             data: fd,
                             processData: false,
                             contentType: false,
-                            url: "https://review-viz.appspot.com/_ah/api/helloworld/v1/hellogreeting/",
+                            url: urlToUse,
                             success: function(response){
                                 common.doWhenAjaxWorks(response)
                                 console.log("3");
