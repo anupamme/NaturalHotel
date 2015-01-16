@@ -41,6 +41,8 @@ excludeList = {'g188098-d619925': True, 'g188098-d550027': True}
 isLoaded = False
 globalLocationKey = 'ZERMATT:SWITZERLAND'
 
+parentProbabilityThreshhold = 0.1
+
 readMap = lambda x: json.loads(open(x, 'r').read())
 encode = lambda x: x.encode('utf-8')
 
@@ -113,13 +115,18 @@ class ReviewMapClass(ndb.Model):
 class TupleClass(ndb.Model):
     attribute = ndb.StringProperty()
     rating = ndb.StringProperty()
+    
+class ReviewMetaClass(ndb.Model):
+    reviewId = ndb.StringProperty(repeated=True)
+    probability = ndb.FloatProperty()
+    parentProbability = ndb.FloatProperty()
+    
 
-
-class SentimentMapClass(ndb.Model):
+class SentimentMapClass(ndb.Model):         #RE
     locationKey = ndb.StringProperty(indexed=True, required=True)
     selectionTuple = ndb.StructuredProperty(TupleClass, indexed=True)
     hotelId = ndb.StringProperty(required=True, indexed=True)
-    reviewId = ndb.StringProperty(repeated=True)
+    reviewId = ndb.StructuredProperty(ReviewMetaClass, repeated=True)
     
     @classmethod
     def PutInstance(model, key, value):
@@ -144,11 +151,11 @@ class HotelDetailMapClass(ndb.Model):
             result[instance.hotelId] = instance.hotelDetail
         return result
 
-class PurposeMapClass(ndb.Model):
+class PurposeMapClass(ndb.Model):       #RE
     locationKey = ndb.StringProperty(indexed=True, required=True)
     purpose = ndb.StringProperty(indexed=True, required=True)
     hotelId = ndb.StringProperty(indexed=True)
-    reviewId = ndb.StringProperty(repeated=True)
+    reviewId = ndb.StructuredProperty(ReviewMetaClass, repeated=True)
     
     @classmethod
     def getClassInstance(self, locKey, purpose, hotelId, reviewArr):
@@ -209,53 +216,9 @@ class AttributeMapClass(ndb.Model):
         r.put()
 
 def loadData(locationKey):
-#    global isLoaded
-#    if isLoaded == False:
-#        global locationMap
-#        locationMap = readMap(locationPath)
-#        global sentimentMap
-#        sentimentMap = readMap(sentimentPath)
-#        global reviewMap
-#        reviewMap = readMap(reviewMapPath)
-#        global hotelDetailMap
-#        hotelDetailMap = readMap(hotelMapPath)
-#        global purposeMap 
-#        purposeMap = readMap(purposeMapPath)
         global hotelAttrMap
         hotelAttrMap = readMap(hotelAttrPath)
-#        global attributeMap
-#        attributeMap = readMap(attributePath)
-#        global subAttrIndexMap
-#        subAttrIndexMap['food'] = readMap(foodIndexPath)
-#        subAttrIndexMap['view'] = readMap(viewIndexPath)
-#        subAttrIndexMap['loc'] = readMap(locIndexPath)
-#        subAttrIndexMap['amenity'] = readMap(amenityIndexPath)
-#        isLoaded = True
         
-def loadData_m(locationKey):
-    global isLoaded
-    if isLoaded == False:
-        global locationMap
-        locationMap = readMap(locationPath)
-        global sentimentMap
-        sentimentMap = readMap(sentimentPath)
-        global reviewMap
-        reviewMap = readMap(reviewMapPath)
-        global hotelDetailMap
-        hotelDetailMap = readMap(hotelMapPath)
-        global purposeMap 
-        purposeMap = readMap(purposeMapPath)
-        global hotelAttrMap
-        hotelAttrMap = readMap(hotelAttrPath)
-        global attributeMap
-        attributeMap = readMap(attributePath)
-        global subAttrIndexMap
-        subAttrIndexMap['food'] = readMap(foodIndexPath)
-        subAttrIndexMap['view'] = readMap(viewIndexPath)
-        subAttrIndexMap['loc'] = readMap(locIndexPath)
-        subAttrIndexMap['amenity'] = readMap(amenityIndexPath)
-        isLoaded = True
-
 class Review(messages.Message):
     review = messages.StringField(1)
     reviewer = messages.StringField(2)
@@ -293,15 +256,15 @@ class HelloWorldApi(remote.Service):
     """Helloworld API v1."""
     
     ''' modifies the dict final and returns in.'''
-    def IncrementOrInsert(self, final, hotelId, reviewId):
+    def IncrementOrInsert(self, final, hotelId, reviewId, probability):
         if hotelId in final:
             if reviewId in final[hotelId]:
-                final[hotelId][reviewId] += 1
+                final[hotelId][reviewId] += probability
             else:
-                final[hotelId][reviewId] = 1
+                final[hotelId][reviewId] = probability
         else:
             final[hotelId] = {}
-            final[hotelId][reviewId] = 1
+            final[hotelId][reviewId] = probability
         return final
     
     '''find the count against each hotelid, reviewid paid'''
@@ -309,8 +272,9 @@ class HelloWorldApi(remote.Service):
         final = {}
         for mapIns in arrayOfMaps:    # key = hotelId
             for hotelId in mapIns: # val = [reviewid]
-                for reviewId in mapIns[hotelId]:
-                    final = self.IncrementOrInsert(final, hotelId, reviewId)
+                for reviewId, probability, parentProbability in mapIns[hotelId]:
+                    if parentProbability > parentProbabilityThreshhold:
+                        final = self.IncrementOrInsert(final, hotelId, reviewId, probability)
         return final
 
     '''combines elements of arguments to produce hotelid -> [reviewid]'''
@@ -371,7 +335,7 @@ class HelloWorldApi(remote.Service):
             obj.attributes = attributeArr
             reviewArr = []
             totalReviews = arg_res[hotelid]
-            for rev in totalReviews:
+            for rev, probability in totalReviews:
                 if hotelid not in reviewMap:
                     #print 'ERROR: Hotel id not found in review map: ' + str(hotelid)
                     continue
@@ -391,54 +355,6 @@ class HelloWorldApi(remote.Service):
             final.append(obj)
         return HotelCollection(items = final)
     
-    def convertToDomainResults_m(self, arg_res, rankingCount):
-        final = []
-        for hotelid in arg_res:
-            if hotelid in excludeList:
-                continue
-            obj = Hotel()
-            if hotelid not in hotelDetailMap:
-                print 'hotel not found in detail map: ' + hotelid
-                continue
-            hotel = hotelDetailMap[hotelid]
-            obj.name = hotel['title']
-            obj.address = hotel['address']
-            obj.images = hotel['images']
-            obj.match = 'not defined'
-            obj.hotelid = hotelid
-            attDetails = self.getAttributeDetails(hotelid)
-            attributeArr = []
-            random = self.findRandomDistribution()
-            count = 0
-            for quality in attDetails:
-                att = Attribute()
-                att.title = int(quality)
-                att.people = attDetails[quality][1]
-                att.percentageAttr = int(random[count])
-                count += 1
-                att.views = attDetails[quality][0]
-                attributeArr.append(att)
-            obj.attributes = attributeArr
-            reviewArr = []
-            totalReviews = arg_res[hotelid]
-            for rev in totalReviews[0:5]:
-                reviewTmp = reviewMap[hotelid]
-                rev_int = int(rev)
-                
-                reviewObj = reviewTmp[rev_int]
-                reviewIns = Review()
-                reviewIns.review = reviewObj.get('review')
-                reviewIns.reviewer = reviewObj.get('ReviewerName')
-                reviewIns.location = reviewObj.get('Place')
-                reviewIns.image = reviewObj.get('ReviewerImage')
-                
-                reviewIns.score = rankingCount[hotelid][rev]
-                reviewArr.append(reviewIns)
-            obj.reviews = reviewArr
-            final.append(obj)
-        return HotelCollection(items = final)
-            
-        
     '''mutates the order of hotels within hotelCollection as per the score. '''
     def rankResults(self, hotelCollection, rankingResults):
         # calculate score per hotel
@@ -519,23 +435,6 @@ class HelloWorldApi(remote.Service):
             i += 1
         return final
     
-    def read_file(self):
-        bucket_name = os.environ.get('BUCKET_NAME', 'jobs-dir')
-
-        #self.response.headers['Content-Type'] = 'text/plain'
-        #self.response.write('Demo GCS Application running from Version: '
-        #                    + os.environ['CURRENT_VERSION_ID'] + '\n')
-        #self.response.write('Using bucket name: ' + bucket_name + '\n\n')
-
-        bucket = '/' + bucket_name
-        filename = bucket + '/job1-th.py'
-        #self.response.write('Abbreviated file content (first line and last 1K):\n')
-
-        gcs_file = gcs.open(filename)
-        self.response.write(gcs_file.readline())
-        gcs_file.seek(-1024, os.SEEK_END)
-        print('cloud file contents: ' + gcs_file.read())
-        gcs_file.close()
     
     STORE_RESOURCE = endpoints.ResourceContainer(
         purpose = messages.StringField(1))
@@ -543,8 +442,6 @@ class HelloWorldApi(remote.Service):
     @endpoints.method(STORE_RESOURCE, Whether, path='data', http_method='GET', name='data.store')
     def request_store_data(self, request):
         #prepare list of files.
-        global locationPath
-        global reviewMapPath
         arg = [(hotelMapPath, HotelDetailMapClass)]
         storeData(arg)
         return Whether(val = 1)
@@ -567,14 +464,7 @@ class HelloWorldApi(remote.Service):
         food = request.food
         view = request.view
         
-        # read cloud bucket: experimental code - delete after testing.
-        self.read_file()
-        #res_loc = set(locationMap[locationKey])  # [hotelids] - not needed as all other maps will take care of location.
-#        resultsAsPerAttr = []                       # [(hotelid, reviewid)]
-#        for att in attributes:
-#            for x in [2.0, 3.0, 4.0]:
-#                if (att, x) in sentimentMap:
-#                    resultsAsPerAttr = resultsAsPerAttr + sentimentMap[(att, x)]
+        
         meta_result = []
         query = "Select * from PurposeMapClass where purpose = '" + purpose + "'"
         print query
@@ -605,11 +495,6 @@ class HelloWorldApi(remote.Service):
         meta_result.append(res_amenities)
         print 'size: ' + str(len(res_amenities))
         
-        # take union
-#        res_food.append(res_purpose)
-#        res_food.append(res_view)
-#        res_food.append(res_loc)
-#        res_food.append(res_amenities)
         rankingCount = self.findCountFromUnion(meta_result) # rankingcount format: (hotelid -> reviewid) -> count
         
         res_union = self.takeUnion(meta_result) # format is {(hotelid: [reviewid])}
@@ -624,119 +509,5 @@ class HelloWorldApi(remote.Service):
         
         return domain_results
     
-    MULTIPLY_METHOD_RESOURCE_M = endpoints.ResourceContainer(
-            purpose = messages.StringField(1, required=True),
-            food = messages.StringField(2, repeated=True),
-            destination=messages.StringField(3, required=True),
-            view=messages.StringField(4),
-            location=messages.StringField(5),
-            amenities=messages.StringField(6, repeated=True))
-    
-    @endpoints.method(MULTIPLY_METHOD_RESOURCE_M, HotelCollection,
-                      path='hellogreeting_m', http_method='POST',
-                      name='greetings.listGreeting_m')
-    def greetings_list(self, request):
-        locationKey = request.destination
-        loadData_m(locationKey)
-        purpose = request.purpose
-        food = request.food
-        view = request.view
-        
-#        locationKey = "ZERMATT:SWITZERLAND"
-#        purpose = "honeymoon"
-#        food = ["indian", "french"]
-#        view = ["mountain"]
-        
-        print 'start params'
-        print locationKey
-        print purpose
-        print 'end params'
-        
-        #res_loc = set(locationMap[locationKey])  # [hotelids] - not needed as all other maps will take care of location.
-#        resultsAsPerAttr = []                       # [(hotelid, reviewid)]
-#        for att in attributes:
-#            for x in [2.0, 3.0, 4.0]:
-#                if (att, x) in sentimentMap:
-#                    resultsAsPerAttr = resultsAsPerAttr + sentimentMap[(att, x)]
-        meta_result = []
-#        query = "Select * from PurposeMapClass where purpose = '" + purpose + "'"
-#        print query
-#        resPurposeIns = ndb.gql(query)
-#        res_purpose = PurposeMapClass.GetJson(resPurposeIns)
-        res_purpose = purposeMap[purpose]   # {(hotelid: [review])}
-        #food.map
-        res_food = []
-        try:
-            if food != None:
-                res_food = map(lambda x: subAttrIndexMap['food'][x], food)  #[{hotelid -> [reviewId]}]
-        except NameError:
-            pass
-        res_view = []
-        try:
-            if view != None:
-                res_view = subAttrIndexMap['view'][view]
-        except NameError:
-            pass
-        res_loc = []
-        try:
-            if location != None:
-                res_loc = subAttrIndexMap['loc'][view]
-        except NameError:
-            pass
-        res_amenities = []
-        try:
-            if amenities != None:
-                res_amenities = map(lambda x: subAttrIndexMap['amenity'][x], amenities)  #[{hotelid -> [reviewId]}]
-        except NameError:
-            pass
-        res_food.append(res_purpose)
-        res_food.append(res_view)
-        res_food.append(res_loc)
-        res_food.append(res_amenities)
-        rankingCount = self.findCountFromUnion(res_food) # rankingcount format: (hotelid -> reviewid) -> count
-        res_union = self.takeUnion(res_food) # format is {(hotelid: [reviewid])
-#        meta_result.append(res_purpose)
-#        print 'size: ' + str(len(res_purpose))
-#        if len(food) == 1:
-#            food.append('breakfast')
-#        newfood = map(encode, food)
-#        query = "Select * from FoodIndexMapClass where purpose in " + str(tuple(newfood))
-#        print query
-#        resPurposeIns = ndb.gql(query)
-#        print resPurposeIns
-#        res_food = FoodIndexMapClass.GetJson(resPurposeIns)
-#        meta_result.append(res_food)
-#        print 'size: ' + str(len(res_food))
-#        
-#        query = "Select * from ViewIndexMapClass where purpose = '" + view + "'"
-#        resPurposeIns = ndb.gql(query)
-#        res_view = ViewIndexMapClass.GetJson(resPurposeIns)
-#        meta_result.append(res_view)
-#        print 'size: ' + str(len(res_view))
-#        
-#        query = "Select * from AmenityMapClass where purpose = 'amenity'"
-#        resPurposeIns = ndb.gql(query)
-#        res_amenities = AmenityMapClass.GetJson(resPurposeIns)
-#        meta_result.append(res_amenities)
-#        print 'size: ' + str(len(res_amenities))
-        
-        # take union
-#        res_food.append(res_purpose)
-#        res_food.append(res_view)
-#        res_food.append(res_loc)
-#        res_food.append(res_amenities)
-#        rankingCount = self.findCountFromUnion(meta_result) # rankingcount format: (hotelid -> reviewid) -> count
-        
-#        res_union = self.takeUnion(meta_result) # format is {(hotelid: [reviewid])}
-        domain_results = self.convertToDomainResults_m(res_union, rankingCount)
-        self.rankResults(domain_results, rankingCount)
-        free = gc.collect()
-        print ('freed memory: ' + str(free))
-        
-        return domain_results
-
-    ID_RESOURCE = endpoints.ResourceContainer(
-            message_types.VoidMessage,
-            id=messages.IntegerField(1, variant=messages.Variant.INT32))
             
 APPLICATION = endpoints.api_server([HelloWorldApi])
