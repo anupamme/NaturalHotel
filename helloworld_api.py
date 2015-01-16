@@ -96,7 +96,7 @@ class ReviewMapClass(ndb.Model):
             
     @classmethod
     def GetJson(self, reviewMapList):
-        print 'Getting json for ReviewMapClass instance list!'
+        #print 'Getting json for ReviewMapClass instance list!'
         result = {}
         for reviewMapIns in reviewMapList:
             locKey = reviewMapIns.locationKey
@@ -348,7 +348,7 @@ class HelloWorldApi(remote.Service):
                 continue
             obj = Hotel()
             if hotelid not in hotelDetailMap:
-                print 'hotel not found in detail map: ' + hotelid
+                #print 'hotel not found in detail map: ' + hotelid
                 continue
             hotel = hotelDetailMap[hotelid]
             obj.name = hotel['title']
@@ -398,7 +398,7 @@ class HelloWorldApi(remote.Service):
                 continue
             obj = Hotel()
             if hotelid not in hotelDetailMap:
-                print 'hotel not found in detail map: ' + hotelid
+                #print 'hotel not found in detail map: ' + hotelid
                 continue
             hotel = hotelDetailMap[hotelid]
             obj.name = hotel['title']
@@ -577,33 +577,33 @@ class HelloWorldApi(remote.Service):
 #                    resultsAsPerAttr = resultsAsPerAttr + sentimentMap[(att, x)]
         meta_result = []
         query = "Select * from PurposeMapClass where purpose = '" + purpose + "'"
-        print query
+        #print query
         resPurposeIns = ndb.gql(query)
         res_purpose = PurposeMapClass.GetJson(resPurposeIns)
         meta_result.append(res_purpose)
-        print 'size: ' + str(len(res_purpose))
+        #print 'size: ' + str(len(res_purpose))
         if len(food) == 1:
             food.append('breakfast')
         newfood = map(encode, food)
         query = "Select * from FoodIndexMapClass where purpose in " + str(tuple(newfood))
-        print query
+        #print query
         resPurposeIns = ndb.gql(query)
-        print resPurposeIns
+        #print resPurposeIns
         res_food = FoodIndexMapClass.GetJson(resPurposeIns)
         meta_result.append(res_food)
-        print 'size: ' + str(len(res_food))
+        #print 'size: ' + str(len(res_food))
         
         query = "Select * from ViewIndexMapClass where purpose = '" + view + "'"
         resPurposeIns = ndb.gql(query)
         res_view = ViewIndexMapClass.GetJson(resPurposeIns)
         meta_result.append(res_view)
-        print 'size: ' + str(len(res_view))
+        #print 'size: ' + str(len(res_view))
         
         query = "Select * from AmenityMapClass where purpose = 'amenity'"
         resPurposeIns = ndb.gql(query)
         res_amenities = AmenityMapClass.GetJson(resPurposeIns)
         meta_result.append(res_amenities)
-        print 'size: ' + str(len(res_amenities))
+        #print 'size: ' + str(len(res_amenities))
         
         # take union
 #        res_food.append(res_purpose)
@@ -613,14 +613,14 @@ class HelloWorldApi(remote.Service):
         rankingCount = self.findCountFromUnion(meta_result) # rankingcount format: (hotelid -> reviewid) -> count
         
         res_union = self.takeUnion(meta_result) # format is {(hotelid: [reviewid])}
-        print 'size semi: ' + str(len(res_union))
+        #print 'size semi: ' + str(len(res_union))
         domain_results = self.convertToDomainResults(res_union, rankingCount)
-        print 'size final: ' + str(len(domain_results))
+        #print 'size final: ' + str(len(domain_results))
         # do ranking
         # rank the domain_results
         self.rankResults(domain_results, rankingCount)
         free = gc.collect()
-        print ('freed memory: ' + str(free))
+        #print ('freed memory: ' + str(free))
         
         return domain_results
     
@@ -641,16 +641,6 @@ class HelloWorldApi(remote.Service):
         purpose = request.purpose
         food = request.food
         view = request.view
-        
-#        locationKey = "ZERMATT:SWITZERLAND"
-#        purpose = "honeymoon"
-#        food = ["indian", "french"]
-#        view = ["mountain"]
-        
-        print 'start params'
-        print locationKey
-        print purpose
-        print 'end params'
         
         #res_loc = set(locationMap[locationKey])  # [hotelids] - not needed as all other maps will take care of location.
 #        resultsAsPerAttr = []                       # [(hotelid, reviewid)]
@@ -731,7 +721,7 @@ class HelloWorldApi(remote.Service):
         domain_results = self.convertToDomainResults_m(res_union, rankingCount)
         self.rankResults(domain_results, rankingCount)
         free = gc.collect()
-        print ('freed memory: ' + str(free))
+#        print ('freed memory: ' + str(free))
         
         return domain_results
 
